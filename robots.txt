@@ -1,0 +1,5 @@
+# OmniSort 랜딩 — 전부 공개다. 숨길 것이 없다.
+User-agent: *
+Allow: /
+
+Sitemap: https://work517.github.io/sitemap.xml

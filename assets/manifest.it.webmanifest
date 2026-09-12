@@ -1,0 +1,34 @@
+{
+  "name": "OmniSort — Vedi dove va ogni file prima di spostarlo",
+  "short_name": "OmniSort",
+  "description": "Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.",
+  "lang": "it",
+  "dir": "ltr",
+  "start_url": "https://work517.github.io/it/",
+  "scope": "https://work517.github.io/",
+  "display": "standalone",
+  "background_color": "#0B1220",
+  "theme_color": "#2F6FEB",
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "https://work517.github.io/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://work517.github.io/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "https://work517.github.io/assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
