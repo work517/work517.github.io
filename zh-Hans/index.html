@@ -156,8 +156,10 @@
      .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
   html[lang="ko"] { word-break: keep-all; }
   h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; text-wrap: balance; margin: 0; }
-  /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구 */
-  h1, h2, h3, p, li, summary, td, th, dd, figcaption, .lead { overflow-wrap: anywhere; }
+  /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구.
+     `anywhere` 가 아니라 `break-word` 다. anywhere 는 min-content 계산까지 바꿔서
+     좁은 칸(표·카드 안)에서 한국어를 다시 아무 데서나 끊는다. */
+  h1, h2, h3, p, li, summary, td, th, dd, figcaption, .lead { overflow-wrap: break-word; }
   h1 { font-size: var(--step-3); line-height: 1.12; }
   h2 { font-size: var(--step-2); line-height: 1.2; }
   h3 { font-size: var(--step-1); line-height: 1.3; }
