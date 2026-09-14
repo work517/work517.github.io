@@ -147,9 +147,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* 한국어는 기본적으로 아무 데서나 줄바꿈된다. 단어 단위로 끊어 읽히게 한다. */
-  h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; text-wrap: balance; word-break: keep-all; margin: 0; }
-  p, li, summary, td, th, .lead { word-break: keep-all; overflow-wrap: anywhere; }
+  /* CSS 기본값은 CJK 를 글자 단위로 끊는다. 한국어는 낱말 사이에 띄어쓰기가 있는데도
+     '대부 / 분의' 처럼 낱말 한가운데가 갈린다. keep-all 로 낱말 경계에서만 끊는다.
+     중국어·일본어는 띄어쓰기가 없어서 keep-all 을 주면 끊을 자리가 아예 없어진다
+     (제목이 넘친다). 그래서 **한국어에만** 준다.
+     word-break 는 상속되는 속성이라 뿌리에 한 번 주면 안쪽 태그가 전부 따라온다 —
+     h1·p 만 집어 주면 span·dd·figcaption 이 빠진다 (실제로 빠져 있었다).
+     .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
+  html[lang="ko"] { word-break: keep-all; }
+  h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; text-wrap: balance; margin: 0; }
+  /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구 */
+  h1, h2, h3, p, li, summary, td, th, dd, figcaption, .lead { overflow-wrap: anywhere; }
   h1 { font-size: var(--step-3); line-height: 1.12; }
   h2 { font-size: var(--step-2); line-height: 1.2; }
   h3 { font-size: var(--step-1); line-height: 1.3; }
