@@ -2,7 +2,7 @@
 //
 // 페이지는 '새 것 먼저, 안 되면 저장본' 이고 자산은 '저장본 먼저' 다.
 // 랜딩은 자주 바뀌지 않지만, 바뀌었는데 옛 것을 보여 주면 곤란하다.
-const CACHE = "omnisort-0.2.4";
+const CACHE = "omnisort-0.2.5";
 
 // 어느 언어 페이지에서 켜지든 같이 쓰는 것들
 const SHARED = [
@@ -58,12 +58,18 @@ self.addEventListener("fetch", function (event) {
   if (wantsPage) {
     event.respondWith(
       fetch(request).then(function (response) {
-        const copy = response.clone();
-        caches.open(CACHE).then(function (cache) { cache.put(request, copy); });
+        // 성공한 것만 저장한다. 배포 중에 404 를 한 번 받아 저장해 버리면,
+        // 인터넷이 끊겼을 때 그 오류 페이지가 '저장본' 이라며 뜬다.
+        if (response.ok && response.type === "basic") {
+          const copy = response.clone();
+          caches.open(CACHE).then(function (cache) { cache.put(request, copy); });
+        }
         return response;
       }).catch(function () {
         return caches.match(request).then(function (hit) {
-          return hit || caches.match("https://work517.github.io/");
+          // 마지막 대비는 등록 범위의 첫 페이지다. 한국어 뿌리를 박아 두면
+          // 일본어만 보던 사람이 오프라인에서 갑자기 한국어를 본다.
+          return hit || caches.match(self.registration.scope);
         });
       })
     );

@@ -7,8 +7,8 @@
   "start_url": "https://work517.github.io/fr/",
   "scope": "https://work517.github.io/",
   "display": "standalone",
-  "background_color": "#0B1220",
-  "theme_color": "#2F6FEB",
+  "background_color": "#FAF8F5",
+  "theme_color": "#9E5E0A",
   "categories": [
     "utilities",
     "productivity"
