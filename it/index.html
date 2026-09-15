@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-p9CUFMJl+i4ORPmJcv3Gd2pN8VpbJBhArRD9kZY2BqY=' 'sha256-JP9GKRPwz6IZh/uVL2UYo+VEtC4GnsfyrPCPhsgVHtg='; worker-src 'self'; style-src 'sha256-4UQ6hz2L6VaGk6V4VFF7PMkAnHkOQuVPM3kduKACB28='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-bE+Tqo2aplEuXV7yfxPY6ozteRNJfPPaDlOEi20N9Vo=' 'sha256-tkPEUKS3Av4HWPsQRl1lUnPYa5vCYW2Y9wcO7f7ICIY='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.">
 <meta name="color-scheme" content="light dark">
@@ -82,7 +82,10 @@
     --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
-    --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
+    /* 작은 본문. 기능 설명·내려받기 칸·FAQ 답이 여기 걸린다 — '작은 글씨' 가
+       아니라 페이지 내용의 절반이다. 한글은 같은 크기에서 라틴보다 빽빽해
+       14px 아래로 내려가면 눈에 띄게 힘들다. 최대 13.4px -> 14.4px. */
+    --step--1: clamp(.875rem, .84rem + .12vw, .94rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
     --step-1:  clamp(1.15rem, 1.08rem + .35vw, 1.35rem);
     --step-2:  clamp(1.6rem, 1.3rem + 1.6vw, 2.9rem);
@@ -157,12 +160,24 @@
   /* CSS 기본값은 CJK 를 글자 단위로 끊는다. 한국어는 낱말 사이에 띄어쓰기가 있는데도
      '대부 / 분의' 처럼 낱말 한가운데가 갈린다. keep-all 로 낱말 경계에서만 끊는다.
      중국어·일본어는 띄어쓰기가 없어서 keep-all 을 주면 끊을 자리가 아예 없어진다
-     (제목이 넘친다). 그래서 **한국어에만** 준다.
+     (제목이 넘친다). 그래서 **그 둘만** 되돌린다.
+     한국어 페이지에만 주면 모자란다. 독일어·러시아어 페이지에도 한글 예시가 그대로
+     실려서 (계약서.pdf) '계약 / 서.pdf' 로 갈렸다 — 라틴·키릴 글자에는 keep-all 이
+     아무 일도 하지 않으므로 다 주는 편이 맞다.
      word-break 는 상속되는 속성이라 뿌리에 한 번 주면 안쪽 태그가 전부 따라온다 —
      h1·p 만 집어 주면 span·dd·figcaption 이 빠진다 (실제로 빠져 있었다).
      .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
-  html[lang="ko"] { word-break: keep-all; }
+  html { word-break: keep-all; }
+  html[lang^="ja"], html[lang^="zh"] { word-break: normal; }
   h1, h2, h3 { font-weight: 700; letter-spacing: -.033em; text-wrap: balance; margin: 0; }
+  /* 제목이 아닌데 제목처럼 읽히는 것들 — FAQ 질문·카드 제목. balance 는 줄들을
+     고르게 나눠서, 마지막 줄에 낱말 하나만 남는 것을 막는다 (독일어 FAQ 에서
+     마지막 줄이 폭의 9% 인 것이 셋 있었다). */
+  summary, .feature h3, .dl-card h3, .dl-alt strong { text-wrap: balance; }
+  /* 본문은 balance 가 아니라 pretty 다 — 줄 수가 많을 때 balance 는 비싸고,
+     정작 필요한 건 '마지막 줄에 낱말 하나' 를 막는 것뿐이다. 모르는 브라우저는
+     그냥 무시한다. */
+  p, li, dd, figcaption { text-wrap: pretty; }
   /* 커진 제목은 자간·행간을 더 조여야 덩어리로 읽힌다 */
   h1 { letter-spacing: -.045em; }
   /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구.
@@ -213,6 +228,11 @@
   @media (max-width: 720px) { .topnav a { display: none; } .topnav a[href="#download"] { display: inline; } }
   /* 360px 폰에서 fr·vi 는 [내려받기] 와 언어 칸이 한 줄에 안 들어가 옆으로 밀렸다 (2차 검수에서 측정) */
   @media (max-width: 420px) { .topbar-inner, .topnav { gap: .6rem; } .langpick select { max-width: 7.5rem; } .brand { font-size: .95rem; } }
+  /* 320px 폰(아이폰 SE)에서는 그래도 모자랐다 — 이름 + [내려받기] + 언어 칸이
+     280px 에 안 들어가 12개 언어 모두 옆으로 밀렸다 (ja 는 26px). 언어 칸을
+     더 줄인다. 감추지는 않는다 — 12개 언어를 만들어 놓고 휴대폰에서 못 바꾸게
+     되는 셈이다. */
+  @media (max-width: 360px) { .topbar-inner, .topnav { gap: .45rem; } .langpick select { max-width: 5.5rem; } }
 
   /* ------------------------------------------------------------------ 히어로 */
   /* 위아래로 넉넉히. 제목을 키운 만큼 숨 쉴 자리가 없으면 도로 답답해진다. */
@@ -376,7 +396,8 @@
   }
   .checks strong { font-weight: 600; letter-spacing: -.012em; }
   .checks span { color: var(--muted); font-size: var(--step--1); display: block;
-                 line-height: 1.65; grid-column: 2; }
+                 /* 폭 611px 에 작은 글씨라 한 줄에 44자까지 갔다. */
+                 line-height: 1.65; grid-column: 2; max-width: 56ch; }
 
   .protected { border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
                overflow: hidden; align-self: start; padding: 1.35rem 1.4rem 1.5rem; }
@@ -402,9 +423,19 @@
   .report-tile strong { font-size: 1.45rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
   .report-tile small { font-size: .72rem; font-weight: 500; color: var(--muted); margin-left: .2rem; }
   .report-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.5rem; padding: 1.25rem; border-top: 1px solid var(--line); }
+  /* 표가 다섯 칸이라 좁은 화면에서는 줄일 수 없다. 제 칸에서 옆으로 밀리게 둔다.
+     안 그러면 표가 칸을 넓혀 버리고, 바깥 상자의 overflow:hidden 이 오른쪽을
+     잘라 낸다 — 독일어 320px 에서 [성공/전체] 칸이 통째로 안 보였다. 옆에 있는
+     막대그래프까지 같이 늘어나 숫자가 잘렸다. */
+  .report-scroll { overflow-x: auto; }
   @media (max-width: 820px) { .report-body { grid-template-columns: 1fr; } }
-  .report-bars { display: grid; gap: .5rem; align-content: start; }
-  .rb { display: grid; grid-template-columns: 3.6rem 1fr auto; gap: .6rem; align-items: center; font-size: var(--step--1); color: var(--ink-soft); }
+  /* 줄마다 따로 grid 를 두고 첫 칸을 3.6rem 으로 고정했더니, 그보다 긴 이름
+     (독일어 Dokumente·Komprimiert)이 칸을 밀어내 그래프가 통째로 넘쳤다 —
+     320px 에서 439px 까지. 한 grid 로 합치고 첫 칸을 auto 로 두면 이름 칸은
+     제일 긴 것에 맞춰 한 번만 정해지고, 막대가 남은 자리를 가진다. */
+  .report-bars { display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+                 gap: .5rem .6rem; align-content: start; align-items: center; }
+  .rb { display: contents; font-size: var(--step--1); color: var(--ink-soft); }
   .rb-track { height: 12px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
   .rb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
   /* 막대 길이. style 속성으로 두면 CSP 에서 'unsafe-inline' 을 못 뗀다. */
@@ -472,7 +503,13 @@
   .compare td:last-child { background: color-mix(in srgb, var(--accent) 6%, transparent); color: var(--ink); }
 
   /* 내려받기 */
-  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  /* 칸이 넷이 됐다. 260px 로 두면 넷이 한 줄에 눌려 들어가 글자가 답답해진다. */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  /* 폴더형은 곁들이다. 본 단추와 같은 무게로 두면 무엇을 받아야 할지 흐려진다. */
+  .dl-alt { margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+  .dl-alt strong { display: block; font-size: .95rem; margin-bottom: .4rem; }
+  .dl-alt p { color: var(--muted); font-size: var(--step--1); line-height: 1.65; margin-bottom: .6rem; }
+  .dl-alt > a { font-size: var(--step--1); color: var(--accent); }
   .dl-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
   .dl-card h3 { margin: 0; }
   .dl-card p { margin: 0; color: var(--muted); font-size: var(--step--1); }
@@ -484,13 +521,17 @@
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
 
   /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
-  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 크기를 따로 적어 두면 타입 스케일을 올려도 여기만 옛 값으로 남는다.
+     실제로 13.76px 로 혼자 뒤처져 있었다 — 페이지에서 유일하게 14px 아래였다. */
+  #paid .protected p { margin: .8rem 0 0; font-size: var(--step--1); color: var(--muted); }
   /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
      떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
      이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
   #paid .checks code { font-family: var(--sans); background: var(--surface-2);
     padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
-  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+  /* 한 줄에 59자까지 늘어져 있었다. 한글은 25~40자가 편하고, 그 위로는 눈이
+     줄 끝에서 다음 줄 머리를 못 찾는다. */
+  .paid-note { max-width: 62ch; margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
     background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
@@ -572,10 +613,10 @@
           Si sposta solo ciò che approvi, e tutto si può annullare.
         </p>
         <ul class="checklist">
-          <li>Prima di spostare, mostra destinazione e motivo di ogni file</li>
-          <li>Sposta solo ciò che spunti e rimette tutto a posto in un colpo</li>
+          <li>Prima di spostare, mostra destinazione e motivo di ogni file</li>
+          <li>Sposta solo ciò che spunti e rimette tutto a posto in un colpo</li>
           <li>Non sovrascrive mai: se a destinazione c'è già qualcosa, il kernel rifiuta lo spostamento</li>
-          <li>Un eseguibile, nessuna installazione: tutto avviene su questo PC</li>
+          <li>Un eseguibile, nessuna installazione: tutto avviene su questo PC</li>
         </ul>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Scarica OmniSort.exe</a>
@@ -584,10 +625,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.5</span>
+          <span>v0.2.6</span>
           <span>Un solo eseguibile</span>
           <span>100.000 file ≈ 49 s</span>
-          <span>966 test</span>
+          <span>1,191 test</span>
         </div>
       </div>
 
@@ -631,13 +672,13 @@
                 <td class="col-check"><input type="checkbox" checked aria-label="Seleziona vendite_settembre.xlsx"></td>
                 <td class="cell-name">vendite_settembre.xlsx</td>
                 <td><span class="folder">Spreadsheets</span></td>
-                <td class="cell-reason">estensione .xlsx</td>
+                <td class="cell-reason">estensione .xlsx</td>
               </tr>
               <tr data-size="44">
                 <td class="col-check"><input type="checkbox" checked aria-label="Seleziona playlist-bounce.mp3"></td>
                 <td class="cell-name">playlist-bounce.mp3</td>
                 <td><span class="folder">Audio</span></td>
-                <td class="cell-reason">estensione .mp3</td>
+                <td class="cell-reason">estensione .mp3</td>
               </tr>
               <tr class="danger" data-size="12">
                 <td class="col-check"><input type="checkbox" aria-label="Seleziona preventivo_finale.pdf"></td>
@@ -661,7 +702,7 @@
                 <td class="col-check"><input type="checkbox" aria-label="Seleziona VSCodeUserSetup-x64.exe"></td>
                 <td class="cell-name">VSCodeUserSetup-x64.exe</td>
                 <td><span class="folder">Installers</span></td>
-                <td class="cell-reason">estensione .exe</td>
+                <td class="cell-reason">estensione .exe</td>
               </tr>
             </tbody>
           </table>
@@ -683,23 +724,23 @@
       <div class="section-head">
         <span class="eyebrow">Come funziona</span>
         <h2>Analizza → anteprima → riordina</h2>
-        <p>I tre passaggi rispettano l'ordine. Finché l'analisi non è finita non si tocca nessun file, e senza il tuo via libera non si sposta niente.</p>
+        <p>I tre passaggi rispettano l'ordine. Finché l'analisi non è finita non si tocca nessun file, e senza il tuo via libera non si sposta niente.</p>
       </div>
       <div class="steps">
         <div class="step">
           <span class="step-n">1</span>
           <h3>Analizza</h3>
-          <p>Le cartelle vengono lette in secondo piano. File nascosti e di sistema, collegamenti simbolici e cartelle come node_modules restano fuori. Puoi annullare quando vuoi.</p>
+          <p>Le cartelle vengono lette in secondo piano. File nascosti e di sistema, collegamenti simbolici e cartelle come node_modules restano fuori. Puoi annullare quando vuoi.</p>
         </div>
         <div class="step">
           <span class="step-n">2</span>
           <h3>Anteprima</h3>
-          <p>File, dov'è adesso, dove finirebbe e perché: tutto in una tabella. I nomi che si scontrano sono segnalati in anticipo, e le caselle le spunti tu.</p>
+          <p>File, dov'è adesso, dove finirebbe e perché: tutto in una tabella. I nomi che si scontrano sono segnalati in anticipo, e le caselle le spunti tu.</p>
         </div>
         <div class="step">
           <span class="step-n">3</span>
           <h3>Riordina</h3>
-          <p>Si sposta solo ciò che hai spuntato, e ogni spostamento viene annotato. Non ti convince? Un [Annulla] e torna tutto al suo posto.</p>
+          <p>Si sposta solo ciò che hai spuntato, e ogni spostamento viene annotato. Non ti convince? Un [Annulla] e torna tutto al suo posto.</p>
         </div>
       </div>
     </div>
@@ -710,11 +751,11 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Funzioni</span>
-        <h2>Solo ciò che serve per riordinare, fatto per bene</h2>
+        <h2>Solo ciò che serve per riordinare, fatto per bene</h2>
       </div>
       <div class="features">
         <div class="feature">
-          <h3>Le tue regole vengono prima</h3>
+          <h3>Le tue regole vengono prima</h3>
           <p>Costruisci regole con caratteri jolly, espressioni regolari, estensioni, dimensione o età, e assegna loro una priorità. <code>contratto*</code> → Documents/Contracts.</p>
         </div>
         <div class="feature">
@@ -727,19 +768,19 @@
         </div>
         <div class="feature">
           <h3>Quando i nomi si scontrano</h3>
-          <p>Se il nome coincide diventa <code>relazione (1).pdf</code>, oppure viene saltato. Sovrascrivere, mai in nessun caso.</p>
+          <p>Se il nome coincide diventa <code>relazione (1).pdf</code>, oppure viene saltato. Sovrascrivere, mai in nessun caso.</p>
         </div>
         <div class="feature">
           <h3>Esclusioni</h3>
-          <p>Ciò che non va toccato lo togli con una regola: <code>*.crdownload</code>, tutto sotto una certa dimensione, intere cartelle.</p>
+          <p>Ciò che non va toccato lo togli con una regola: <code>*.crdownload</code>, tutto sotto una certa dimensione, intere cartelle.</p>
         </div>
         <div class="feature">
           <h3>Riordino pianificato</h3>
-          <p>Ogni giorno all'ora che scegli: solo analisi, oppure anche spostamento. Una riga — <code>schedule --install</code> — e l'Utilità di pianificazione è a posto.</p>
+          <p>Ogni giorno all'ora che scegli: solo analisi, oppure anche spostamento. Una riga — <code>schedule --install</code> — e l'Utilità di pianificazione è a posto.</p>
         </div>
         <div class="feature">
           <h3>Percorsi lunghi e non latini</h3>
-          <p>I percorsi oltre 260 caratteri passano dal prefisso <code>\\?\</code>, e i percorsi in coreano, giapponese o cinese vengono gestiti così come sono.</p>
+          <p>I percorsi oltre 260 caratteri passano dal prefisso <code>\\?\</code>, e i percorsi in coreano, giapponese o cinese vengono gestiti così come sono.</p>
         </div>
         <div class="feature">
           <h3>Estensioni camuffate, smascherate</h3>
@@ -747,27 +788,27 @@
         </div>
         <div class="feature">
           <h3>Cerca i file duplicati</h3>
-          <p>Prima la dimensione, poi 64 KB di hash da ciascun capo, poi il file intero: tre passaggi, e nel Cestino vanno solo le copie. L'originale si riconosce dal nome e resta.</p>
+          <p>Prima la dimensione, poi 64 KB di hash da ciascun capo, poi il file intero: tre passaggi, e nel Cestino vanno solo le copie. L'originale si riconosce dal nome e resta.</p>
         </div>
         <div class="feature">
           <h3>Cronologia</h3>
-          <p>Ogni analisi e ogni spostamento finiscono in SQLite. In <code>operation_items</code> una riga per file: origine, destinazione, stato, motivo, errore.</p>
+          <p>Ogni analisi e ogni spostamento finiscono in SQLite. In <code>operation_items</code> una riga per file: origine, destinazione, stato, motivo, errore.</p>
         </div>
         <div class="feature">
           <h3>Set di regole pronti</h3>
           <p>Aggiungi in un colpo i set di regole per studenti, impiegati, sviluppatori, foto e design. Prima di aggiungerli vedi cosa andrà dove, e le regole create da te hanno sempre la precedenza.</p>
         </div>
         <div class="feature">
-          <h3>Spazio su disco</h3>
-          <p>Mostra file grandi, file che non tocchi da tempo, spazio per categoria e spazio libero su disco, in sola lettura. Si tolgono solo i file che scegli, e solo nel Cestino.</p>
+          <h3>Spazio su disco</h3>
+          <p>Mostra file grandi, file che non tocchi da tempo, spazio per categoria e spazio libero su disco, in sola lettura. Si tolgono solo i file che scegli, e solo nel Cestino.</p>
         </div>
         <div class="feature">
-          <h3>Statistiche mese per mese</h3>
-          <p>Nel Pannello di amministrazione vedi il riordino mese per mese, il tasso di riuscita complessivo e lo spazio liberato col Cestino. Le regole si esportano in JSON e si condividono con un altro PC.</p>
+          <h3>Statistiche mese per mese</h3>
+          <p>Nel Pannello di amministrazione vedi il riordino mese per mese, il tasso di riuscita complessivo e lo spazio liberato col Cestino. Le regole si esportano in JSON e si condividono con un altro PC.</p>
         </div>
         <div class="feature">
           <h3>Una finestra che non si blocca</h3>
-          <p>Analisi e spostamenti girano su thread di lavoro: circa 5 secondi per scorrere e classificare 10.000 file. Se annulli a metà, la registrazione resta.</p>
+          <p>Analisi e spostamenti girano su thread di lavoro: circa 5 secondi per scorrere e classificare 10.000 file. Se annulli a metà, la registrazione resta.</p>
         </div>
       </div>
     </div>
@@ -787,7 +828,7 @@
         <li><span>Schemi di nome</span><span class="ex">*invoice* → Documents/Invoices</span></li>
         <li><span>Data</span><span class="ex">Images/2026/09</span></li>
         <li><span>Dimensione</span><span class="ex">Videos/Large</span></li>
-        <li><span>Analisi del contenuto (facoltativa)</span><span class="ex">solo i primi 8 KB di testo</span></li>
+        <li><span>Analisi del contenuto (facoltativa)</span><span class="ex">solo i primi 8 KB di testo</span></li>
       </ol>
 
       <div class="spacer"></div>
@@ -798,14 +839,14 @@
             <tr><th>Categorie</th><th>Estensione</th></tr>
           </thead>
           <tbody>
-            <tr><td>Documenti</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
-            <tr><td>Immagini</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
-            <tr><td>Video</td><td class="ext">mp4 mov avi mkv webm</td></tr>
-            <tr><td>Audio</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
-            <tr><td>Archivi</td><td class="ext">zip 7z rar tar gz</td></tr>
-            <tr><td>Fogli di calcolo</td><td class="ext">xls xlsx csv ods</td></tr>
-            <tr><td>Presentazioni</td><td class="ext">ppt pptx odp</td></tr>
-            <tr><td>Eseguibili</td><td class="ext">exe msi msix</td></tr>
+            <tr><td>Documenti</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
+            <tr><td>Immagini</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
+            <tr><td>Video</td><td class="ext">mp4 mov avi mkv webm</td></tr>
+            <tr><td>Audio</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
+            <tr><td>Archivi</td><td class="ext">zip 7z rar tar gz</td></tr>
+            <tr><td>Fogli di calcolo</td><td class="ext">xls xlsx csv ods</td></tr>
+            <tr><td>Presentazioni</td><td class="ext">ppt pptx odp</td></tr>
+            <tr><td>Eseguibili</td><td class="ext">exe msi msix</td></tr>
             <tr><td>Altro</td><td class="ext">tutto il resto (non classificato)</td></tr>
           </tbody>
         </table>
@@ -818,8 +859,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">La finestra</span>
-        <h2>Una tabella e il controllo è fatto</h2>
-        <p>Filtri con la ricerca, con il tasto destro controlli in Esplora file, e sposti solo ciò che hai spuntato.</p>
+        <h2>Una tabella e il controllo è fatto</h2>
+        <p>Filtri con la ricerca, con il tasto destro controlli in Esplora file, e sposti solo ciò che hai spuntato.</p>
       </div>
       <figure class="shot">
         <div class="shot-chrome">
@@ -837,8 +878,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Report</span>
-        <h2>Cosa si è mosso e quando, in una pagina sola</h2>
-        <p>Un pulsante (o <code>omnisort-cli report</code>) salva tutto il riordino fatto finora in una pagina HTML. Niente server, niente internet: la conservi o la giri così com'è.</p>
+        <h2>Cosa si è mosso e quando, in una pagina sola</h2>
+        <p>Un pulsante (o <code>omnisort-cli report</code>) salva tutto il riordino fatto finora in una pagina HTML. Niente server, niente internet: la conservi o la giri così com'è.</p>
       </div>
 
       <div class="report-mock">
@@ -860,15 +901,17 @@
             <div class="rb"><span>Altro</span><span class="rb-track"><span class="rb-fill w-11"></span></span><span class="rb-num">209</span></div>
           </div>
 
+          <div class="report-scroll">
           <table class="report-table">
             <thead><tr><th>ID</th><th>Tipo</th><th>Ora</th><th>Stato</th><th>Riusciti/Totale</th></tr></thead>
             <tbody>
-              <tr><td>#128</td><td>Riordino</td><td>09-11 03:00</td><td><span class="pill pill-ok">Fatto</span></td><td>412/412</td></tr>
-              <tr><td>#127</td><td>Annulla</td><td>09-10 21:14</td><td><span class="pill pill-info">Ripristinato</span></td><td>37/37</td></tr>
-              <tr><td>#126</td><td>Riordino</td><td>09-10 03:00</td><td><span class="pill pill-warn">Riuscito in parte</span></td><td>298/300</td></tr>
-              <tr><td>#125</td><td>Cestino</td><td>09-09 18:02</td><td><span class="pill pill-ok">Fatto</span></td><td>64/64</td></tr>
+              <tr><td>#128</td><td>Riordino</td><td>09-11 03:00</td><td><span class="pill pill-ok">Fatto</span></td><td>412/412</td></tr>
+              <tr><td>#127</td><td>Annulla</td><td>09-10 21:14</td><td><span class="pill pill-info">Ripristinato</span></td><td>37/37</td></tr>
+              <tr><td>#126</td><td>Riordino</td><td>09-10 03:00</td><td><span class="pill pill-warn">Riuscito in parte</span></td><td>298/300</td></tr>
+              <tr><td>#125</td><td>Cestino</td><td>09-09 18:02</td><td><span class="pill pill-ok">Fatto</span></td><td>64/64</td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>
@@ -884,28 +927,28 @@
       </div>
       <div class="safety">
         <ul class="checks">
-          <li><div><strong>Non elimina mai per sempre</strong><span>Eliminare vuol dire Cestino, sempre. Anche le cartelle rimaste vuote finiscono lì invece di sparire.</span></div></li>
+          <li><div><strong>Non elimina mai per sempre</strong><span>Eliminare vuol dire Cestino, sempre. Anche le cartelle rimaste vuote finiscono lì invece di sparire.</span></div></li>
           <li><div><strong>Nessuna sovrascrittura — lo garantisce il kernel</strong><span>Lo spostamento è chiesto in modo che il kernel lo rifiuti se lì c'è già qualcosa. Anche se un file compare fra il controllo e lo spostamento, nessun file altrui viene sovrascritto.</span></div></li>
-          <li><div><strong>Ricontrollato appena prima di spostare</strong><span>Se dopo l'anteprima sono cambiate dimensione o data, o il file è diventato un collegamento, viene lasciato stare.</span></div></li>
-          <li><div><strong>Le cartelle di sistema non si toccano</strong><span>I percorsi protetti vengono rifiutati già quando aggiungi la cartella, e saltati se l'analisi ci incappa.</span></div></li>
-          <li><div><strong>Prima di muovere, tutto in chiaro</strong><span>Origine, destinazione ed eventuale conflitto di nome sono tutti in chiaro; si toccano solo le righe spuntate.</span></div></li>
-          <li><div><strong>Prima si scrive, poi si sposta</strong><span>Ogni voce viene scritta nel database e solo dopo spostata. Se salta la corrente a metà, resta scritto fin dove era arrivato.</span></div></li>
-          <li><div><strong>I file in scrittura restano fermi</strong><span>I file ancora in scaricamento (.crdownload, .part) o modificati un attimo fa vengono saltati da soli.</span></div></li>
+          <li><div><strong>Ricontrollato appena prima di spostare</strong><span>Se dopo l'anteprima sono cambiate dimensione o data, o il file è diventato un collegamento, viene lasciato stare.</span></div></li>
+          <li><div><strong>Le cartelle di sistema non si toccano</strong><span>I percorsi protetti vengono rifiutati già quando aggiungi la cartella, e saltati se l'analisi ci incappa.</span></div></li>
+          <li><div><strong>Prima di muovere, tutto in chiaro</strong><span>Origine, destinazione ed eventuale conflitto di nome sono tutti in chiaro; si toccano solo le righe spuntate.</span></div></li>
+          <li><div><strong>Prima si scrive, poi si sposta</strong><span>Ogni voce viene scritta nel database e solo dopo spostata. Se salta la corrente a metà, resta scritto fin dove era arrivato.</span></div></li>
+          <li><div><strong>I file in scrittura restano fermi</strong><span>I file ancora in scaricamento (.crdownload, .part) o modificati un attimo fa vengono saltati da soli.</span></div></li>
           <li><div><strong>Anche interrotto, resta annullabile</strong><span>Se il programma muore a metà riordino, al prossimo avvio scopre fin dove era arrivato e rimette le cose in uno stato che puoi annullare.</span></div></li>
-          <li><div><strong>I collegamenti non vengono seguiti</strong><span>Non esce mai attraverso un collegamento simbolico o una giunzione, e rifiuta una destinazione il cui percorso ne attraversi uno.</span></div></li>
-          <li><div><strong>Dalla cartella radice non si esce</strong><span>Nelle regole non si possono usare <code>..</code>, percorsi assoluti o di rete; e se il percorso finale finisce fuori dalla cartella radice, non si sposta nulla.</span></div></li>
+          <li><div><strong>I collegamenti non vengono seguiti</strong><span>Non esce mai attraverso un collegamento simbolico o una giunzione, e rifiuta una destinazione il cui percorso ne attraversi uno.</span></div></li>
+          <li><div><strong>Dalla cartella radice non si esce</strong><span>Nelle regole non si possono usare <code>..</code>, percorsi assoluti o di rete; e se il percorso finale finisce fuori dalla cartella radice, non si sposta nulla.</span></div></li>
         </ul>
         <div class="protected">
           <h3>Posti che non possono mai essere destinazione</h3>
           <ul>
             <li>C:\Windows</li>
-            <li>C:\Program Files</li>
-            <li>C:\Program Files (x86)</li>
+            <li>C:\Program Files</li>
+            <li>C:\Program Files (x86)</li>
             <li>C:\ProgramData</li>
-            <li>%LOCALAPPDATA% · %APPDATA%</li>
+            <li>%LOCALAPPDATA% · %APPDATA%</li>
             <li>C:\$Recycle.Bin</li>
             <li>System Volume Information</li>
-            <li>la radice di un'unità (C:\)</li>
+            <li>la radice di un'unità (C:\)</li>
           </ul>
         </div>
       </div>
@@ -918,31 +961,31 @@
       <div class="section-head">
         <span class="eyebrow">Già pagato</span>
         <h2>Questo elenco non l'abbiamo inventato: ci siamo andati a sbattere</h2>
-        <p>Un programma che sposta file è pericoloso non perché gli manchino funzioni, ma perché i file spariscono dove nessuno guarda. Tutto ciò che segue ci è successo, ed è stato risolto.</p>
+        <p>Un programma che sposta file è pericoloso non perché gli manchino funzioni, ma perché i file spariscono dove nessuno guarda. Tutto ciò che segue ci è successo, ed è stato risolto.</p>
       </div>
       <div class="safety">
         <ul class="checks">
-          <li><div><strong>Alcuni file non possono finire nel Cestino</strong><span>File su unità di rete o rimovibili, file più grandi del Cestino stesso, unità con il Cestino disattivato. In questi casi Windows <strong>li cancella per sempre, senza chiedere</strong>. Noi verifichiamo prima e, se non si può, lasciamo il file dov'è e annotiamo il perché.</span></div></li>
-          <li><div><strong>Se togli la chiavetta a metà, perdi entrambe le copie</strong><span>Spostare tra unità significa copiare e poi cancellare l'originale. Aspettiamo che la copia sia davvero arrivata sul disco prima di cancellare. È più lento, ed è la cosa giusta.</span></div></li>
-          <li><div><strong>Una cartella può in realtà puntare altrove</strong><span>Giunzioni, nomi brevi 8.3, condivisioni amministrative (<code>\\host\C$</code>), percorsi di dispositivo. Quattro strade per rientrare nelle cartelle protette: tutte sbarrate.</span></div></li>
-          <li><div><strong>Il nome appena scelto può essere preso in quell'istante</strong><span>Subito dopo aver scelto un nome libero, un altro programma può creare un file con quel nome. Chiamiamo lo spostamento in modo che sia il kernel a rifiutare: nemmeno allora sovrascriviamo il file di qualcun altro.</span></div></li>
-          <li><div><strong>I nomi di file coreani arrivati da un Mac non sono la stessa stringa</strong><span>A schermo si legge <code>계약서.pdf</code> in entrambi i casi, ma la forma salvata è diversa e le regole mancano il bersaglio in silenzio. Le allineiamo solo per il confronto: il nome del file non viene toccato.</span></div></li>
-          <li><div><strong>Un registro che si può modificare non è un registro</strong><span>Ogni riordino viene sigillato su quello precedente. Cambia una riga, cancella un'operazione, infilane una falsa: tutto ciò che segue non torna più, e si vede.</span></div></li>
+          <li><div><strong>Alcuni file non possono finire nel Cestino</strong><span>File su unità di rete o rimovibili, file più grandi del Cestino stesso, unità con il Cestino disattivato. In questi casi Windows <strong>li cancella per sempre, senza chiedere</strong>. Noi verifichiamo prima e, se non si può, lasciamo il file dov'è e annotiamo il perché.</span></div></li>
+          <li><div><strong>Se togli la chiavetta a metà, perdi entrambe le copie</strong><span>Spostare tra unità significa copiare e poi cancellare l'originale. Aspettiamo che la copia sia davvero arrivata sul disco prima di cancellare. È più lento, ed è la cosa giusta.</span></div></li>
+          <li><div><strong>Una cartella può in realtà puntare altrove</strong><span>Giunzioni, nomi brevi 8.3, condivisioni amministrative (<code>\\host\C$</code>), percorsi di dispositivo. Quattro strade per rientrare nelle cartelle protette: tutte sbarrate.</span></div></li>
+          <li><div><strong>Il nome appena scelto può essere preso in quell'istante</strong><span>Subito dopo aver scelto un nome libero, un altro programma può creare un file con quel nome. Chiamiamo lo spostamento in modo che sia il kernel a rifiutare: nemmeno allora sovrascriviamo il file di qualcun altro.</span></div></li>
+          <li><div><strong>I nomi di file coreani arrivati da un Mac non sono la stessa stringa</strong><span>A schermo si legge <code>계약서.pdf</code> in entrambi i casi, ma la forma salvata è diversa e le regole mancano il bersaglio in silenzio. Le allineiamo solo per il confronto: il nome del file non viene toccato.</span></div></li>
+          <li><div><strong>Un registro che si può modificare non è un registro</strong><span>Ogni riordino viene sigillato su quello precedente. Cambia una riga, cancella un'operazione, infilane una falsa: tutto ciò che segue non torna più, e si vede.</span></div></li>
         </ul>
         <div class="protected">
           <h3>Non promesse: è la build a imporle</h3>
           <ul>
             <li>Nessuna eliminazione definitiva</li>
             <li>Nessuna sovrascrittura</li>
-            <li>Ricontrollato appena prima di spostare</li>
-            <li>Percorsi protetti rifiutati</li>
+            <li>Ricontrollato appena prima di spostare</li>
+            <li>Percorsi protetti rifiutati</li>
             <li>Prima il registro, poi lo spostamento</li>
-            <li>Una sola via verso l'esterno</li>
+            <li>Una sola via verso l'esterno</li>
           </ul>
           <p>Per tutti e sei, il codice che li viola <strong>non può proprio essere pubblicato.</strong></p>
         </div>
       </div>
-      <p class="paid-note">Verificalo tu stesso. La schermata [Amministrazione] mostra <strong>quante richieste sono davvero uscite da questo PC</strong>. Appena installato, dice «mai».</p>
+      <p class="paid-note">Verificalo tu stesso. La schermata [Amministrazione] mostra <strong>quante richieste sono davvero uscite da questo PC</strong>. Appena installato, dice «mai».</p>
     </div>
   </section>
 
@@ -952,7 +995,7 @@
       <div class="section-head">
         <span class="eyebrow">CLI e pianificazione</span>
         <h2>Un eseguibile da console da agganciare all'Utilità di pianificazione</h2>
-        <p>Stesso database e stesse regole della finestra. Senza <code>--apply</code> non muove un solo file.</p>
+        <p>Stesso database e stesse regole della finestra. Senza <code>--apply</code> non muove un solo file.</p>
       </div>
       <div class="cli">
         <div class="cli-head">omnisort-cli.exe</div>
@@ -998,8 +1041,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Confronto</span>
-        <h2>Spostare è facile: il difficile è quando si sposta male</h2>
-        <p>Gli strumenti che sorvegliano una cartella e spostano subito i file secondo le regole sono veloci, ma cosa è finito dove lo scopri solo dopo. OmniSort inverte l'ordine.</p>
+        <h2>Spostare è facile: il difficile è quando si sposta male</h2>
+        <p>Gli strumenti che sorvegliano una cartella e spostano subito i file secondo le regole sono veloci, ma cosa è finito dove lo scopri solo dopo. OmniSort inverte l'ordine.</p>
       </div>
       <div class="table-wrap">
         <table class="compare">
@@ -1007,7 +1050,7 @@
           <thead>
             <tr>
               <th scope="col"><span class="sr-only">Aspetto</span></th>
-              <th scope="col">A mano</th>
+              <th scope="col">A mano</th>
               <th scope="col">Spostamento automatico a regole</th>
               <th scope="col" class="ours">OmniSort</th>
             </tr>
@@ -1015,39 +1058,39 @@
           <tbody>
             <tr>
               <th scope="row">Vedere la destinazione prima di spostare</th>
-              <td class="part">Decidi tu</td>
+              <td class="part">Decidi tu</td>
               <td class="no">Lo scopri dopo lo spostamento</td>
-              <td class="yes">Destinazione e motivo per ogni file</td>
+              <td class="yes">Destinazione e motivo per ogni file</td>
             </tr>
             <tr>
-              <th scope="row">Se hai spostato male</th>
+              <th scope="row">Se hai spostato male</th>
               <td class="no">Ti affidi alla memoria</td>
               <td class="part">Dipende dallo strumento</td>
               <td class="yes">Annulla operazioni intere, anche quelle vecchie</td>
             </tr>
             <tr>
-              <th scope="row">File con lo stesso nome</th>
+              <th scope="row">File con lo stesso nome</th>
               <td class="part">Ti affidi all'avviso di sovrascrittura</td>
               <td class="part">Dipende dallo strumento</td>
-              <td class="yes">Non sovrascrive mai, in nessun caso</td>
+              <td class="yes">Non sovrascrive mai, in nessun caso</td>
             </tr>
             <tr>
               <th scope="row">File con estensione camuffata</th>
               <td class="no">Difficile accorgersene</td>
               <td class="no">Non controlla il contenuto</td>
-              <td class="yes">Legge il contenuto e segna ⚠</td>
+              <td class="yes">Legge il contenuto e segna ⚠</td>
             </tr>
             <tr>
               <th scope="row">Togliere duplicati e file grandi</th>
-              <td class="part">Uno per uno in Esplora file</td>
+              <td class="part">Uno per uno in Esplora file</td>
               <td class="no">Serve un altro strumento</td>
               <td class="yes">In un solo programma, solo nel Cestino</td>
             </tr>
             <tr>
               <th scope="row">Internet e account</th>
-              <td class="yes">Non serve</td>
+              <td class="yes">Non serve</td>
               <td class="part">Dipende dallo strumento</td>
-              <td class="yes">Non serve, e di base non esce nulla</td>
+              <td class="yes">Non serve, e di base non esce nulla</td>
             </tr>
           </tbody>
         </table>
@@ -1061,34 +1104,47 @@
       <div class="section-head">
         <span class="eyebrow">Download</span>
         <h2>Scarichi e lo avvii subito</h2>
-        <p>Non c'è un programma di installazione. Metti l'eseguibile nella cartella che preferisci, avvialo, ed è fatta.</p>
+        <p>Non c'è un programma di installazione. Metti l'eseguibile nella cartella che preferisci, avvialo, ed è fatta.</p>
       </div>
       <div class="download-grid">
         <div class="dl-card">
           <h3>Tre passaggi</h3>
           <ol class="dl-steps">
-            <li>Scarica <code>OmniSort.exe</code> dalla pagina delle release (e anche <code>omnisort-cli.exe</code>, se vuoi la riga di comando)</li>
-            <li>Metti il file nella cartella che preferisci e avvialo con un doppio clic</li>
+            <li>Scarica <code>OmniSort.exe</code> dalla pagina delle release (e anche <code>omnisort-cli.exe</code>, se vuoi la riga di comando)</li>
+            <li>Metti il file nella cartella che preferisci e avvialo con un doppio clic</li>
             <li>Aggiungi la cartella Downloads con [+ Aggiungi] e premi [Analizza]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Scarica OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.5 · 30.0 MB · SHA-256 <code>5860ec06424701deb14ab387ab6917b21c1848b298494b7f24dc89e7e529953a</code></p>
-          <p><a href="https://dl.omnisort.win/folder">Scarica lo zip a cartella</a></p>
+          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <div class="dl-alt">
+            <strong>C’è anche una versione a cartella</strong>
+            <p>Lo stesso programma, ma le librerie Qt stanno separate in una cartella <code>_internal</code>. Puoi sostituirle con la versione che preferisci (LGPL-3.0). Prova anche questa se l’antivirus blocca il file unico.</p>
+            <a href="https://dl.omnisort.win/folder">Scarica lo zip a cartella</a>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+          </div>
         </div>
         <div class="dl-card">
-          <h3>Cosa serve</h3>
+          <h3>Cosa serve</h3>
           <dl class="reqs">
-            <dt>Sistema operativo</dt><dd>Windows 10 / 11 (64 bit)</dd>
+            <dt>Sistema operativo</dt><dd>Windows 10 / 11 (64 bit)</dd>
             <dt>Installazione</dt><dd>Non serve · e nemmeno i permessi di amministratore</dd>
-            <dt>Internet</dt><dd>Non serve · usa solo le funzioni online che hai attivato</dd>
-            <dt>Cosa resta</dt><dd>L'eseguibile, il file DB per la cronologia e un piccolo file di marcatura nelle cartelle riordinate</dd>
+            <dt>Internet</dt><dd>Non serve · usa solo le funzioni online che hai attivato</dd>
+            <dt>Cosa resta</dt><dd>L'eseguibile, il file DB per la cronologia e un piccolo file di marcatura nelle cartelle riordinate</dd>
           </dl>
         </div>
         <div class="dl-card">
           <h3>Se compare la finestra “PC protetto da Windows”</h3>
-          <p>OmniSort ha la firma del codice, ma una versione appena uscita ha ancora pochi download, quindi per un po' SmartScreen può chiedere una conferma. Premi [Ulteriori informazioni], controlla che l'autore sia <code>PROJECTTEAMFORYOU</code> e poi premi [Esegui comunque]. Se il nome dell'autore è diverso o manca, non avviarlo.</p>
-          <p>Per verificare che il file scaricato sia identico a quello pubblicato, apri PowerShell nella cartella dell'exe, esegui il comando qui sotto e confronta il valore ottenuto con lo SHA-256 della pagina delle release.</p>
+          <p>OmniSort ha la firma del codice, ma una versione appena uscita ha ancora pochi download, quindi per un po' SmartScreen può chiedere una conferma. Premi [Ulteriori informazioni], controlla che l'autore sia <code>PROJECTTEAMFORYOU</code> e poi premi [Esegui comunque]. Se il nome dell'autore è diverso o manca, non avviarlo.</p>
+          <p>Per verificare che il file scaricato sia identico a quello pubblicato, apri PowerShell nella cartella dell'exe, esegui il comando qui sotto e confronta il valore ottenuto con lo SHA-256 della pagina delle release.</p>
           <div class="cli"><pre>Get-FileHash .\OmniSort.exe -Algorithm SHA256</pre></div>
+        </div>
+        <div class="dl-card">
+          <h3>Se l’antivirus lo blocca</h3>
+          <p>Il <code>OmniSort.exe</code> in file unico contiene al suo interno il programma e l’intera libreria Qt compressi. Li decomprime all’avvio.</p>
+          <p>Alcuni controlli di apprendimento automatico degli antivirus leggono questo come «si decomprime e si esegue da solo». Per questo a volte viene segnalato con un nome generico come Wacatac o Dropper.Agent. È un falso positivo comune per i programmi scritti in Python.</p>
+          <p><strong>Confronta prima lo SHA-256 qui sopra</strong> per verificare che il file ricevuto sia quello che abbiamo pubblicato. Apri anche le proprietà del file e controlla che l’autore sia <code>PROJECTTEAMFORYOU</code>.</p>
+          <p>Se coincidono entrambi, prova lo <strong>zip della versione a cartella</strong>. È un altro file, senza il blocco compresso dentro, e può essere valutato diversamente.</p>
+          <p>Ancora bloccato? Scrivi a <a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a> indicando il nome dell’antivirus e il nome mostrato. La segnalazione di falso positivo la facciamo noi.</p>
         </div>
       </div>
     </div>
@@ -1108,19 +1164,23 @@
         </details>
         <details>
           <summary>Non usa proprio internet?</summary>
-          <p>Di base, mai. Riceve dati solo se attivi tu stesso, nel Pannello di amministrazione, il controllo versione, gli avvisi o il numero di download, e anche allora non invia informazioni sui file (il controllo versione include solo il numero di versione). Cosa esce, indirizzo compreso, è scritto proprio in quel pannello.</p>
+          <p>Di base, mai. Riceve dati solo se attivi tu stesso, nel Pannello di amministrazione, il controllo versione, gli avvisi o il numero di download, e anche allora non invia informazioni sui file (il controllo versione include solo il numero di versione). Cosa esce, indirizzo compreso, è scritto proprio in quel pannello.</p>
+        </details>
+        <details>
+          <summary>Contate i download?</summary>
+          <p>Quando premi il pulsante di download, il nostro server annota solo la data, un codice paese di due lettere e quale versione hai preso. Nessun indirizzo IP, nessun nome del browser, nessuna pagina di provenienza. Ogni riga è una somma su molte persone, quindi non si risale a nessuno. Il programma in sé resta uguale: esce in rete solo per ciò che attivi nella schermata di amministrazione.</p>
         </details>
         <details>
           <summary>È gratuito?</summary>
           <p>Sì. Si usa gratis, senza account né pagamenti. Di base non c'è nemmeno pubblicità. Se nel Pannello di amministrazione attivi gli avvisi e arriva una comunicazione promozionale, viene mostrata con l'etichetta «Pubblicità».</p>
         </details>
         <details>
-          <summary>Spazio su disco elimina dei file?</summary>
-          <p>No. Spazio su disco guarda soltanto. Finiscono nel Cestino solo i file che scegli tu dall'elenco e confermi, e dal Cestino puoi recuperarli. Ciò che nel Cestino non può entrare, come i file su unità di rete o su unità rimovibili come le chiavette USB o quelli più grandi del Cestino, non viene spostato e te lo segnala.</p>
+          <summary>Spazio su disco elimina dei file?</summary>
+          <p>No. Spazio su disco guarda soltanto. Finiscono nel Cestino solo i file che scegli tu dall'elenco e confermi, e dal Cestino puoi recuperarli. Ciò che nel Cestino non può entrare, come i file su unità di rete o su unità rimovibili come le chiavette USB o quelli più grandi del Cestino, non viene spostato e te lo segnala.</p>
         </details>
         <details>
           <summary>E se il risultato non mi piace?</summary>
-          <p>Premi [Annulla] e l'ultima operazione viene ripercorsa al contrario. Puoi anche scegliere un'operazione più vecchia nella cronologia. Se nella posizione di partenza è ricomparso un file con lo stesso nome, quella voce viene saltata invece che sovrascritta — e ti viene detto quali e perché.</p>
+          <p>Premi [Annulla] e l'ultima operazione viene ripercorsa al contrario. Puoi anche scegliere un'operazione più vecchia nella cronologia. Se nella posizione di partenza è ricomparso un file con lo stesso nome, quella voce viene saltata invece che sovrascritta — e ti viene detto quali e perché.</p>
         </details>
         <details>
           <summary>Rimetterà mano a cartelle già riordinate?</summary>
@@ -1128,7 +1188,7 @@
         </details>
         <details>
           <summary>E se un file è bloccato o non ho i permessi?</summary>
-          <p>Solo quella voce risulta non riuscita e il resto va avanti. Il motivo è nella cronologia, e il file resta esattamente dov'era.</p>
+          <p>Solo quella voce risulta non riuscita e il resto va avanti. Il motivo è nella cronologia, e il file resta esattamente dov'era.</p>
         </details>
         <details>
           <summary>Bisogna installare qualcosa?</summary>
@@ -1141,7 +1201,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.5 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Domande e segnalazioni</a></span>
     
@@ -1266,7 +1326,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.5",
+  "softwareVersion": "0.2.6",
   "description": "Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.",
   "url": "https://omnisort.win/it/",
   "inLanguage": "it",
@@ -1303,6 +1363,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Di base, mai. Riceve dati solo se attivi tu stesso, nel Pannello di amministrazione, il controllo versione, gli avvisi o il numero di download, e anche allora non invia informazioni sui file (il controllo versione include solo il numero di versione). Cosa esce, indirizzo compreso, è scritto proprio in quel pannello."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Contate i download?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Quando premi il pulsante di download, il nostro server annota solo la data, un codice paese di due lettere e quale versione hai preso. Nessun indirizzo IP, nessun nome del browser, nessuna pagina di provenienza. Ogni riga è una somma su molte persone, quindi non si risale a nessuno. Il programma in sé resta uguale: esce in rete solo per ciò che attivi nella schermata di amministrazione."
       }
     },
     {

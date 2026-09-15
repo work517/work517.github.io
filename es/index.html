@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-wwkNOHuioO+X0TyXNp4Bi74n2+P1H49zjVh4HsNmAF0=' 'sha256-PqIq6wotoNNMv8FgLWqKbBvuimqgmGSgAXBH7hx6r4k='; worker-src 'self'; style-src 'sha256-4UQ6hz2L6VaGk6V4VFF7PMkAnHkOQuVPM3kduKACB28='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-Dz+XunlAEFY3KMKm3Rgbxzuaz4c5Dp4CLeKzyf+g31Y=' 'sha256-lLMk6CO/NQehjSLZ9rcXHhs9HPm8kTvI7oP+nostn0A='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.">
 <meta name="color-scheme" content="light dark">
@@ -82,7 +82,10 @@
     --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
-    --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
+    /* 작은 본문. 기능 설명·내려받기 칸·FAQ 답이 여기 걸린다 — '작은 글씨' 가
+       아니라 페이지 내용의 절반이다. 한글은 같은 크기에서 라틴보다 빽빽해
+       14px 아래로 내려가면 눈에 띄게 힘들다. 최대 13.4px -> 14.4px. */
+    --step--1: clamp(.875rem, .84rem + .12vw, .94rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
     --step-1:  clamp(1.15rem, 1.08rem + .35vw, 1.35rem);
     --step-2:  clamp(1.6rem, 1.3rem + 1.6vw, 2.9rem);
@@ -157,12 +160,24 @@
   /* CSS 기본값은 CJK 를 글자 단위로 끊는다. 한국어는 낱말 사이에 띄어쓰기가 있는데도
      '대부 / 분의' 처럼 낱말 한가운데가 갈린다. keep-all 로 낱말 경계에서만 끊는다.
      중국어·일본어는 띄어쓰기가 없어서 keep-all 을 주면 끊을 자리가 아예 없어진다
-     (제목이 넘친다). 그래서 **한국어에만** 준다.
+     (제목이 넘친다). 그래서 **그 둘만** 되돌린다.
+     한국어 페이지에만 주면 모자란다. 독일어·러시아어 페이지에도 한글 예시가 그대로
+     실려서 (계약서.pdf) '계약 / 서.pdf' 로 갈렸다 — 라틴·키릴 글자에는 keep-all 이
+     아무 일도 하지 않으므로 다 주는 편이 맞다.
      word-break 는 상속되는 속성이라 뿌리에 한 번 주면 안쪽 태그가 전부 따라온다 —
      h1·p 만 집어 주면 span·dd·figcaption 이 빠진다 (실제로 빠져 있었다).
      .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
-  html[lang="ko"] { word-break: keep-all; }
+  html { word-break: keep-all; }
+  html[lang^="ja"], html[lang^="zh"] { word-break: normal; }
   h1, h2, h3 { font-weight: 700; letter-spacing: -.033em; text-wrap: balance; margin: 0; }
+  /* 제목이 아닌데 제목처럼 읽히는 것들 — FAQ 질문·카드 제목. balance 는 줄들을
+     고르게 나눠서, 마지막 줄에 낱말 하나만 남는 것을 막는다 (독일어 FAQ 에서
+     마지막 줄이 폭의 9% 인 것이 셋 있었다). */
+  summary, .feature h3, .dl-card h3, .dl-alt strong { text-wrap: balance; }
+  /* 본문은 balance 가 아니라 pretty 다 — 줄 수가 많을 때 balance 는 비싸고,
+     정작 필요한 건 '마지막 줄에 낱말 하나' 를 막는 것뿐이다. 모르는 브라우저는
+     그냥 무시한다. */
+  p, li, dd, figcaption { text-wrap: pretty; }
   /* 커진 제목은 자간·행간을 더 조여야 덩어리로 읽힌다 */
   h1 { letter-spacing: -.045em; }
   /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구.
@@ -213,6 +228,11 @@
   @media (max-width: 720px) { .topnav a { display: none; } .topnav a[href="#download"] { display: inline; } }
   /* 360px 폰에서 fr·vi 는 [내려받기] 와 언어 칸이 한 줄에 안 들어가 옆으로 밀렸다 (2차 검수에서 측정) */
   @media (max-width: 420px) { .topbar-inner, .topnav { gap: .6rem; } .langpick select { max-width: 7.5rem; } .brand { font-size: .95rem; } }
+  /* 320px 폰(아이폰 SE)에서는 그래도 모자랐다 — 이름 + [내려받기] + 언어 칸이
+     280px 에 안 들어가 12개 언어 모두 옆으로 밀렸다 (ja 는 26px). 언어 칸을
+     더 줄인다. 감추지는 않는다 — 12개 언어를 만들어 놓고 휴대폰에서 못 바꾸게
+     되는 셈이다. */
+  @media (max-width: 360px) { .topbar-inner, .topnav { gap: .45rem; } .langpick select { max-width: 5.5rem; } }
 
   /* ------------------------------------------------------------------ 히어로 */
   /* 위아래로 넉넉히. 제목을 키운 만큼 숨 쉴 자리가 없으면 도로 답답해진다. */
@@ -376,7 +396,8 @@
   }
   .checks strong { font-weight: 600; letter-spacing: -.012em; }
   .checks span { color: var(--muted); font-size: var(--step--1); display: block;
-                 line-height: 1.65; grid-column: 2; }
+                 /* 폭 611px 에 작은 글씨라 한 줄에 44자까지 갔다. */
+                 line-height: 1.65; grid-column: 2; max-width: 56ch; }
 
   .protected { border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
                overflow: hidden; align-self: start; padding: 1.35rem 1.4rem 1.5rem; }
@@ -402,9 +423,19 @@
   .report-tile strong { font-size: 1.45rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
   .report-tile small { font-size: .72rem; font-weight: 500; color: var(--muted); margin-left: .2rem; }
   .report-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.5rem; padding: 1.25rem; border-top: 1px solid var(--line); }
+  /* 표가 다섯 칸이라 좁은 화면에서는 줄일 수 없다. 제 칸에서 옆으로 밀리게 둔다.
+     안 그러면 표가 칸을 넓혀 버리고, 바깥 상자의 overflow:hidden 이 오른쪽을
+     잘라 낸다 — 독일어 320px 에서 [성공/전체] 칸이 통째로 안 보였다. 옆에 있는
+     막대그래프까지 같이 늘어나 숫자가 잘렸다. */
+  .report-scroll { overflow-x: auto; }
   @media (max-width: 820px) { .report-body { grid-template-columns: 1fr; } }
-  .report-bars { display: grid; gap: .5rem; align-content: start; }
-  .rb { display: grid; grid-template-columns: 3.6rem 1fr auto; gap: .6rem; align-items: center; font-size: var(--step--1); color: var(--ink-soft); }
+  /* 줄마다 따로 grid 를 두고 첫 칸을 3.6rem 으로 고정했더니, 그보다 긴 이름
+     (독일어 Dokumente·Komprimiert)이 칸을 밀어내 그래프가 통째로 넘쳤다 —
+     320px 에서 439px 까지. 한 grid 로 합치고 첫 칸을 auto 로 두면 이름 칸은
+     제일 긴 것에 맞춰 한 번만 정해지고, 막대가 남은 자리를 가진다. */
+  .report-bars { display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+                 gap: .5rem .6rem; align-content: start; align-items: center; }
+  .rb { display: contents; font-size: var(--step--1); color: var(--ink-soft); }
   .rb-track { height: 12px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
   .rb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
   /* 막대 길이. style 속성으로 두면 CSP 에서 'unsafe-inline' 을 못 뗀다. */
@@ -472,7 +503,13 @@
   .compare td:last-child { background: color-mix(in srgb, var(--accent) 6%, transparent); color: var(--ink); }
 
   /* 내려받기 */
-  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  /* 칸이 넷이 됐다. 260px 로 두면 넷이 한 줄에 눌려 들어가 글자가 답답해진다. */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  /* 폴더형은 곁들이다. 본 단추와 같은 무게로 두면 무엇을 받아야 할지 흐려진다. */
+  .dl-alt { margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+  .dl-alt strong { display: block; font-size: .95rem; margin-bottom: .4rem; }
+  .dl-alt p { color: var(--muted); font-size: var(--step--1); line-height: 1.65; margin-bottom: .6rem; }
+  .dl-alt > a { font-size: var(--step--1); color: var(--accent); }
   .dl-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
   .dl-card h3 { margin: 0; }
   .dl-card p { margin: 0; color: var(--muted); font-size: var(--step--1); }
@@ -484,13 +521,17 @@
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
 
   /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
-  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 크기를 따로 적어 두면 타입 스케일을 올려도 여기만 옛 값으로 남는다.
+     실제로 13.76px 로 혼자 뒤처져 있었다 — 페이지에서 유일하게 14px 아래였다. */
+  #paid .protected p { margin: .8rem 0 0; font-size: var(--step--1); color: var(--muted); }
   /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
      떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
      이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
   #paid .checks code { font-family: var(--sans); background: var(--surface-2);
     padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
-  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+  /* 한 줄에 59자까지 늘어져 있었다. 한글은 25~40자가 편하고, 그 위로는 눈이
+     줄 끝에서 다음 줄 머리를 못 찾는다. */
+  .paid-note { max-width: 62ch; margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
     background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
@@ -562,20 +603,20 @@
     
     <div class="hero-head">
       <span class="eyebrow">Windows 10 / 11 · solo local · sin instalación</span>
-      <h1>Antes de mover un solo archivo,<br><em>te muestra adónde</em> va cada uno</h1>
+      <h1>Antes de mover un solo archivo,<br><em>te muestra adónde</em> va cada uno</h1>
     </div>
     <div class="hero-grid">
       <div class="hero-copy">
         <p class="lead">
           Recorre tu carpeta de Descargas, clasifica por extensión, nombre, fecha y tamaño,
           y en cada fila escribe «por qué esta carpeta» antes de mover nada.
-          Solo se mueve lo que apruebas, y todo se puede deshacer.
+          Solo se mueve lo que apruebas, y todo se puede deshacer.
         </p>
         <ul class="checklist">
-          <li>Antes de mover, muestra el destino y el motivo de cada archivo</li>
-          <li>Mueve solo lo marcado y lo devuelve todo de una vez</li>
+          <li>Antes de mover, muestra el destino y el motivo de cada archivo</li>
+          <li>Mueve solo lo marcado y lo devuelve todo de una vez</li>
           <li>Nunca sobrescribe: si ya hay algo ahí, el núcleo rechaza el movimiento</li>
-          <li>Un ejecutable, sin instalación; todo ocurre en este PC</li>
+          <li>Un ejecutable, sin instalación; todo ocurre en este PC</li>
         </ul>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Descargar OmniSort.exe</a>
@@ -584,10 +625,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.5</span>
+          <span>v0.2.6</span>
           <span>Un solo ejecutable</span>
           <span>100 000 archivos ≈ 49 s</span>
-          <span>966 pruebas</span>
+          <span>1,191 pruebas</span>
         </div>
       </div>
 
@@ -631,13 +672,13 @@
                 <td class="col-check"><input type="checkbox" checked aria-label="Marcar ventas_septiembre.xlsx"></td>
                 <td class="cell-name">ventas_septiembre.xlsx</td>
                 <td><span class="folder">Spreadsheets</span></td>
-                <td class="cell-reason">extensión .xlsx</td>
+                <td class="cell-reason">extensión .xlsx</td>
               </tr>
               <tr data-size="44">
                 <td class="col-check"><input type="checkbox" checked aria-label="Marcar playlist-bounce.mp3"></td>
                 <td class="cell-name">playlist-bounce.mp3</td>
                 <td><span class="folder">Audio</span></td>
-                <td class="cell-reason">extensión .mp3</td>
+                <td class="cell-reason">extensión .mp3</td>
               </tr>
               <tr class="danger" data-size="12">
                 <td class="col-check"><input type="checkbox" aria-label="Marcar presupuesto_final.pdf"></td>
@@ -661,7 +702,7 @@
                 <td class="col-check"><input type="checkbox" aria-label="Marcar VSCodeUserSetup-x64.exe"></td>
                 <td class="cell-name">VSCodeUserSetup-x64.exe</td>
                 <td><span class="folder">Installers</span></td>
-                <td class="cell-reason">extensión .exe</td>
+                <td class="cell-reason">extensión .exe</td>
               </tr>
             </tbody>
           </table>
@@ -683,23 +724,23 @@
       <div class="section-head">
         <span class="eyebrow">Cómo funciona</span>
         <h2>Analizar → vista previa → organizar</h2>
-        <p>Los tres pasos respetan su orden. Nada se toca antes de terminar el análisis, y nada se mueve sin tu visto bueno.</p>
+        <p>Los tres pasos respetan su orden. Nada se toca antes de terminar el análisis, y nada se mueve sin tu visto bueno.</p>
       </div>
       <div class="steps">
         <div class="step">
           <span class="step-n">1</span>
           <h3>Analizar</h3>
-          <p>Tus carpetas se leen en segundo plano. Los archivos ocultos y de sistema, los enlaces simbólicos y carpetas como node_modules quedan fuera. Puedes cancelar en cualquier momento.</p>
+          <p>Tus carpetas se leen en segundo plano. Los archivos ocultos y de sistema, los enlaces simbólicos y carpetas como node_modules quedan fuera. Puedes cancelar en cualquier momento.</p>
         </div>
         <div class="step">
           <span class="step-n">2</span>
           <h3>Vista previa</h3>
-          <p>Archivo, dónde está, dónde iría y por qué: todo en una tabla. Los choques de nombre se marcan de antemano, y las casillas las decides tú.</p>
+          <p>Archivo, dónde está, dónde iría y por qué: todo en una tabla. Los choques de nombre se marcan de antemano, y las casillas las decides tú.</p>
         </div>
         <div class="step">
           <span class="step-n">3</span>
           <h3>Organizar</h3>
-          <p>Solo se mueve lo marcado, y cada movimiento queda anotado. ¿No te convence? Un [Deshacer] y todo vuelve a su sitio.</p>
+          <p>Solo se mueve lo marcado, y cada movimiento queda anotado. ¿No te convence? Un [Deshacer] y todo vuelve a su sitio.</p>
         </div>
       </div>
     </div>
@@ -710,7 +751,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Funciones</span>
-        <h2>Solo lo que necesita un organizador, bien hecho</h2>
+        <h2>Solo lo que necesita un organizador, bien hecho</h2>
       </div>
       <div class="features">
         <div class="feature">
@@ -726,48 +767,48 @@
           <p>Origen y destino se guardan por operación y se recorren al revés. Si en el sitio original ha aparecido otro archivo, se omite en vez de sobrescribir.</p>
         </div>
         <div class="feature">
-          <h3>Cuando el nombre choca</h3>
+          <h3>Cuando el nombre choca</h3>
           <p>Si el nombre choca, se guarda como <code>informe (1).pdf</code> o se omite. Nunca, bajo ningún supuesto, se sobrescribe.</p>
         </div>
         <div class="feature">
           <h3>Exclusiones</h3>
-          <p>Deja fuera con una regla lo que no se debe tocar: <code>*.crdownload</code>, lo que baje de cierto tamaño, carpetas enteras.</p>
+          <p>Deja fuera con una regla lo que no se debe tocar: <code>*.crdownload</code>, lo que baje de cierto tamaño, carpetas enteras.</p>
         </div>
         <div class="feature">
           <h3>Limpieza programada</h3>
-          <p>Cada día a la hora que elijas: solo analizar, o mover también. Una línea, <code>schedule --install</code>, y el Programador de tareas queda listo.</p>
+          <p>Cada día a la hora que elijas: solo analizar, o mover también. Una línea, <code>schedule --install</code>, y el Programador de tareas queda listo.</p>
         </div>
         <div class="feature">
           <h3>Rutas largas y no latinas</h3>
-          <p>Las rutas de más de 260 caracteres pasan por el prefijo <code>\\?\</code>, y las rutas en coreano, japonés o chino se manejan tal cual.</p>
+          <p>Las rutas de más de 260 caracteres pasan por el prefijo <code>\\?\</code>, y las rutas en coreano, japonés o chino se manejan tal cual.</p>
         </div>
         <div class="feature">
-          <h3>Extensiones falsas, a la vista</h3>
+          <h3>Extensiones falsas, a la vista</h3>
           <p>Un «presupuesto.pdf» que en realidad es un programa, o una extensión doble como <code>factura.pdf.exe</code>, se marcan con ⚠. Solo se leen los primeros 512 bytes de las extensiones que vale la pena falsificar.</p>
         </div>
         <div class="feature">
           <h3>Buscar archivos duplicados</h3>
-          <p>Tamaño, luego un hash de 64KB por cada extremo, luego el archivo entero: tres pasadas, y solo las copias van a la Papelera. El original se elige por su nombre y se conserva.</p>
+          <p>Tamaño, luego un hash de 64KB por cada extremo, luego el archivo entero: tres pasadas, y solo las copias van a la Papelera. El original se elige por su nombre y se conserva.</p>
         </div>
         <div class="feature">
           <h3>Historial</h3>
-          <p>Cada análisis y cada movimiento quedan en SQLite. Una fila por archivo en <code>operation_items</code>: origen, destino, estado, motivo, error.</p>
+          <p>Cada análisis y cada movimiento quedan en SQLite. Una fila por archivo en <code>operation_items</code>: origen, destino, estado, motivo, error.</p>
         </div>
         <div class="feature">
           <h3>Paquetes de reglas</h3>
-          <p>Añade de una vez paquetes de reglas para estudiantes, oficina, desarrollo y foto/diseño. Antes te enseña qué iría adónde, y tus propias reglas siempre van primero.</p>
+          <p>Añade de una vez paquetes de reglas para estudiantes, oficina, desarrollo y foto/diseño. Antes te enseña qué iría adónde, y tus propias reglas siempre van primero.</p>
         </div>
         <div class="feature">
           <h3>Buscar espacio</h3>
-          <p>Muestra, solo leyendo, los archivos grandes, los que nadie toca desde hace tiempo, el espacio por categoría y lo que queda libre en el disco. Solo se quita lo que eliges, y a la Papelera.</p>
+          <p>Muestra, solo leyendo, los archivos grandes, los que nadie toca desde hace tiempo, el espacio por categoría y lo que queda libre en el disco. Solo se quita lo que eliges, y a la Papelera.</p>
         </div>
         <div class="feature">
-          <h3>Estadísticas de cada mes</h3>
-          <p>En el Panel de administración ves lo organizado cada mes, la tasa de éxito global y el volumen enviado a la Papelera. Las reglas se exportan en JSON para compartirlas con otro PC.</p>
+          <h3>Estadísticas de cada mes</h3>
+          <p>En el Panel de administración ves lo organizado cada mes, la tasa de éxito global y el volumen enviado a la Papelera. Las reglas se exportan en JSON para compartirlas con otro PC.</p>
         </div>
         <div class="feature">
           <h3>Una ventana que no se congela</h3>
-          <p>El análisis y los movimientos corren en hilos de trabajo: unos 5 segundos para revisar y clasificar 10 000 archivos. Si cancelas a medias, el registro se queda.</p>
+          <p>El análisis y los movimientos corren en hilos de trabajo: unos 5 segundos para revisar y clasificar 10 000 archivos. Si cancelas a medias, el registro se queda.</p>
         </div>
       </div>
     </div>
@@ -778,7 +819,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Reglas de clasificación</span>
-        <h2>Seis pasos, aplicados en orden</h2>
+        <h2>Seis pasos, aplicados en orden</h2>
         <p>Cuando un paso decide, los de abajo ni se consultan. La fecha y el tamaño solo añaden una subcarpeta una vez fijada la categoría.</p>
       </div>
       <ol class="priority">
@@ -787,7 +828,7 @@
         <li><span>Patrones de nombre</span><span class="ex">*invoice* → Documents/Invoices</span></li>
         <li><span>Fecha</span><span class="ex">Images/2026/09</span></li>
         <li><span>Tamaño</span><span class="ex">Videos/Large</span></li>
-        <li><span>Análisis del contenido (opcional)</span><span class="ex">solo los primeros 8KB de texto</span></li>
+        <li><span>Análisis del contenido (opcional)</span><span class="ex">solo los primeros 8KB de texto</span></li>
       </ol>
 
       <div class="spacer"></div>
@@ -798,14 +839,14 @@
             <tr><th>Categorías</th><th>Extensión</th></tr>
           </thead>
           <tbody>
-            <tr><td>Documentos</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
-            <tr><td>Imágenes</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
-            <tr><td>Vídeos</td><td class="ext">mp4 mov avi mkv webm</td></tr>
-            <tr><td>Audio</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
-            <tr><td>Comprimidos</td><td class="ext">zip 7z rar tar gz</td></tr>
-            <tr><td>Hojas de cálculo</td><td class="ext">xls xlsx csv ods</td></tr>
-            <tr><td>Presentaciones</td><td class="ext">ppt pptx odp</td></tr>
-            <tr><td>Instaladores</td><td class="ext">exe msi msix</td></tr>
+            <tr><td>Documentos</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
+            <tr><td>Imágenes</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
+            <tr><td>Vídeos</td><td class="ext">mp4 mov avi mkv webm</td></tr>
+            <tr><td>Audio</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
+            <tr><td>Comprimidos</td><td class="ext">zip 7z rar tar gz</td></tr>
+            <tr><td>Hojas de cálculo</td><td class="ext">xls xlsx csv ods</td></tr>
+            <tr><td>Presentaciones</td><td class="ext">ppt pptx odp</td></tr>
+            <tr><td>Instaladores</td><td class="ext">exe msi msix</td></tr>
             <tr><td>Otros</td><td class="ext">todo lo demás (sin clasificar)</td></tr>
           </tbody>
         </table>
@@ -819,7 +860,7 @@
       <div class="section-head">
         <span class="eyebrow">La ventana</span>
         <h2>Una tabla y ya está revisado</h2>
-        <p>Filtras con la búsqueda, compruebas algo en el Explorador con el botón derecho y mueves solo lo que marcaste.</p>
+        <p>Filtras con la búsqueda, compruebas algo en el Explorador con el botón derecho y mueves solo lo que marcaste.</p>
       </div>
       <figure class="shot">
         <div class="shot-chrome">
@@ -838,7 +879,7 @@
       <div class="section-head">
         <span class="eyebrow">Informe</span>
         <h2>Qué se movió y cuándo, en una sola página</h2>
-        <p>Un botón (o <code>omnisort-cli report</code>) reúne todo lo organizado hasta ahora en una página HTML. Sin servidor y sin internet: la guardas o la compartes tal cual.</p>
+        <p>Un botón (o <code>omnisort-cli report</code>) reúne todo lo organizado hasta ahora en una página HTML. Sin servidor y sin internet: la guardas o la compartes tal cual.</p>
       </div>
 
       <div class="report-mock">
@@ -860,15 +901,17 @@
             <div class="rb"><span>Otros</span><span class="rb-track"><span class="rb-fill w-11"></span></span><span class="rb-num">209</span></div>
           </div>
 
+          <div class="report-scroll">
           <table class="report-table">
             <thead><tr><th>ID</th><th>Tipo</th><th>Hora</th><th>Estado</th><th>Hechos/Total</th></tr></thead>
             <tbody>
-              <tr><td>#128</td><td>Organización</td><td>09-11 03:00</td><td><span class="pill pill-ok">Hecho</span></td><td>412/412</td></tr>
-              <tr><td>#127</td><td>Deshacer</td><td>09-10 21:14</td><td><span class="pill pill-info">Deshecho</span></td><td>37/37</td></tr>
-              <tr><td>#126</td><td>Organización</td><td>09-10 03:00</td><td><span class="pill pill-warn">Parcial</span></td><td>298/300</td></tr>
-              <tr><td>#125</td><td>Papelera</td><td>09-09 18:02</td><td><span class="pill pill-ok">Hecho</span></td><td>64/64</td></tr>
+              <tr><td>#128</td><td>Organización</td><td>09-11 03:00</td><td><span class="pill pill-ok">Hecho</span></td><td>412/412</td></tr>
+              <tr><td>#127</td><td>Deshacer</td><td>09-10 21:14</td><td><span class="pill pill-info">Deshecho</span></td><td>37/37</td></tr>
+              <tr><td>#126</td><td>Organización</td><td>09-10 03:00</td><td><span class="pill pill-warn">Parcial</span></td><td>298/300</td></tr>
+              <tr><td>#125</td><td>Papelera</td><td>09-09 18:02</td><td><span class="pill pill-ok">Hecho</span></td><td>64/64</td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>
@@ -880,32 +923,32 @@
       <div class="section-head">
         <span class="eyebrow">Seguridad</span>
         <h2>No borra. No sobrescribe.</h2>
-        <p>Cuando un organizador se equivoca, pierdes datos. Por eso lo que no se puede deshacer simplemente no está.</p>
+        <p>Cuando un organizador se equivoca, pierdes datos. Por eso lo que no se puede deshacer simplemente no está.</p>
       </div>
       <div class="safety">
         <ul class="checks">
           <li><div><strong>Nunca borra para siempre</strong><span>Borrar significa la Papelera, siempre. Incluso las carpetas que quedan vacías después van allí en vez de desaparecer.</span></div></li>
-          <li><div><strong>Sin sobrescribir — lo garantiza el núcleo</strong><span>El movimiento se pide de forma que el núcleo lo rechace si ya hay algo ahí. Aunque aparezca un archivo entre la comprobación y el movimiento, no se pisa el archivo de nadie.</span></div></li>
-          <li><div><strong>Otra comprobación justo antes</strong><span>Si después de la vista previa cambió el tamaño o la fecha, o el archivo se convirtió en un enlace, se deja quieto.</span></div></li>
-          <li><div><strong>Las carpetas del sistema, intocables</strong><span>Las rutas protegidas se rechazan al añadir la carpeta, y se omiten si el análisis se topa con una.</span></div></li>
-          <li><div><strong>Todo a la vista antes de mover</strong><span>Origen, destino y posible choque de nombres, todo a la vista; solo se tocan las filas marcadas.</span></div></li>
-          <li><div><strong>Primero se anota, luego se mueve</strong><span>Cada elemento se anota en la base de datos y después se mueve. Si se corta a medias, queda registrado hasta dónde llegó.</span></div></li>
-          <li><div><strong>Los archivos en uso se quedan quietos</strong><span>Los archivos que se están descargando (.crdownload, .part) o que cambiaron hace un momento se omiten solos.</span></div></li>
-          <li><div><strong>Aunque se interrumpa, se puede deshacer</strong><span>Si el programa muere a mitad, el siguiente arranque averigua hasta dónde llegó y lo deja en un estado que puedes deshacer.</span></div></li>
-          <li><div><strong>Los enlaces no se siguen</strong><span>Nunca se sale por un enlace simbólico o una unión, y rechaza un destino cuya ruta pase por uno.</span></div></li>
-          <li><div><strong>Nada sale de la raíz</strong><span>Las reglas no admiten <code>..</code>, rutas absolutas ni rutas de red; y si la ruta final cae fuera de la carpeta raíz, no se mueve nada.</span></div></li>
+          <li><div><strong>Sin sobrescribir — lo garantiza el núcleo</strong><span>El movimiento se pide de forma que el núcleo lo rechace si ya hay algo ahí. Aunque aparezca un archivo entre la comprobación y el movimiento, no se pisa el archivo de nadie.</span></div></li>
+          <li><div><strong>Otra comprobación justo antes</strong><span>Si después de la vista previa cambió el tamaño o la fecha, o el archivo se convirtió en un enlace, se deja quieto.</span></div></li>
+          <li><div><strong>Las carpetas del sistema, intocables</strong><span>Las rutas protegidas se rechazan al añadir la carpeta, y se omiten si el análisis se topa con una.</span></div></li>
+          <li><div><strong>Todo a la vista antes de mover</strong><span>Origen, destino y posible choque de nombres, todo a la vista; solo se tocan las filas marcadas.</span></div></li>
+          <li><div><strong>Primero se anota, luego se mueve</strong><span>Cada elemento se anota en la base de datos y después se mueve. Si se corta a medias, queda registrado hasta dónde llegó.</span></div></li>
+          <li><div><strong>Los archivos en uso se quedan quietos</strong><span>Los archivos que se están descargando (.crdownload, .part) o que cambiaron hace un momento se omiten solos.</span></div></li>
+          <li><div><strong>Aunque se interrumpa, se puede deshacer</strong><span>Si el programa muere a mitad, el siguiente arranque averigua hasta dónde llegó y lo deja en un estado que puedes deshacer.</span></div></li>
+          <li><div><strong>Los enlaces no se siguen</strong><span>Nunca se sale por un enlace simbólico o una unión, y rechaza un destino cuya ruta pase por uno.</span></div></li>
+          <li><div><strong>Nada sale de la raíz</strong><span>Las reglas no admiten <code>..</code>, rutas absolutas ni rutas de red; y si la ruta final cae fuera de la carpeta raíz, no se mueve nada.</span></div></li>
         </ul>
         <div class="protected">
           <h3>Sitios que nunca pueden ser destino</h3>
           <ul>
             <li>C:\Windows</li>
-            <li>C:\Program Files</li>
-            <li>C:\Program Files (x86)</li>
+            <li>C:\Program Files</li>
+            <li>C:\Program Files (x86)</li>
             <li>C:\ProgramData</li>
-            <li>%LOCALAPPDATA% · %APPDATA%</li>
+            <li>%LOCALAPPDATA% · %APPDATA%</li>
             <li>C:\$Recycle.Bin</li>
             <li>System Volume Information</li>
-            <li>la raíz de una unidad (C:\)</li>
+            <li>la raíz de una unidad (C:\)</li>
           </ul>
         </div>
       </div>
@@ -916,33 +959,33 @@
   <section id="paid">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Ya nos costó</span>
+        <span class="eyebrow">Ya nos costó</span>
         <h2>Esta lista no la inventamos: nos la encontramos</h2>
         <p>Un programa que mueve archivos es peligroso no por falta de funciones, sino porque los archivos desaparecen donde nadie mira. Todo lo de abajo nos pasó, y lo arreglamos.</p>
       </div>
       <div class="safety">
         <ul class="checks">
-          <li><div><strong>Hay archivos que no pueden ir a la Papelera</strong><span>Archivos en unidades de red o extraíbles, archivos más grandes que la propia papelera, unidades con la papelera desactivada. En esos casos Windows <strong>los borra para siempre, sin preguntar</strong>. Nosotros lo comprobamos antes y, si no se puede, dejamos el archivo y anotamos el motivo.</span></div></li>
-          <li><div><strong>Si sacas el USB a mitad, pierdes las dos copias</strong><span>Mover entre unidades es copiar y luego borrar el original. Esperamos a que la copia haya llegado de verdad al disco antes de borrar nada. Es más lento, y es lo correcto.</span></div></li>
+          <li><div><strong>Hay archivos que no pueden ir a la Papelera</strong><span>Archivos en unidades de red o extraíbles, archivos más grandes que la propia papelera, unidades con la papelera desactivada. En esos casos Windows <strong>los borra para siempre, sin preguntar</strong>. Nosotros lo comprobamos antes y, si no se puede, dejamos el archivo y anotamos el motivo.</span></div></li>
+          <li><div><strong>Si sacas el USB a mitad, pierdes las dos copias</strong><span>Mover entre unidades es copiar y luego borrar el original. Esperamos a que la copia haya llegado de verdad al disco antes de borrar nada. Es más lento, y es lo correcto.</span></div></li>
           <li><div><strong>Una carpeta puede apuntar en realidad a otro sitio</strong><span>Uniones, nombres cortos 8.3, recursos administrativos (<code>\\host\C$</code>), rutas de dispositivo. Cuatro maneras de volver a carpetas protegidas: las cuatro bloqueadas.</span></div></li>
-          <li><div><strong>El nombre que acabas de elegir puede ocuparse en ese instante</strong><span>Justo después de elegir un nombre libre, otro programa puede crear un archivo con él. Hacemos la llamada de modo que el propio núcleo la rechace, así ni siquiera entonces sobrescribimos el archivo de nadie.</span></div></li>
-          <li><div><strong>Los nombres coreanos venidos de un Mac no son la misma cadena</strong><span>En pantalla se lee <code>계약서.pdf</code> igual, pero la forma guardada difiere, así que las reglas fallan en silencio. Las igualamos solo al comparar: el nombre del archivo no se toca.</span></div></li>
-          <li><div><strong>Un registro que se puede editar no es un registro</strong><span>Cada limpieza se sella sobre la anterior. Cambia una fila, borra una operación o cuela una falsa: todo lo posterior deja de cuadrar y se nota.</span></div></li>
+          <li><div><strong>El nombre que acabas de elegir puede ocuparse en ese instante</strong><span>Justo después de elegir un nombre libre, otro programa puede crear un archivo con él. Hacemos la llamada de modo que el propio núcleo la rechace, así ni siquiera entonces sobrescribimos el archivo de nadie.</span></div></li>
+          <li><div><strong>Los nombres coreanos venidos de un Mac no son la misma cadena</strong><span>En pantalla se lee <code>계약서.pdf</code> igual, pero la forma guardada difiere, así que las reglas fallan en silencio. Las igualamos solo al comparar: el nombre del archivo no se toca.</span></div></li>
+          <li><div><strong>Un registro que se puede editar no es un registro</strong><span>Cada limpieza se sella sobre la anterior. Cambia una fila, borra una operación o cuela una falsa: todo lo posterior deja de cuadrar y se nota.</span></div></li>
         </ul>
         <div class="protected">
           <h3>No son promesas: lo impone la compilación</h3>
           <ul>
             <li>Sin borrado permanente</li>
             <li>Sin sobrescritura</li>
-            <li>Revisado justo antes de mover</li>
+            <li>Revisado justo antes de mover</li>
             <li>Rutas protegidas rechazadas</li>
             <li>Primero el registro, luego el movimiento</li>
-            <li>Una sola salida al exterior</li>
+            <li>Una sola salida al exterior</li>
           </ul>
-          <p>En los seis casos, el código que los rompa <strong>no puede publicarse siquiera.</strong></p>
+          <p>En los seis casos, el código que los rompa <strong>no puede publicarse siquiera.</strong></p>
         </div>
       </div>
-      <p class="paid-note">Compruébalo tú mismo. La pantalla [Admin] muestra <strong>cuántas peticiones salieron realmente de este PC</strong>. Recién instalado pone «nunca».</p>
+      <p class="paid-note">Compruébalo tú mismo. La pantalla [Admin] muestra <strong>cuántas peticiones salieron realmente de este PC</strong>. Recién instalado pone «nunca».</p>
     </div>
   </section>
 
@@ -952,7 +995,7 @@
       <div class="section-head">
         <span class="eyebrow">CLI y programación</span>
         <h2>Un ejecutable de consola listo para el Programador de tareas</h2>
-        <p>Misma base de datos y mismas reglas que la ventana. Sin <code>--apply</code> no mueve ni un archivo.</p>
+        <p>Misma base de datos y mismas reglas que la ventana. Sin <code>--apply</code> no mueve ni un archivo.</p>
       </div>
       <div class="cli">
         <div class="cli-head">omnisort-cli.exe</div>
@@ -998,8 +1041,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Comparativa</span>
-        <h2>Lo difícil no es mover, sino arreglarlo cuando algo va mal</h2>
-        <p>Las herramientas que vigilan una carpeta y mueven al instante según reglas son rápidas, pero qué fue adónde lo descubres después. OmniSort le da la vuelta al orden.</p>
+        <h2>Lo difícil no es mover, sino arreglarlo cuando algo va mal</h2>
+        <p>Las herramientas que vigilan una carpeta y mueven al instante según reglas son rápidas, pero qué fue adónde lo descubres después. OmniSort le da la vuelta al orden.</p>
       </div>
       <div class="table-wrap">
         <table class="compare">
@@ -1007,20 +1050,20 @@
           <thead>
             <tr>
               <th scope="col"><span class="sr-only">Aspecto</span></th>
-              <th scope="col">Organizar a mano</th>
+              <th scope="col">Organizar a mano</th>
               <th scope="col">Mover al instante por reglas</th>
               <th scope="col" class="ours">OmniSort</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Ver el destino antes de mover</th>
-              <td class="part">Decides tú</td>
-              <td class="no">Lo sabes después de mover</td>
+              <th scope="row">Ver el destino antes de mover</th>
+              <td class="part">Decides tú</td>
+              <td class="no">Lo sabes después de mover</td>
               <td class="yes">Destino y motivo de cada archivo</td>
             </tr>
             <tr>
-              <th scope="row">Si algo se mueve mal</th>
+              <th scope="row">Si algo se mueve mal</th>
               <td class="no">Depende de tu memoria</td>
               <td class="part">Depende de la herramienta</td>
               <td class="yes">Deshace operaciones enteras, también las antiguas</td>
@@ -1029,13 +1072,13 @@
               <th scope="row">Archivos con el mismo nombre</th>
               <td class="part">Depende del aviso de sobrescritura</td>
               <td class="part">Depende de la herramienta</td>
-              <td class="yes">Nunca sobrescribe, pase lo que pase</td>
+              <td class="yes">Nunca sobrescribe, pase lo que pase</td>
             </tr>
             <tr>
-              <th scope="row">Archivos con extensión falsa</th>
-              <td class="no">Difícil de notar</td>
+              <th scope="row">Archivos con extensión falsa</th>
+              <td class="no">Difícil de notar</td>
               <td class="no">No mira el contenido</td>
-              <td class="yes">Lee el contenido y marca con ⚠</td>
+              <td class="yes">Lee el contenido y marca con ⚠</td>
             </tr>
             <tr>
               <th scope="row">Quitar duplicados y archivos grandes</th>
@@ -1045,9 +1088,9 @@
             </tr>
             <tr>
               <th scope="row">Internet y cuenta</th>
-              <td class="yes">No hace falta</td>
+              <td class="yes">No hace falta</td>
               <td class="part">Depende de la herramienta</td>
-              <td class="yes">No hace falta; por defecto no sale nada</td>
+              <td class="yes">No hace falta; por defecto no sale nada</td>
             </tr>
           </tbody>
         </table>
@@ -1060,35 +1103,48 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Descargar</span>
-        <h2>Descargar y ejecutar, sin más</h2>
-        <p>No hay instalador. Pones un único ejecutable en la carpeta que quieras, lo ejecutas y listo.</p>
+        <h2>Descargar y ejecutar, sin más</h2>
+        <p>No hay instalador. Pones un único ejecutable en la carpeta que quieras, lo ejecutas y listo.</p>
       </div>
       <div class="download-grid">
         <div class="dl-card">
-          <h3>Tres pasos</h3>
+          <h3>Tres pasos</h3>
           <ol class="dl-steps">
-            <li>Descarga <code>OmniSort.exe</code> desde la página de lanzamientos (y <code>omnisort-cli.exe</code> si quieres usar la línea de comandos)</li>
-            <li>Déjalo en la carpeta que quieras y ábrelo con doble clic</li>
+            <li>Descarga <code>OmniSort.exe</code> desde la página de lanzamientos (y <code>omnisort-cli.exe</code> si quieres usar la línea de comandos)</li>
+            <li>Déjalo en la carpeta que quieras y ábrelo con doble clic</li>
             <li>Añade la carpeta Downloads con [+ Añadir] y pulsa [Analizar]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Descargar OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.5 · 30.0 MB · SHA-256 <code>5860ec06424701deb14ab387ab6917b21c1848b298494b7f24dc89e7e529953a</code></p>
-          <p><a href="https://dl.omnisort.win/folder">Descargar el zip en carpeta</a></p>
+          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <div class="dl-alt">
+            <strong>También hay una versión en carpeta</strong>
+            <p>El mismo programa, pero las bibliotecas Qt están aparte, en una carpeta <code>_internal</code>. Puedes cambiarlas por la versión que prefieras (LGPL-3.0). Prueba también esta si el antivirus bloquea el archivo único.</p>
+            <a href="https://dl.omnisort.win/folder">Descargar el zip en carpeta</a>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+          </div>
         </div>
         <div class="dl-card">
           <h3>Requisitos</h3>
           <dl class="reqs">
-            <dt>Sistema</dt><dd>Windows 10 / 11 (64 bits)</dd>
+            <dt>Sistema</dt><dd>Windows 10 / 11 (64 bits)</dd>
             <dt>Instalación</dt><dd>No hace falta · tampoco permisos de administrador</dd>
-            <dt>Internet</dt><dd>No hace falta · solo usa las funciones en línea que actives</dd>
-            <dt>Qué queda en el PC</dt><dd>El ejecutable, el archivo DB del historial y pequeños archivos de marca dentro de las carpetas organizadas</dd>
+            <dt>Internet</dt><dd>No hace falta · solo usa las funciones en línea que actives</dd>
+            <dt>Qué queda en el PC</dt><dd>El ejecutable, el archivo DB del historial y pequeños archivos de marca dentro de las carpetas organizadas</dd>
           </dl>
         </div>
         <div class="dl-card">
-          <h3>Si aparece «Windows protegió su PC»</h3>
-          <p>OmniSort tiene firma de código, pero una versión recién publicada todavía tiene pocas descargas, así que SmartScreen puede pedir confirmación durante un tiempo. Pulsa [Más información], comprueba que el editor sea <code>PROJECTTEAMFORYOU</code> y luego pulsa [Ejecutar de todas formas]. Si el nombre del editor es otro o no aparece, no lo ejecutes.</p>
+          <h3>Si aparece «Windows protegió su PC»</h3>
+          <p>OmniSort tiene firma de código, pero una versión recién publicada todavía tiene pocas descargas, así que SmartScreen puede pedir confirmación durante un tiempo. Pulsa [Más información], comprueba que el editor sea <code>PROJECTTEAMFORYOU</code> y luego pulsa [Ejecutar de todas formas]. Si el nombre del editor es otro o no aparece, no lo ejecutes.</p>
           <p>Para comprobar que lo descargado es idéntico a lo publicado, abre PowerShell en la carpeta donde está el exe, ejecuta el comando de abajo y compara el valor que salga con el SHA-256 de la página de lanzamientos.</p>
           <div class="cli"><pre>Get-FileHash .\OmniSort.exe -Algorithm SHA256</pre></div>
+        </div>
+        <div class="dl-card">
+          <h3>Si el antivirus lo bloquea</h3>
+          <p>El <code>OmniSort.exe</code> de un solo archivo lleva dentro el programa y toda la biblioteca Qt comprimidos. Los descomprime al arrancar.</p>
+          <p>Algunos análisis de aprendizaje automático de los antivirus leen eso como «se descomprime y se ejecuta solo». Por eso a veces lo marcan con un nombre genérico como Wacatac o Dropper.Agent. Es un falso positivo habitual en programas hechos con Python.</p>
+          <p><strong>Compara primero el SHA-256 de arriba</strong> para comprobar que el archivo que recibiste es el que publicamos. Abre también las propiedades del archivo y confirma que el editor es <code>PROJECTTEAMFORYOU</code>.</p>
+          <p>Si ambos coinciden, prueba el <strong>zip de la versión en carpeta</strong>. Es otro archivo, sin el bloque comprimido dentro, y puede verse de otra manera.</p>
+          <p>¿Sigue bloqueado? Escribe a <a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a> con el nombre del antivirus y el nombre que mostró. El aviso de falso positivo lo presentamos nosotros.</p>
         </div>
       </div>
     </div>
@@ -1107,8 +1163,12 @@
           <p>No. Analizar, clasificar, mover y registrar termina todo dentro de este PC, y ni los nombres ni las rutas de tus archivos salen de él. La configuración y el historial viven en un único archivo: %LOCALAPPDATA%\OmniSort\omnisort.db.</p>
         </details>
         <details>
-          <summary>¿No usa internet para nada?</summary>
-          <p>Por defecto, ni una vez. Solo se conecta si tú activas en el Panel de administración la comprobación de versión, los avisos o las cifras de descargas, e incluso entonces no envía ninguna información de tus archivos (la comprobación de versión solo lleva el número de versión). Esa misma pantalla dice qué sale, con la dirección incluida.</p>
+          <summary>¿No usa internet para nada?</summary>
+          <p>Por defecto, ni una vez. Solo se conecta si tú activas en el Panel de administración la comprobación de versión, los avisos o las cifras de descargas, e incluso entonces no envía ninguna información de tus archivos (la comprobación de versión solo lleva el número de versión). Esa misma pantalla dice qué sale, con la dirección incluida.</p>
+        </details>
+        <details>
+          <summary>¿Cuentan las descargas?</summary>
+          <p>Al pulsar el botón de descarga, nuestro servidor registra solo la fecha, un código de país de dos letras y qué versión se llevó. Ninguna dirección IP, ningún nombre de navegador, ninguna página de origen. Cada fila es la suma de muchas personas, así que no se puede rastrear a nadie. El programa no cambia: solo sale a la red para lo que usted active en la pantalla de administración.</p>
         </details>
         <details>
           <summary>¿Es gratis?</summary>
@@ -1116,22 +1176,22 @@
         </details>
         <details>
           <summary>¿Buscar espacio borra archivos?</summary>
-          <p>No. Buscar espacio solo lee. Únicamente van a la Papelera los archivos que tú eliges en la lista y confirmas, y desde la Papelera se pueden recuperar. Lo que no puede ir a la Papelera, como archivos en unidades de red o en unidades extraíbles como memorias USB, o más grandes que la propia Papelera, no se envía: te lo avisa.</p>
+          <p>No. Buscar espacio solo lee. Únicamente van a la Papelera los archivos que tú eliges en la lista y confirmas, y desde la Papelera se pueden recuperar. Lo que no puede ir a la Papelera, como archivos en unidades de red o en unidades extraíbles como memorias USB, o más grandes que la propia Papelera, no se envía: te lo avisa.</p>
         </details>
         <details>
           <summary>¿Y si el resultado no me gusta?</summary>
-          <p>Pulsas [Deshacer] y la última operación se revierte en orden inverso. También puedes elegir una operación antigua en el historial y deshacerla. Si en el sitio original ha aparecido un archivo con el mismo nombre, ese elemento se omite en vez de sobrescribirse, y se te dice cuáles se omitieron y por qué.</p>
+          <p>Pulsas [Deshacer] y la última operación se revierte en orden inverso. También puedes elegir una operación antigua en el historial y deshacerla. Si en el sitio original ha aparecido un archivo con el mismo nombre, ese elemento se omite en vez de sobrescribirse, y se te dice cuáles se omitieron y por qué.</p>
         </details>
         <details>
           <summary>¿Volverá a organizar carpetas que ya organizó?</summary>
-          <p>Las carpetas que crea OmniSort llevan una marca y se omiten en el siguiente análisis. Los archivos que ya están en su sitio también salen de la lista.</p>
+          <p>Las carpetas que crea OmniSort llevan una marca y se omiten en el siguiente análisis. Los archivos que ya están en su sitio también salen de la lista.</p>
         </details>
         <details>
           <summary>¿Y si un archivo está bloqueado o no tengo permiso?</summary>
-          <p>Ese elemento se anota como fallido y el resto sigue. El motivo está en el historial, y el archivo se queda exactamente donde estaba.</p>
+          <p>Ese elemento se anota como fallido y el resto sigue. El motivo está en el historial, y el archivo se queda exactamente donde estaba.</p>
         </details>
         <details>
-          <summary>¿Hay que instalar algo?</summary>
+          <summary>¿Hay que instalar algo?</summary>
           <p>Descargas OmniSort.exe y lo ejecutas. Sin permisos de administrador y sin tocar el registro. Para quitarlo, borra el exe y la carpeta de la base de datos de arriba. Si activaste la limpieza programada, quita antes la tarea del Programador de tareas con <code>omnisort-cli schedule --uninstall</code>.</p>
         </details>
       </div>
@@ -1141,7 +1201,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.5 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Consultas y errores</a></span>
     
@@ -1266,7 +1326,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.5",
+  "softwareVersion": "0.2.6",
   "description": "Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.",
   "url": "https://omnisort.win/es/",
   "inLanguage": "es",
@@ -1303,6 +1363,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Por defecto, ni una vez. Solo se conecta si tú activas en el Panel de administración la comprobación de versión, los avisos o las cifras de descargas, e incluso entonces no envía ninguna información de tus archivos (la comprobación de versión solo lleva el número de versión). Esa misma pantalla dice qué sale, con la dirección incluida."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuentan las descargas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Al pulsar el botón de descarga, nuestro servidor registra solo la fecha, un código de país de dos letras y qué versión se llevó. Ninguna dirección IP, ningún nombre de navegador, ninguna página de origen. Cada fila es la suma de muchas personas, así que no se puede rastrear a nadie. El programa no cambia: solo sale a la red para lo que usted active en la pantalla de administración."
       }
     },
     {

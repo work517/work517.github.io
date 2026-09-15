@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-pNo+aPm9MCKudXWehug2Mr2BAb6BzVH4GDp4wPJSLuQ=' 'sha256-KdURl0smcynv2MCPMVtv69JN/wnjHGYLMs7m6onoN9U='; worker-src 'self'; style-src 'sha256-4UQ6hz2L6VaGk6V4VFF7PMkAnHkOQuVPM3kduKACB28='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-y9LGby2uphOz4977GTyPz/7sSGUVv8EiVWtiUjBtXnQ=' 'sha256-38pyzTiq2hjsiQdpLrhWnJHxpD4ugY4SsKarRD3XGgI='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.">
 <meta name="color-scheme" content="light dark">
@@ -82,7 +82,10 @@
     --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
-    --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
+    /* 작은 본문. 기능 설명·내려받기 칸·FAQ 답이 여기 걸린다 — '작은 글씨' 가
+       아니라 페이지 내용의 절반이다. 한글은 같은 크기에서 라틴보다 빽빽해
+       14px 아래로 내려가면 눈에 띄게 힘들다. 최대 13.4px -> 14.4px. */
+    --step--1: clamp(.875rem, .84rem + .12vw, .94rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
     --step-1:  clamp(1.15rem, 1.08rem + .35vw, 1.35rem);
     --step-2:  clamp(1.6rem, 1.3rem + 1.6vw, 2.9rem);
@@ -157,12 +160,24 @@
   /* CSS 기본값은 CJK 를 글자 단위로 끊는다. 한국어는 낱말 사이에 띄어쓰기가 있는데도
      '대부 / 분의' 처럼 낱말 한가운데가 갈린다. keep-all 로 낱말 경계에서만 끊는다.
      중국어·일본어는 띄어쓰기가 없어서 keep-all 을 주면 끊을 자리가 아예 없어진다
-     (제목이 넘친다). 그래서 **한국어에만** 준다.
+     (제목이 넘친다). 그래서 **그 둘만** 되돌린다.
+     한국어 페이지에만 주면 모자란다. 독일어·러시아어 페이지에도 한글 예시가 그대로
+     실려서 (계약서.pdf) '계약 / 서.pdf' 로 갈렸다 — 라틴·키릴 글자에는 keep-all 이
+     아무 일도 하지 않으므로 다 주는 편이 맞다.
      word-break 는 상속되는 속성이라 뿌리에 한 번 주면 안쪽 태그가 전부 따라온다 —
      h1·p 만 집어 주면 span·dd·figcaption 이 빠진다 (실제로 빠져 있었다).
      .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
-  html[lang="ko"] { word-break: keep-all; }
+  html { word-break: keep-all; }
+  html[lang^="ja"], html[lang^="zh"] { word-break: normal; }
   h1, h2, h3 { font-weight: 700; letter-spacing: -.033em; text-wrap: balance; margin: 0; }
+  /* 제목이 아닌데 제목처럼 읽히는 것들 — FAQ 질문·카드 제목. balance 는 줄들을
+     고르게 나눠서, 마지막 줄에 낱말 하나만 남는 것을 막는다 (독일어 FAQ 에서
+     마지막 줄이 폭의 9% 인 것이 셋 있었다). */
+  summary, .feature h3, .dl-card h3, .dl-alt strong { text-wrap: balance; }
+  /* 본문은 balance 가 아니라 pretty 다 — 줄 수가 많을 때 balance 는 비싸고,
+     정작 필요한 건 '마지막 줄에 낱말 하나' 를 막는 것뿐이다. 모르는 브라우저는
+     그냥 무시한다. */
+  p, li, dd, figcaption { text-wrap: pretty; }
   /* 커진 제목은 자간·행간을 더 조여야 덩어리로 읽힌다 */
   h1 { letter-spacing: -.045em; }
   /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구.
@@ -213,6 +228,11 @@
   @media (max-width: 720px) { .topnav a { display: none; } .topnav a[href="#download"] { display: inline; } }
   /* 360px 폰에서 fr·vi 는 [내려받기] 와 언어 칸이 한 줄에 안 들어가 옆으로 밀렸다 (2차 검수에서 측정) */
   @media (max-width: 420px) { .topbar-inner, .topnav { gap: .6rem; } .langpick select { max-width: 7.5rem; } .brand { font-size: .95rem; } }
+  /* 320px 폰(아이폰 SE)에서는 그래도 모자랐다 — 이름 + [내려받기] + 언어 칸이
+     280px 에 안 들어가 12개 언어 모두 옆으로 밀렸다 (ja 는 26px). 언어 칸을
+     더 줄인다. 감추지는 않는다 — 12개 언어를 만들어 놓고 휴대폰에서 못 바꾸게
+     되는 셈이다. */
+  @media (max-width: 360px) { .topbar-inner, .topnav { gap: .45rem; } .langpick select { max-width: 5.5rem; } }
 
   /* ------------------------------------------------------------------ 히어로 */
   /* 위아래로 넉넉히. 제목을 키운 만큼 숨 쉴 자리가 없으면 도로 답답해진다. */
@@ -376,7 +396,8 @@
   }
   .checks strong { font-weight: 600; letter-spacing: -.012em; }
   .checks span { color: var(--muted); font-size: var(--step--1); display: block;
-                 line-height: 1.65; grid-column: 2; }
+                 /* 폭 611px 에 작은 글씨라 한 줄에 44자까지 갔다. */
+                 line-height: 1.65; grid-column: 2; max-width: 56ch; }
 
   .protected { border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
                overflow: hidden; align-self: start; padding: 1.35rem 1.4rem 1.5rem; }
@@ -402,9 +423,19 @@
   .report-tile strong { font-size: 1.45rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
   .report-tile small { font-size: .72rem; font-weight: 500; color: var(--muted); margin-left: .2rem; }
   .report-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.5rem; padding: 1.25rem; border-top: 1px solid var(--line); }
+  /* 표가 다섯 칸이라 좁은 화면에서는 줄일 수 없다. 제 칸에서 옆으로 밀리게 둔다.
+     안 그러면 표가 칸을 넓혀 버리고, 바깥 상자의 overflow:hidden 이 오른쪽을
+     잘라 낸다 — 독일어 320px 에서 [성공/전체] 칸이 통째로 안 보였다. 옆에 있는
+     막대그래프까지 같이 늘어나 숫자가 잘렸다. */
+  .report-scroll { overflow-x: auto; }
   @media (max-width: 820px) { .report-body { grid-template-columns: 1fr; } }
-  .report-bars { display: grid; gap: .5rem; align-content: start; }
-  .rb { display: grid; grid-template-columns: 3.6rem 1fr auto; gap: .6rem; align-items: center; font-size: var(--step--1); color: var(--ink-soft); }
+  /* 줄마다 따로 grid 를 두고 첫 칸을 3.6rem 으로 고정했더니, 그보다 긴 이름
+     (독일어 Dokumente·Komprimiert)이 칸을 밀어내 그래프가 통째로 넘쳤다 —
+     320px 에서 439px 까지. 한 grid 로 합치고 첫 칸을 auto 로 두면 이름 칸은
+     제일 긴 것에 맞춰 한 번만 정해지고, 막대가 남은 자리를 가진다. */
+  .report-bars { display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+                 gap: .5rem .6rem; align-content: start; align-items: center; }
+  .rb { display: contents; font-size: var(--step--1); color: var(--ink-soft); }
   .rb-track { height: 12px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
   .rb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
   /* 막대 길이. style 속성으로 두면 CSP 에서 'unsafe-inline' 을 못 뗀다. */
@@ -472,7 +503,13 @@
   .compare td:last-child { background: color-mix(in srgb, var(--accent) 6%, transparent); color: var(--ink); }
 
   /* 내려받기 */
-  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  /* 칸이 넷이 됐다. 260px 로 두면 넷이 한 줄에 눌려 들어가 글자가 답답해진다. */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  /* 폴더형은 곁들이다. 본 단추와 같은 무게로 두면 무엇을 받아야 할지 흐려진다. */
+  .dl-alt { margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+  .dl-alt strong { display: block; font-size: .95rem; margin-bottom: .4rem; }
+  .dl-alt p { color: var(--muted); font-size: var(--step--1); line-height: 1.65; margin-bottom: .6rem; }
+  .dl-alt > a { font-size: var(--step--1); color: var(--accent); }
   .dl-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
   .dl-card h3 { margin: 0; }
   .dl-card p { margin: 0; color: var(--muted); font-size: var(--step--1); }
@@ -484,13 +521,17 @@
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
 
   /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
-  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 크기를 따로 적어 두면 타입 스케일을 올려도 여기만 옛 값으로 남는다.
+     실제로 13.76px 로 혼자 뒤처져 있었다 — 페이지에서 유일하게 14px 아래였다. */
+  #paid .protected p { margin: .8rem 0 0; font-size: var(--step--1); color: var(--muted); }
   /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
      떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
      이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
   #paid .checks code { font-family: var(--sans); background: var(--surface-2);
     padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
-  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+  /* 한 줄에 59자까지 늘어져 있었다. 한글은 25~40자가 편하고, 그 위로는 눈이
+     줄 끝에서 다음 줄 머리를 못 찾는다. */
+  .paid-note { max-width: 62ch; margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
     background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
@@ -569,11 +610,11 @@
         <p class="lead">
           Она проходит по папке «Загрузки», раскладывает по расширению, имени, дате и размеру
           и в каждой строке пишет «почему именно эта папка» — ещё до того, как что-то сдвинется.
-          Перемещается только то, что вы одобрили, и всё это можно вернуть.
+          Перемещается только то, что вы одобрили, и всё это можно вернуть.
         </p>
         <ul class="checklist">
-          <li>Перед перемещением показывает назначение и причину для каждого файла</li>
-          <li>Переместит только отмеченное и вернёт всё одним махом</li>
+          <li>Перед перемещением показывает назначение и причину для каждого файла</li>
+          <li>Переместит только отмеченное и вернёт всё одним махом</li>
           <li>Никогда не перезаписывает: если файл уже есть, ядро отклоняет перемещение</li>
           <li>Один файл, без установки — всё происходит на этом компьютере</li>
         </ul>
@@ -584,10 +625,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.5</span>
+          <span>v0.2.6</span>
           <span>Один исполняемый файл</span>
           <span>100 000 файлов ≈ 49 с</span>
-          <span>Тестов: 966</span>
+          <span>Тестов: 1,191</span>
         </div>
       </div>
 
@@ -604,7 +645,7 @@
               <tr>
                 <th class="col-check"><span class="sr-only">Выбор</span></th>
                 <th>Файл</th>
-                <th>Новое место</th>
+                <th>Новое место</th>
                 <th>Причина</th>
               </tr>
             </thead>
@@ -631,13 +672,13 @@
                 <td class="col-check"><input type="checkbox" checked aria-label="Отметить продажи_сентябрь.xlsx"></td>
                 <td class="cell-name">продажи_сентябрь.xlsx</td>
                 <td><span class="folder">Spreadsheets</span></td>
-                <td class="cell-reason">расширение .xlsx</td>
+                <td class="cell-reason">расширение .xlsx</td>
               </tr>
               <tr data-size="44">
                 <td class="col-check"><input type="checkbox" checked aria-label="Отметить playlist-bounce.mp3"></td>
                 <td class="cell-name">playlist-bounce.mp3</td>
                 <td><span class="folder">Audio</span></td>
-                <td class="cell-reason">расширение .mp3</td>
+                <td class="cell-reason">расширение .mp3</td>
               </tr>
               <tr class="danger" data-size="12">
                 <td class="col-check"><input type="checkbox" aria-label="Отметить смета_итог.pdf"></td>
@@ -661,7 +702,7 @@
                 <td class="col-check"><input type="checkbox" aria-label="Отметить VSCodeUserSetup-x64.exe"></td>
                 <td class="cell-name">VSCodeUserSetup-x64.exe</td>
                 <td><span class="folder">Installers</span></td>
-                <td class="cell-reason">расширение .exe</td>
+                <td class="cell-reason">расширение .exe</td>
               </tr>
             </tbody>
           </table>
@@ -689,17 +730,17 @@
         <div class="step">
           <span class="step-n">1</span>
           <h3>Анализ</h3>
-          <p>Папки читаются в фоне. Скрытые и системные файлы, символические ссылки и папки вроде node_modules остаются в стороне. Отменить можно в любой момент.</p>
+          <p>Папки читаются в фоне. Скрытые и системные файлы, символические ссылки и папки вроде node_modules остаются в стороне. Отменить можно в любой момент.</p>
         </div>
         <div class="step">
           <span class="step-n">2</span>
           <h3>Предпросмотр</h3>
-          <p>Файл, где лежит, куда попадёт и почему — всё в одной таблице. Совпадения имён помечены заранее, а флажки ставите вы.</p>
+          <p>Файл, где лежит, куда попадёт и почему — всё в одной таблице. Совпадения имён помечены заранее, а флажки ставите вы.</p>
         </div>
         <div class="step">
           <span class="step-n">3</span>
           <h3>Разложить</h3>
-          <p>Перемещается только отмеченное, и каждое перемещение записывается. Не понравилось — одно [Отменить], и всё возвращается на место.</p>
+          <p>Перемещается только отмеченное, и каждое перемещение записывается. Не понравилось — одно [Отменить], и всё возвращается на место.</p>
         </div>
       </div>
     </div>
@@ -727,39 +768,39 @@
         </div>
         <div class="feature">
           <h3>Когда имена совпадают</h3>
-          <p>При совпадении имени получится <code>отчёт (1).pdf</code> либо файл будет пропущен. Перезаписи не бывает ни при каких условиях.</p>
+          <p>При совпадении имени получится <code>отчёт (1).pdf</code> либо файл будет пропущен. Перезаписи не бывает ни при каких условиях.</p>
         </div>
         <div class="feature">
           <h3>Исключения</h3>
-          <p>Всё, что трогать не надо, выносится правилом: <code>*.crdownload</code>, файлы меньше заданного размера, целые папки.</p>
+          <p>Всё, что трогать не надо, выносится правилом: <code>*.crdownload</code>, файлы меньше заданного размера, целые папки.</p>
         </div>
         <div class="feature">
           <h3>Уборка по расписанию</h3>
-          <p>Каждый день в выбранное время: только анализ или сразу перемещение. Одна строка — <code>schedule --install</code> — и задание в планировщике готово.</p>
+          <p>Каждый день в выбранное время: только анализ или сразу перемещение. Одна строка — <code>schedule --install</code> — и задание в планировщике готово.</p>
         </div>
         <div class="feature">
-          <h3>Длинные и нелатинские пути</h3>
-          <p>Пути длиннее 260 символов идут через префикс <code>\\?\</code>, а корейские, японские и китайские пути обрабатываются как есть.</p>
+          <h3>Длинные и нелатинские пути</h3>
+          <p>Пути длиннее 260 символов идут через префикс <code>\\?\</code>, а корейские, японские и китайские пути обрабатываются как есть.</p>
         </div>
         <div class="feature">
-          <h3>Поддельные расширения на виду</h3>
+          <h3>Поддельные расширения на виду</h3>
           <p>«Смета.pdf», которая на деле программа, или двойное расширение вроде <code>счёт.pdf.exe</code> получают ⚠. Первые 512 байт читаются только у тех расширений, которые есть смысл подделывать.</p>
         </div>
         <div class="feature">
           <h3>Найти дубликаты файлов</h3>
-          <p>Сначала размер, потом по 64 КБ хеша с каждого конца, потом весь файл — три прохода, и в корзину уходят только копии. Оригинал выбирается по имени и остаётся.</p>
+          <p>Сначала размер, потом по 64 КБ хеша с каждого конца, потом весь файл — три прохода, и в корзину уходят только копии. Оригинал выбирается по имени и остаётся.</p>
         </div>
         <div class="feature">
           <h3>Журнал</h3>
-          <p>Каждый анализ и каждое перемещение попадают в SQLite. В <code>operation_items</code> по строке на файл: откуда, куда, состояние, причина, ошибка.</p>
+          <p>Каждый анализ и каждое перемещение попадают в SQLite. В <code>operation_items</code> по строке на файл: откуда, куда, состояние, причина, ошибка.</p>
         </div>
         <div class="feature">
           <h3>Готовые наборы правил</h3>
-          <p>Наборы правил для студентов, офисных работников, разработчиков, фото и дизайна добавляются одним махом. Перед добавлением видно, что куда попадёт, а ваши собственные правила всегда применяются первыми.</p>
+          <p>Наборы правил для студентов, офисных работников, разработчиков, фото и дизайна добавляются одним махом. Перед добавлением видно, что куда попадёт, а ваши собственные правила всегда применяются первыми.</p>
         </div>
         <div class="feature">
-          <h3>Место на диске</h3>
-          <p>Показывает большие файлы, давно не тронутые файлы, объём по категориям и свободное место на диске — только просмотр. Убираются лишь выбранные файлы, и только в корзину.</p>
+          <h3>Место на диске</h3>
+          <p>Показывает большие файлы, давно не тронутые файлы, объём по категориям и свободное место на диске — только просмотр. Убираются лишь выбранные файлы, и только в корзину.</p>
         </div>
         <div class="feature">
           <h3>Статистика по месяцам</h3>
@@ -787,7 +828,7 @@
         <li><span>Шаблоны имён</span><span class="ex">*invoice* → Documents/Invoices</span></li>
         <li><span>Дата</span><span class="ex">Images/2026/09</span></li>
         <li><span>Размер</span><span class="ex">Videos/Large</span></li>
-        <li><span>Разбор содержимого (по желанию)</span><span class="ex">только первые 8 КБ текста</span></li>
+        <li><span>Разбор содержимого (по желанию)</span><span class="ex">только первые 8 КБ текста</span></li>
       </ol>
 
       <div class="spacer"></div>
@@ -798,14 +839,14 @@
             <tr><th>Категории</th><th>Расширение</th></tr>
           </thead>
           <tbody>
-            <tr><td>Документы</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
-            <tr><td>Изображения</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
-            <tr><td>Видео</td><td class="ext">mp4 mov avi mkv webm</td></tr>
-            <tr><td>Аудио</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
-            <tr><td>Архивы</td><td class="ext">zip 7z rar tar gz</td></tr>
-            <tr><td>Таблицы</td><td class="ext">xls xlsx csv ods</td></tr>
-            <tr><td>Презентации</td><td class="ext">ppt pptx odp</td></tr>
-            <tr><td>Установщики</td><td class="ext">exe msi msix</td></tr>
+            <tr><td>Документы</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
+            <tr><td>Изображения</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
+            <tr><td>Видео</td><td class="ext">mp4 mov avi mkv webm</td></tr>
+            <tr><td>Аудио</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
+            <tr><td>Архивы</td><td class="ext">zip 7z rar tar gz</td></tr>
+            <tr><td>Таблицы</td><td class="ext">xls xlsx csv ods</td></tr>
+            <tr><td>Презентации</td><td class="ext">ppt pptx odp</td></tr>
+            <tr><td>Установщики</td><td class="ext">exe msi msix</td></tr>
             <tr><td>Прочее</td><td class="ext">всё остальное (без разбора)</td></tr>
           </tbody>
         </table>
@@ -838,7 +879,7 @@
       <div class="section-head">
         <span class="eyebrow">Отчёт</span>
         <h2>Что и когда переехало — на одной странице</h2>
-        <p>Одна кнопка (или <code>omnisort-cli report</code>) — и всё, что было убрано, сохраняется одной HTML-страницей. Ни сервера, ни интернета: храните или передавайте как есть.</p>
+        <p>Одна кнопка (или <code>omnisort-cli report</code>) — и всё, что было убрано, сохраняется одной HTML-страницей. Ни сервера, ни интернета: храните или передавайте как есть.</p>
       </div>
 
       <div class="report-mock">
@@ -860,15 +901,17 @@
             <div class="rb"><span>Прочее</span><span class="rb-track"><span class="rb-fill w-11"></span></span><span class="rb-num">209</span></div>
           </div>
 
+          <div class="report-scroll">
           <table class="report-table">
             <thead><tr><th>ID</th><th>Тип</th><th>Время</th><th>Состояние</th><th>Успешно/Всего</th></tr></thead>
             <tbody>
-              <tr><td>#128</td><td>Переместить</td><td>09-11 03:00</td><td><span class="pill pill-ok">Готово</span></td><td>412/412</td></tr>
-              <tr><td>#127</td><td>Отменить</td><td>09-10 21:14</td><td><span class="pill pill-info">Отменено</span></td><td>37/37</td></tr>
-              <tr><td>#126</td><td>Переместить</td><td>09-10 03:00</td><td><span class="pill pill-warn">Частично</span></td><td>298/300</td></tr>
-              <tr><td>#125</td><td>Корзина</td><td>09-09 18:02</td><td><span class="pill pill-ok">Готово</span></td><td>64/64</td></tr>
+              <tr><td>#128</td><td>Переместить</td><td>09-11 03:00</td><td><span class="pill pill-ok">Готово</span></td><td>412/412</td></tr>
+              <tr><td>#127</td><td>Отменить</td><td>09-10 21:14</td><td><span class="pill pill-info">Отменено</span></td><td>37/37</td></tr>
+              <tr><td>#126</td><td>Переместить</td><td>09-10 03:00</td><td><span class="pill pill-warn">Частично</span></td><td>298/300</td></tr>
+              <tr><td>#125</td><td>Корзина</td><td>09-09 18:02</td><td><span class="pill pill-ok">Готово</span></td><td>64/64</td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>
@@ -880,18 +923,18 @@
       <div class="section-head">
         <span class="eyebrow">Безопасность</span>
         <h2>Не удаляет. Не перезаписывает.</h2>
-        <p>Ошибка программы для уборки — это потерянные данные. Поэтому всё, что нельзя отменить, сюда просто не попало.</p>
+        <p>Ошибка программы для уборки — это потерянные данные. Поэтому всё, что нельзя отменить, сюда просто не попало.</p>
       </div>
       <div class="safety">
         <ul class="checks">
-          <li><div><strong>Никогда не удаляет навсегда</strong><span>Удаление — это всегда корзина. Даже опустевшие после уборки папки отправляются туда, а не исчезают.</span></div></li>
+          <li><div><strong>Никогда не удаляет навсегда</strong><span>Удаление — это всегда корзина. Даже опустевшие после уборки папки отправляются туда, а не исчезают.</span></div></li>
           <li><div><strong>Никакой перезаписи — это гарантирует ядро</strong><span>Перемещение запрашивается так, что ядро откажет, если там уже что-то есть. Даже если файл появится между проверкой и перемещением, чужой файл не пострадает.</span></div></li>
-          <li><div><strong>Ещё одна проверка перед самым перемещением</strong><span>Если после предпросмотра изменился размер или время правки, либо файл стал ссылкой, его не трогают.</span></div></li>
+          <li><div><strong>Ещё одна проверка перед самым перемещением</strong><span>Если после предпросмотра изменился размер или время правки, либо файл стал ссылкой, его не трогают.</span></div></li>
           <li><div><strong>Системные папки — не трогаем</strong><span>Защищённые пути отклоняются уже при добавлении папки и пропускаются, если анализ на них наткнётся.</span></div></li>
-          <li><div><strong>До перемещения видно всё</strong><span>Откуда, куда и есть ли совпадение имён — всё на виду; обрабатываются только отмеченные строки.</span></div></li>
-          <li><div><strong>Сначала запись, потом перемещение</strong><span>Каждый пункт сначала пишется в базу, потом перемещается. Выключится питание на полпути — останется запись, докуда дошло.</span></div></li>
-          <li><div><strong>Файлы, в которые пишут, остаются нетронутыми</strong><span>Файлы, которые ещё качаются (.crdownload, .part) или только что изменились, пропускаются сами.</span></div></li>
-          <li><div><strong>Даже прерванное можно отменить</strong><span>Если программа умрёт посреди уборки, при следующем запуске она выяснит, докуда дошла, и приведёт всё в состояние, которое можно отменить.</span></div></li>
+          <li><div><strong>До перемещения видно всё</strong><span>Откуда, куда и есть ли совпадение имён — всё на виду; обрабатываются только отмеченные строки.</span></div></li>
+          <li><div><strong>Сначала запись, потом перемещение</strong><span>Каждый пункт сначала пишется в базу, потом перемещается. Выключится питание на полпути — останется запись, докуда дошло.</span></div></li>
+          <li><div><strong>Файлы, в которые пишут, остаются нетронутыми</strong><span>Файлы, которые ещё качаются (.crdownload, .part) или только что изменились, пропускаются сами.</span></div></li>
+          <li><div><strong>Даже прерванное можно отменить</strong><span>Если программа умрёт посреди уборки, при следующем запуске она выяснит, докуда дошла, и приведёт всё в состояние, которое можно отменить.</span></div></li>
           <li><div><strong>По ссылкам не ходит</strong><span>Через символическую ссылку или соединение наружу не выходит, а назначение, путь к которому проходит через них, отклоняет.</span></div></li>
           <li><div><strong>За пределы корневой папки не выйти</strong><span>В правилах нельзя использовать <code>..</code>, абсолютные и сетевые пути; а если итоговый путь выходит за корневую папку, ничего не перемещается.</span></div></li>
         </ul>
@@ -899,13 +942,13 @@
           <h3>Места, которые никогда не станут назначением</h3>
           <ul>
             <li>C:\Windows</li>
-            <li>C:\Program Files</li>
-            <li>C:\Program Files (x86)</li>
+            <li>C:\Program Files</li>
+            <li>C:\Program Files (x86)</li>
             <li>C:\ProgramData</li>
-            <li>%LOCALAPPDATA% · %APPDATA%</li>
+            <li>%LOCALAPPDATA% · %APPDATA%</li>
             <li>C:\$Recycle.Bin</li>
             <li>System Volume Information</li>
-            <li>корень диска (C:\)</li>
+            <li>корень диска (C:\)</li>
           </ul>
         </div>
       </div>
@@ -922,27 +965,27 @@
       </div>
       <div class="safety">
         <ul class="checks">
-          <li><div><strong>Некоторые файлы не попадают в Корзину</strong><span>Файлы на сетевых и съёмных дисках, файлы больше самой Корзины, диски с отключённой Корзиной. В этих случаях Windows <strong>удаляет их насовсем, не спрашивая</strong>. Мы проверяем заранее, и если нельзя — оставляем файл на месте и записываем причину.</span></div></li>
+          <li><div><strong>Некоторые файлы не попадают в Корзину</strong><span>Файлы на сетевых и съёмных дисках, файлы больше самой Корзины, диски с отключённой Корзиной. В этих случаях Windows <strong>удаляет их насовсем, не спрашивая</strong>. Мы проверяем заранее, и если нельзя — оставляем файл на месте и записываем причину.</span></div></li>
           <li><div><strong>Выдернете флешку на полпути — потеряете обе копии</strong><span>Перемещение между дисками — это копирование, а затем удаление оригинала. Мы ждём, пока копия действительно ляжет на диск, и только потом удаляем. Это медленнее — и это правильно.</span></div></li>
-          <li><div><strong>Папка может на самом деле вести в другое место</strong><span>Соединения (junction), короткие имена 8.3, административные общие ресурсы (<code>\\host\C$</code>), пути устройств. Четыре способа вернуться в защищённые папки — каждый перекрыт.</span></div></li>
-          <li><div><strong>Только что выбранное имя могут занять в тот же миг</strong><span>Сразу после того, как мы выбрали свободное имя, другая программа может создать файл с ним. Мы вызываем перемещение так, что ядро само отказывает, — и даже тогда мы не перезаписываем чужой файл.</span></div></li>
-          <li><div><strong>Корейские имена файлов с Mac — это другая строка</strong><span>На экране в обоих случаях читается <code>계약서.pdf</code>, но сохранённая форма разная, и правила молча промахиваются. Мы приводим их к одному виду только при сравнении — само имя файла не трогаем.</span></div></li>
-          <li><div><strong>Журнал, который можно править, — не журнал</strong><span>Каждая уборка запечатывается поверх предыдущей. Измените строку, удалите операцию, вставьте выдуманную — всё последующее перестаёт сходиться, и это видно.</span></div></li>
+          <li><div><strong>Папка может на самом деле вести в другое место</strong><span>Соединения (junction), короткие имена 8.3, административные общие ресурсы (<code>\\host\C$</code>), пути устройств. Четыре способа вернуться в защищённые папки — каждый перекрыт.</span></div></li>
+          <li><div><strong>Только что выбранное имя могут занять в тот же миг</strong><span>Сразу после того, как мы выбрали свободное имя, другая программа может создать файл с ним. Мы вызываем перемещение так, что ядро само отказывает, — и даже тогда мы не перезаписываем чужой файл.</span></div></li>
+          <li><div><strong>Корейские имена файлов с Mac — это другая строка</strong><span>На экране в обоих случаях читается <code>계약서.pdf</code>, но сохранённая форма разная, и правила молча промахиваются. Мы приводим их к одному виду только при сравнении — само имя файла не трогаем.</span></div></li>
+          <li><div><strong>Журнал, который можно править, — не журнал</strong><span>Каждая уборка запечатывается поверх предыдущей. Измените строку, удалите операцию, вставьте выдуманную — всё последующее перестаёт сходиться, и это видно.</span></div></li>
         </ul>
         <div class="protected">
           <h3>Не обещания — это обеспечивает сборка</h3>
           <ul>
-            <li>Без безвозвратного удаления</li>
+            <li>Без безвозвратного удаления</li>
             <li>Без перезаписи</li>
             <li>Повторная проверка перед перемещением</li>
             <li>Защищённые пути отклоняются</li>
             <li>Сначала запись, потом перемещение</li>
-            <li>Наружу — ровно один путь</li>
+            <li>Наружу — ровно один путь</li>
           </ul>
           <p>Во всех шести случаях код, который их нарушает, <strong>вообще нельзя выпустить.</strong></p>
         </div>
       </div>
-      <p class="paid-note">Проверьте сами. На экране [Администрирование] видно, <strong>сколько запросов действительно ушло с этого ПК</strong>. Сразу после установки там «ни разу».</p>
+      <p class="paid-note">Проверьте сами. На экране [Администрирование] видно, <strong>сколько запросов действительно ушло с этого ПК</strong>. Сразу после установки там «ни разу».</p>
     </div>
   </section>
 
@@ -952,7 +995,7 @@
       <div class="section-head">
         <span class="eyebrow">CLI и расписание</span>
         <h2>Консольная версия, которую можно повесить на планировщик заданий</h2>
-        <p>Та же база данных и те же правила, что и в окне. Без <code>--apply</code> не сдвинется ни один файл.</p>
+        <p>Та же база данных и те же правила, что и в окне. Без <code>--apply</code> не сдвинется ни один файл.</p>
       </div>
       <div class="cli">
         <div class="cli-head">omnisort-cli.exe</div>
@@ -998,8 +1041,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Сравнение</span>
-        <h2>Переместить легко — трудно, когда переместили не туда</h2>
-        <p>Программы, которые следят за папкой и сразу раскладывают файлы по правилам, работают быстро, но что куда попало, вы узнаёте только потом. OmniSort меняет порядок на обратный.</p>
+        <h2>Переместить легко — трудно, когда переместили не туда</h2>
+        <p>Программы, которые следят за папкой и сразу раскладывают файлы по правилам, работают быстро, но что куда попало, вы узнаёте только потом. OmniSort меняет порядок на обратный.</p>
       </div>
       <div class="table-wrap">
         <table class="compare">
@@ -1015,12 +1058,12 @@
           <tbody>
             <tr>
               <th scope="row">Видно назначение до перемещения</th>
-              <td class="part">Решаете сами</td>
+              <td class="part">Решаете сами</td>
               <td class="no">Узнаёте уже после перемещения</td>
-              <td class="yes">Назначение и причина для каждого файла</td>
+              <td class="yes">Назначение и причина для каждого файла</td>
             </tr>
             <tr>
-              <th scope="row">Если переместили не туда</th>
+              <th scope="row">Если переместили не туда</th>
               <td class="no">Полагаетесь на память</td>
               <td class="part">Зависит от программы</td>
               <td class="yes">Отменяет операцию целиком, даже давнюю</td>
@@ -1035,17 +1078,17 @@
               <th scope="row">Файл с поддельным расширением</th>
               <td class="no">Трудно заметить</td>
               <td class="no">Содержимое не проверяется</td>
-              <td class="yes">Читает содержимое и ставит ⚠</td>
+              <td class="yes">Читает содержимое и ставит ⚠</td>
             </tr>
             <tr>
-              <th scope="row">Убрать дубликаты и большие файлы</th>
+              <th scope="row">Убрать дубликаты и большие файлы</th>
               <td class="part">По одному в Проводнике</td>
               <td class="no">Нужна отдельная программа</td>
               <td class="yes">В одной программе и только в корзину</td>
             </tr>
             <tr>
               <th scope="row">Интернет и учётная запись</th>
-              <td class="yes">Не нужны</td>
+              <td class="yes">Не нужны</td>
               <td class="part">Зависит от программы</td>
               <td class="yes">Не нужны, по умолчанию наружу ничего не уходит</td>
             </tr>
@@ -1061,34 +1104,47 @@
       <div class="section-head">
         <span class="eyebrow">Скачать</span>
         <h2>Скачали — и сразу запускаете</h2>
-        <p>Установщика нет. Положите один исполняемый файл в любую папку и запустите — вот и всё.</p>
+        <p>Установщика нет. Положите один исполняемый файл в любую папку и запустите — вот и всё.</p>
       </div>
       <div class="download-grid">
         <div class="dl-card">
-          <h3>Три шага</h3>
+          <h3>Три шага</h3>
           <ol class="dl-steps">
             <li>Скачайте <code>OmniSort.exe</code> со страницы релизов (а для командной строки — ещё и <code>omnisort-cli.exe</code>)</li>
-            <li>Положите файл в любую папку и запустите двойным щелчком</li>
-            <li>Добавьте папку Downloads кнопкой [+ Добавить] и нажмите [Анализ]</li>
+            <li>Положите файл в любую папку и запустите двойным щелчком</li>
+            <li>Добавьте папку Downloads кнопкой [+ Добавить] и нажмите [Анализ]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Скачать OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.5 · 30.0 MB · SHA-256 <code>5860ec06424701deb14ab387ab6917b21c1848b298494b7f24dc89e7e529953a</code></p>
-          <p><a href="https://dl.omnisort.win/folder">Скачать zip папочной сборки</a></p>
+          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <div class="dl-alt">
+            <strong>Есть и папочная сборка</strong>
+            <p>Та же программа, но библиотеки Qt лежат отдельно, в папке <code>_internal</code>. Их можно заменить на любую сборку (LGPL-3.0). Попробуйте и эту, если антивирус блокирует однофайловую.</p>
+            <a href="https://dl.omnisort.win/folder">Скачать zip папочной сборки</a>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+          </div>
         </div>
         <div class="dl-card">
-          <h3>Что нужно</h3>
+          <h3>Что нужно</h3>
           <dl class="reqs">
             <dt>Операционная система</dt><dd>Windows 10 / 11 (64-разрядная)</dd>
-            <dt>Установка</dt><dd>Не нужна · права администратора тоже не нужны</dd>
+            <dt>Установка</dt><dd>Не нужна · права администратора тоже не нужны</dd>
             <dt>Интернет</dt><dd>Не нужен · используются только включённые вами онлайн-функции</dd>
-            <dt>Что остаётся</dt><dd>Исполняемый файл, DB-файл с журналом и маленький файл-метка в убранных папках</dd>
+            <dt>Что остаётся</dt><dd>Исполняемый файл, DB-файл с журналом и маленький файл-метка в убранных папках</dd>
           </dl>
         </div>
         <div class="dl-card">
           <h3>Если появилось окно «Система Windows защитила ваш компьютер»</h3>
           <p>OmniSort подписан цифровой подписью, но у только что вышедшей версии пока мало загрузок, поэтому SmartScreen какое-то время может просить подтверждение. Нажмите [Подробнее], проверьте, что издатель — <code>PROJECTTEAMFORYOU</code>, а затем нажмите [Выполнить в любом случае]. Если имя издателя другое или его нет, не запускайте программу.</p>
-          <p>Чтобы убедиться, что скачанный файл совпадает с опубликованным, откройте PowerShell в папке с exe, выполните команду ниже и сравните полученное значение с SHA-256 на странице релизов.</p>
+          <p>Чтобы убедиться, что скачанный файл совпадает с опубликованным, откройте PowerShell в папке с exe, выполните команду ниже и сравните полученное значение с SHA-256 на странице релизов.</p>
           <div class="cli"><pre>Get-FileHash .\OmniSort.exe -Algorithm SHA256</pre></div>
+        </div>
+        <div class="dl-card">
+          <h3>Если антивирус блокирует</h3>
+          <p>Однофайловый <code>OmniSort.exe</code> хранит программу и всю библиотеку Qt внутри себя в сжатом виде. При запуске он их распаковывает.</p>
+          <p>Машинное обучение некоторых антивирусов читает это как «сам распаковывается и запускается». Поэтому файл иногда помечают общим именем вроде Wacatac или Dropper.Agent. Для программ на Python это частое ложное срабатывание.</p>
+          <p><strong>Сначала сверьте SHA-256 выше</strong>, чтобы убедиться, что полученный файл — тот, который мы опубликовали. Ещё посмотрите в свойствах файла, что издатель — <code>PROJECTTEAMFORYOU</code>.</p>
+          <p>Если оба совпали, попробуйте <strong>zip папочной сборки</strong>. Это другой файл, без сжатого блока внутри, и оценка может отличаться.</p>
+          <p>Всё равно блокирует? Напишите на <a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a>, укажите антивирус и показанное им имя. Заявку о ложном срабатывании подадим мы.</p>
         </div>
       </div>
     </div>
@@ -1108,7 +1164,11 @@
         </details>
         <details>
           <summary>Он совсем не выходит в интернет?</summary>
-          <p>По умолчанию — ни разу. Данные загружаются, только если вы сами включите в панели администрирования проверку обновлений, объявления или число скачиваний, и даже тогда сведения о файлах не отправляются (при проверке обновлений передаётся только номер версии). Что именно уходит наружу, вплоть до адреса, написано там же.</p>
+          <p>По умолчанию — ни разу. Данные загружаются, только если вы сами включите в панели администрирования проверку обновлений, объявления или число скачиваний, и даже тогда сведения о файлах не отправляются (при проверке обновлений передаётся только номер версии). Что именно уходит наружу, вплоть до адреса, написано там же.</p>
+        </details>
+        <details>
+          <summary>Вы считаете загрузки?</summary>
+          <p>Когда вы нажимаете кнопку загрузки, наш сервер записывает только дату, двухбуквенный код страны и то, какую сборку вы взяли. Ни IP-адреса, ни названия браузера, ни страницы перехода. Каждая строка — сумма по многим людям, поэтому по ней нельзя выйти на человека. Сама программа не изменилась — наружу она обращается только за тем, что вы включили в окне администратора.</p>
         </details>
         <details>
           <summary>Это бесплатно?</summary>
@@ -1116,19 +1176,19 @@
         </details>
         <details>
           <summary>«Место на диске» удаляет файлы?</summary>
-          <p>Нет. «Место на диске» только смотрит. В корзину уходят лишь файлы, которые вы сами выбрали в списке и подтвердили, и из корзины их можно вернуть. То, что не может попасть в корзину, — например, файлы на сетевом диске или съёмном носителе вроде USB-флешки либо файлы больше самой корзины, — не отправляется, и программа об этом сообщает.</p>
+          <p>Нет. «Место на диске» только смотрит. В корзину уходят лишь файлы, которые вы сами выбрали в списке и подтвердили, и из корзины их можно вернуть. То, что не может попасть в корзину, — например, файлы на сетевом диске или съёмном носителе вроде USB-флешки либо файлы больше самой корзины, — не отправляется, и программа об этом сообщает.</p>
         </details>
         <details>
           <summary>А если результат не понравится?</summary>
-          <p>Нажмите [Отменить] — и последняя операция раскручивается в обратном порядке. Можно выбрать в журнале и более раннюю операцию. Если на прежнем месте уже появился файл с тем же именем, именно этот пункт пропускается, а не перезаписывается, — и вам скажут, какие пропущены и почему.</p>
+          <p>Нажмите [Отменить] — и последняя операция раскручивается в обратном порядке. Можно выбрать в журнале и более раннюю операцию. Если на прежнем месте уже появился файл с тем же именем, именно этот пункт пропускается, а не перезаписывается, — и вам скажут, какие пропущены и почему.</p>
         </details>
         <details>
           <summary>Не будет ли он снова и снова убирать те же папки?</summary>
-          <p>На папках, созданных OmniSort, остаётся метка, и при следующем анализе они пропускаются. Файлы, уже лежащие на своих местах, тоже выпадают из списка.</p>
+          <p>На папках, созданных OmniSort, остаётся метка, и при следующем анализе они пропускаются. Файлы, уже лежащие на своих местах, тоже выпадают из списка.</p>
         </details>
         <details>
-          <summary>А если файл занят или не хватает прав?</summary>
-          <p>Именно этот пункт помечается как неудачный, остальное идёт дальше. Причина видна в журнале, а файл остаётся ровно там, где был.</p>
+          <summary>А если файл занят или не хватает прав?</summary>
+          <p>Именно этот пункт помечается как неудачный, остальное идёт дальше. Причина видна в журнале, а файл остаётся ровно там, где был.</p>
         </details>
         <details>
           <summary>Нужно ли что-то устанавливать?</summary>
@@ -1141,7 +1201,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.5 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Вопросы и сообщения об ошибках</a></span>
     
@@ -1266,7 +1326,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.5",
+  "softwareVersion": "0.2.6",
   "description": "Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.",
   "url": "https://omnisort.win/ru/",
   "inLanguage": "ru",
@@ -1303,6 +1363,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "По умолчанию — ни разу. Данные загружаются, только если вы сами включите в панели администрирования проверку обновлений, объявления или число скачиваний, и даже тогда сведения о файлах не отправляются (при проверке обновлений передаётся только номер версии). Что именно уходит наружу, вплоть до адреса, написано там же."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Вы считаете загрузки?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Когда вы нажимаете кнопку загрузки, наш сервер записывает только дату, двухбуквенный код страны и то, какую сборку вы взяли. Ни IP-адреса, ни названия браузера, ни страницы перехода. Каждая строка — сумма по многим людям, поэтому по ней нельзя выйти на человека. Сама программа не изменилась — наружу она обращается только за тем, что вы включили в окне администратора."
       }
     },
     {

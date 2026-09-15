@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-QuJaJtM8AfrGHh5bZwaaiAXVuRRzX9RjTlUVyW09oCc=' 'sha256-GTblbnADIxaQEhQoMOVdc3jbaW/ZisQrSKYy+VcwGgc='; worker-src 'self'; style-src 'sha256-4UQ6hz2L6VaGk6V4VFF7PMkAnHkOQuVPM3kduKACB28='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-PDs6/A6QxWvqVcoSpNYdsjWQMPoLB/Zusy2NevY1+A8=' 'sha256-rRngEhBR77rwO067KSFv2nuCoByQd2OimIrdANJBHNk='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="先告诉你每个文件要去哪，再动手的 Windows 文件整理工具。">
 <meta name="color-scheme" content="light dark">
@@ -82,7 +82,10 @@
     --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
-    --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
+    /* 작은 본문. 기능 설명·내려받기 칸·FAQ 답이 여기 걸린다 — '작은 글씨' 가
+       아니라 페이지 내용의 절반이다. 한글은 같은 크기에서 라틴보다 빽빽해
+       14px 아래로 내려가면 눈에 띄게 힘들다. 최대 13.4px -> 14.4px. */
+    --step--1: clamp(.875rem, .84rem + .12vw, .94rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
     --step-1:  clamp(1.15rem, 1.08rem + .35vw, 1.35rem);
     --step-2:  clamp(1.6rem, 1.3rem + 1.6vw, 2.9rem);
@@ -157,12 +160,24 @@
   /* CSS 기본값은 CJK 를 글자 단위로 끊는다. 한국어는 낱말 사이에 띄어쓰기가 있는데도
      '대부 / 분의' 처럼 낱말 한가운데가 갈린다. keep-all 로 낱말 경계에서만 끊는다.
      중국어·일본어는 띄어쓰기가 없어서 keep-all 을 주면 끊을 자리가 아예 없어진다
-     (제목이 넘친다). 그래서 **한국어에만** 준다.
+     (제목이 넘친다). 그래서 **그 둘만** 되돌린다.
+     한국어 페이지에만 주면 모자란다. 독일어·러시아어 페이지에도 한글 예시가 그대로
+     실려서 (계약서.pdf) '계약 / 서.pdf' 로 갈렸다 — 라틴·키릴 글자에는 keep-all 이
+     아무 일도 하지 않으므로 다 주는 편이 맞다.
      word-break 는 상속되는 속성이라 뿌리에 한 번 주면 안쪽 태그가 전부 따라온다 —
      h1·p 만 집어 주면 span·dd·figcaption 이 빠진다 (실제로 빠져 있었다).
      .checksum 처럼 제 규칙이 있는 자리는 상속보다 세므로 해시는 그대로 잘 끊긴다. */
-  html[lang="ko"] { word-break: keep-all; }
+  html { word-break: keep-all; }
+  html[lang^="ja"], html[lang^="zh"] { word-break: normal; }
   h1, h2, h3 { font-weight: 700; letter-spacing: -.033em; text-wrap: balance; margin: 0; }
+  /* 제목이 아닌데 제목처럼 읽히는 것들 — FAQ 질문·카드 제목. balance 는 줄들을
+     고르게 나눠서, 마지막 줄에 낱말 하나만 남는 것을 막는다 (독일어 FAQ 에서
+     마지막 줄이 폭의 9% 인 것이 셋 있었다). */
+  summary, .feature h3, .dl-card h3, .dl-alt strong { text-wrap: balance; }
+  /* 본문은 balance 가 아니라 pretty 다 — 줄 수가 많을 때 balance 는 비싸고,
+     정작 필요한 건 '마지막 줄에 낱말 하나' 를 막는 것뿐이다. 모르는 브라우저는
+     그냥 무시한다. */
+  p, li, dd, figcaption { text-wrap: pretty; }
   /* 커진 제목은 자간·행간을 더 조여야 덩어리로 읽힌다 */
   h1 { letter-spacing: -.045em; }
   /* 낱말 경계가 없는 긴 덩어리(주소 등)는 넘치느니 끊는다 — keep-all 의 도피구.
@@ -213,6 +228,11 @@
   @media (max-width: 720px) { .topnav a { display: none; } .topnav a[href="#download"] { display: inline; } }
   /* 360px 폰에서 fr·vi 는 [내려받기] 와 언어 칸이 한 줄에 안 들어가 옆으로 밀렸다 (2차 검수에서 측정) */
   @media (max-width: 420px) { .topbar-inner, .topnav { gap: .6rem; } .langpick select { max-width: 7.5rem; } .brand { font-size: .95rem; } }
+  /* 320px 폰(아이폰 SE)에서는 그래도 모자랐다 — 이름 + [내려받기] + 언어 칸이
+     280px 에 안 들어가 12개 언어 모두 옆으로 밀렸다 (ja 는 26px). 언어 칸을
+     더 줄인다. 감추지는 않는다 — 12개 언어를 만들어 놓고 휴대폰에서 못 바꾸게
+     되는 셈이다. */
+  @media (max-width: 360px) { .topbar-inner, .topnav { gap: .45rem; } .langpick select { max-width: 5.5rem; } }
 
   /* ------------------------------------------------------------------ 히어로 */
   /* 위아래로 넉넉히. 제목을 키운 만큼 숨 쉴 자리가 없으면 도로 답답해진다. */
@@ -376,7 +396,8 @@
   }
   .checks strong { font-weight: 600; letter-spacing: -.012em; }
   .checks span { color: var(--muted); font-size: var(--step--1); display: block;
-                 line-height: 1.65; grid-column: 2; }
+                 /* 폭 611px 에 작은 글씨라 한 줄에 44자까지 갔다. */
+                 line-height: 1.65; grid-column: 2; max-width: 56ch; }
 
   .protected { border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
                overflow: hidden; align-self: start; padding: 1.35rem 1.4rem 1.5rem; }
@@ -402,9 +423,19 @@
   .report-tile strong { font-size: 1.45rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
   .report-tile small { font-size: .72rem; font-weight: 500; color: var(--muted); margin-left: .2rem; }
   .report-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.5rem; padding: 1.25rem; border-top: 1px solid var(--line); }
+  /* 표가 다섯 칸이라 좁은 화면에서는 줄일 수 없다. 제 칸에서 옆으로 밀리게 둔다.
+     안 그러면 표가 칸을 넓혀 버리고, 바깥 상자의 overflow:hidden 이 오른쪽을
+     잘라 낸다 — 독일어 320px 에서 [성공/전체] 칸이 통째로 안 보였다. 옆에 있는
+     막대그래프까지 같이 늘어나 숫자가 잘렸다. */
+  .report-scroll { overflow-x: auto; }
   @media (max-width: 820px) { .report-body { grid-template-columns: 1fr; } }
-  .report-bars { display: grid; gap: .5rem; align-content: start; }
-  .rb { display: grid; grid-template-columns: 3.6rem 1fr auto; gap: .6rem; align-items: center; font-size: var(--step--1); color: var(--ink-soft); }
+  /* 줄마다 따로 grid 를 두고 첫 칸을 3.6rem 으로 고정했더니, 그보다 긴 이름
+     (독일어 Dokumente·Komprimiert)이 칸을 밀어내 그래프가 통째로 넘쳤다 —
+     320px 에서 439px 까지. 한 grid 로 합치고 첫 칸을 auto 로 두면 이름 칸은
+     제일 긴 것에 맞춰 한 번만 정해지고, 막대가 남은 자리를 가진다. */
+  .report-bars { display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+                 gap: .5rem .6rem; align-content: start; align-items: center; }
+  .rb { display: contents; font-size: var(--step--1); color: var(--ink-soft); }
   .rb-track { height: 12px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
   .rb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
   /* 막대 길이. style 속성으로 두면 CSP 에서 'unsafe-inline' 을 못 뗀다. */
@@ -472,7 +503,13 @@
   .compare td:last-child { background: color-mix(in srgb, var(--accent) 6%, transparent); color: var(--ink); }
 
   /* 내려받기 */
-  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  /* 칸이 넷이 됐다. 260px 로 두면 넷이 한 줄에 눌려 들어가 글자가 답답해진다. */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  /* 폴더형은 곁들이다. 본 단추와 같은 무게로 두면 무엇을 받아야 할지 흐려진다. */
+  .dl-alt { margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+  .dl-alt strong { display: block; font-size: .95rem; margin-bottom: .4rem; }
+  .dl-alt p { color: var(--muted); font-size: var(--step--1); line-height: 1.65; margin-bottom: .6rem; }
+  .dl-alt > a { font-size: var(--step--1); color: var(--accent); }
   .dl-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
   .dl-card h3 { margin: 0; }
   .dl-card p { margin: 0; color: var(--muted); font-size: var(--step--1); }
@@ -484,13 +521,17 @@
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
 
   /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
-  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 크기를 따로 적어 두면 타입 스케일을 올려도 여기만 옛 값으로 남는다.
+     실제로 13.76px 로 혼자 뒤처져 있었다 — 페이지에서 유일하게 14px 아래였다. */
+  #paid .protected p { margin: .8rem 0 0; font-size: var(--step--1); color: var(--muted); }
   /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
      떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
      이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
   #paid .checks code { font-family: var(--sans); background: var(--surface-2);
     padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
-  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+  /* 한 줄에 59자까지 늘어져 있었다. 한글은 25~40자가 편하고, 그 위로는 눈이
+     줄 끝에서 다음 줄 머리를 못 찾는다. */
+  .paid-note { max-width: 62ch; margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
     background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
@@ -561,7 +602,7 @@
   <div class="hero wrap">
     
     <div class="hero-head">
-      <span class="eyebrow">Windows 10 / 11 · 纯本地 · 免安装</span>
+      <span class="eyebrow">Windows 10 / 11 · 纯本地 · 免安装</span>
       <h1>移动文件之前，<br><em>先告诉你</em>每个去哪</h1>
     </div>
     <div class="hero-grid">
@@ -584,10 +625,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.5</span>
+          <span>v0.2.6</span>
           <span>单个可执行文件</span>
           <span>10 万个文件 ≈ 49 秒</span>
-          <span>966 项测试</span>
+          <span>1,191 项测试</span>
         </div>
       </div>
 
@@ -631,13 +672,13 @@
                 <td class="col-check"><input type="checkbox" checked aria-label="选择 销售结算_9月.xlsx"></td>
                 <td class="cell-name">销售结算_9月.xlsx</td>
                 <td><span class="folder">Spreadsheets</span></td>
-                <td class="cell-reason">扩展名 .xlsx</td>
+                <td class="cell-reason">扩展名 .xlsx</td>
               </tr>
               <tr data-size="44">
                 <td class="col-check"><input type="checkbox" checked aria-label="选择 playlist-bounce.mp3"></td>
                 <td class="cell-name">playlist-bounce.mp3</td>
                 <td><span class="folder">Audio</span></td>
-                <td class="cell-reason">扩展名 .mp3</td>
+                <td class="cell-reason">扩展名 .mp3</td>
               </tr>
               <tr class="danger" data-size="12">
                 <td class="col-check"><input type="checkbox" aria-label="选择 报价单_最终.pdf"></td>
@@ -661,7 +702,7 @@
                 <td class="col-check"><input type="checkbox" aria-label="选择 VSCodeUserSetup-x64.exe"></td>
                 <td class="cell-name">VSCodeUserSetup-x64.exe</td>
                 <td><span class="folder">Installers</span></td>
-                <td class="cell-reason">扩展名 .exe</td>
+                <td class="cell-reason">扩展名 .exe</td>
               </tr>
             </tbody>
           </table>
@@ -682,7 +723,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">怎么用</span>
-        <h2>分析 → 预览 → 开始整理</h2>
+        <h2>分析 → 预览 → 开始整理</h2>
         <p>三步严格按顺序来。分析没完，不碰任何文件；没有你的同意，不会移动。</p>
       </div>
       <div class="steps">
@@ -743,7 +784,7 @@
         </div>
         <div class="feature">
           <h3>识破伪装的扩展名</h3>
-          <p>“报价单.pdf”其实是程序，或者 <code>发票.pdf.exe</code> 这种双扩展名，都会被标上 ⚠。只有容易被冒充的扩展名才读前 512 字节。</p>
+          <p>“报价单.pdf”其实是程序，或者 <code>发票.pdf.exe</code> 这种双扩展名，都会被标上 ⚠。只有容易被冒充的扩展名才读前 512 字节。</p>
         </div>
         <div class="feature">
           <h3>查找重复文件</h3>
@@ -787,7 +828,7 @@
         <li><span>文件名规则</span><span class="ex">*invoice* → Documents/Invoices</span></li>
         <li><span>日期</span><span class="ex">Images/2026/09</span></li>
         <li><span>大小</span><span class="ex">Videos/Large</span></li>
-        <li><span>可选的内容分析</span><span class="ex">只看文本前 8KB</span></li>
+        <li><span>可选的内容分析</span><span class="ex">只看文本前 8KB</span></li>
       </ol>
 
       <div class="spacer"></div>
@@ -798,14 +839,14 @@
             <tr><th>分类</th><th>扩展名</th></tr>
           </thead>
           <tbody>
-            <tr><td>文档</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
-            <tr><td>图片</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
-            <tr><td>视频</td><td class="ext">mp4 mov avi mkv webm</td></tr>
-            <tr><td>音频</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
-            <tr><td>压缩包</td><td class="ext">zip 7z rar tar gz</td></tr>
-            <tr><td>表格</td><td class="ext">xls xlsx csv ods</td></tr>
-            <tr><td>演示文稿</td><td class="ext">ppt pptx odp</td></tr>
-            <tr><td>安装程序</td><td class="ext">exe msi msix</td></tr>
+            <tr><td>文档</td><td class="ext">pdf doc docx hwp hwpx txt md rtf odt</td></tr>
+            <tr><td>图片</td><td class="ext">jpg jpeg png webp gif bmp svg heic</td></tr>
+            <tr><td>视频</td><td class="ext">mp4 mov avi mkv webm</td></tr>
+            <tr><td>音频</td><td class="ext">mp3 wav flac m4a ogg</td></tr>
+            <tr><td>压缩包</td><td class="ext">zip 7z rar tar gz</td></tr>
+            <tr><td>表格</td><td class="ext">xls xlsx csv ods</td></tr>
+            <tr><td>演示文稿</td><td class="ext">ppt pptx odp</td></tr>
+            <tr><td>安装程序</td><td class="ext">exe msi msix</td></tr>
             <tr><td>其他</td><td class="ext">其余全部（未分类）</td></tr>
           </tbody>
         </table>
@@ -860,15 +901,17 @@
             <div class="rb"><span>其他</span><span class="rb-track"><span class="rb-fill w-11"></span></span><span class="rb-num">209</span></div>
           </div>
 
+          <div class="report-scroll">
           <table class="report-table">
             <thead><tr><th>ID</th><th>类型</th><th>时间</th><th>状态</th><th>成功/总数</th></tr></thead>
             <tbody>
-              <tr><td>#128</td><td>整理</td><td>09-11 03:00</td><td><span class="pill pill-ok">完成</span></td><td>412/412</td></tr>
-              <tr><td>#127</td><td>撤销</td><td>09-10 21:14</td><td><span class="pill pill-info">已撤销</span></td><td>37/37</td></tr>
-              <tr><td>#126</td><td>整理</td><td>09-10 03:00</td><td><span class="pill pill-warn">部分失败</span></td><td>298/300</td></tr>
-              <tr><td>#125</td><td>回收站</td><td>09-09 18:02</td><td><span class="pill pill-ok">完成</span></td><td>64/64</td></tr>
+              <tr><td>#128</td><td>整理</td><td>09-11 03:00</td><td><span class="pill pill-ok">完成</span></td><td>412/412</td></tr>
+              <tr><td>#127</td><td>撤销</td><td>09-10 21:14</td><td><span class="pill pill-info">已撤销</span></td><td>37/37</td></tr>
+              <tr><td>#126</td><td>整理</td><td>09-10 03:00</td><td><span class="pill pill-warn">部分失败</span></td><td>298/300</td></tr>
+              <tr><td>#125</td><td>回收站</td><td>09-09 18:02</td><td><span class="pill pill-ok">完成</span></td><td>64/64</td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>
@@ -899,10 +942,10 @@
           <h3>不能作为目标的位置</h3>
           <ul>
             <li>C:\Windows</li>
-            <li>C:\Program Files</li>
-            <li>C:\Program Files (x86)</li>
+            <li>C:\Program Files</li>
+            <li>C:\Program Files (x86)</li>
             <li>C:\ProgramData</li>
-            <li>%LOCALAPPDATA% · %APPDATA%</li>
+            <li>%LOCALAPPDATA% · %APPDATA%</li>
             <li>C:\$Recycle.Bin</li>
             <li>System Volume Information</li>
             <li>磁盘根目录（C:\）</li>
@@ -950,7 +993,7 @@
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">命令行 · 定时</span>
+        <span class="eyebrow">命令行 · 定时</span>
         <h2>可以挂到任务计划程序上的控制台版本</h2>
         <p>和窗口版用同一个数据库、同一套规则。不加 <code>--apply</code> 就绝不会动任何文件。</p>
       </div>
@@ -999,7 +1042,7 @@
       <div class="section-head">
         <span class="eyebrow">对比</span>
         <h2>比移动更难的，是移错了的时候</h2>
-        <p>盯着文件夹、按规则立刻移动的工具很快，但什么去了哪里，要等移完才知道。OmniSort 把顺序倒了过来。</p>
+        <p>盯着文件夹、按规则立刻移动的工具很快，但什么去了哪里，要等移完才知道。OmniSort 把顺序倒了过来。</p>
       </div>
       <div class="table-wrap">
         <table class="compare">
@@ -1035,7 +1078,7 @@
               <th scope="row">伪装扩展名的文件</th>
               <td class="no">很难察觉</td>
               <td class="no">不检查内容</td>
-              <td class="yes">读取内容，标上 ⚠</td>
+              <td class="yes">读取内容，标上 ⚠</td>
             </tr>
             <tr>
               <th scope="row">清理重复和大文件</th>
@@ -1072,14 +1115,19 @@
             <li>用[+ 添加]加入 Downloads 文件夹，再点[分析]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">下载 OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.5 · 30.0 MB · SHA-256 <code>5860ec06424701deb14ab387ab6917b21c1848b298494b7f24dc89e7e529953a</code></p>
-          <p><a href="https://dl.omnisort.win/folder">获取文件夹版 zip</a></p>
+          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <div class="dl-alt">
+            <strong>还有文件夹版</strong>
+            <p>同一个程序，只是 Qt 库单独放在 <code>_internal</code> 文件夹里。您可以换成自己想用的版本（LGPL-3.0）。单文件版被杀毒软件拦下时也请试试这个。</p>
+            <a href="https://dl.omnisort.win/folder">获取文件夹版 zip</a>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+          </div>
         </div>
         <div class="dl-card">
           <h3>需要什么</h3>
           <dl class="reqs">
-            <dt>操作系统</dt><dd>Windows 10 / 11（64 位）</dd>
-            <dt>安装</dt><dd>不需要 · 也不需要管理员权限</dd>
+            <dt>操作系统</dt><dd>Windows 10 / 11（64 位）</dd>
+            <dt>安装</dt><dd>不需要 · 也不需要管理员权限</dd>
             <dt>网络</dt><dd>不需要 · 只有你开启的联网功能才会用到</dd>
             <dt>留下的东西</dt><dd>可执行文件、记录用的 DB 文件，以及整理过的文件夹里的小标记文件</dd>
           </dl>
@@ -1087,8 +1135,16 @@
         <div class="dl-card">
           <h3>如果弹出“Windows 已保护你的电脑”</h3>
           <p>OmniSort 已进行代码签名，但新发布的版本下载的人还不多，SmartScreen 可能会在一段时间内要求确认。点[更多信息]，确认发布者是 <code>PROJECTTEAMFORYOU</code> 后再点[仍要运行]。如果发布者名称不同或没有显示，请不要运行。</p>
-          <p>想确认下载的文件和发布的是否一致，可以在 exe 所在的文件夹里打开 PowerShell，运行下面的命令，把得到的值和发布页面上的 SHA-256 对比。</p>
+          <p>想确认下载的文件和发布的是否一致，可以在 exe 所在的文件夹里打开 PowerShell，运行下面的命令，把得到的值和发布页面上的 SHA-256 对比。</p>
           <div class="cli"><pre>Get-FileHash .\OmniSort.exe -Algorithm SHA256</pre></div>
+        </div>
+        <div class="dl-card">
+          <h3>如果杀毒软件拦截</h3>
+          <p>单文件的 <code>OmniSort.exe</code> 把程序和整个 Qt 库压缩后放在自身内部。运行时再解开使用。</p>
+          <p>部分杀毒软件的机器学习检查会把这读作“自行解压并运行”。因此有时会以 Wacatac、Dropper.Agent 这类通用名称报出。这是用 Python 编写的程序常见的误报。</p>
+          <p><strong>先比对上面的 SHA-256</strong>，确认拿到的文件与我们发布的一致。也请在文件属性中查看发布者是否为 <code>PROJECTTEAMFORYOU</code>。</p>
+          <p>两项都对的话，请试试<strong>文件夹版 zip</strong>。那是另一个文件，里面没有压缩成块的内容，判定可能不同。</p>
+          <p>仍被拦截，请把杀毒软件名称和显示的名称发到 <a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a>。误报申诉由我们来提交。</p>
         </div>
       </div>
     </div>
@@ -1104,11 +1160,15 @@
       <div class="faq">
         <details open>
           <summary>会把文件传到网上吗？</summary>
-          <p>不会。扫描、分类、移动、记录全都在这台电脑上完成，文件名和路径都不会外传。设置和日志只存在 %LOCALAPPDATA%\OmniSort\omnisort.db 这一个文件里。</p>
+          <p>不会。扫描、分类、移动、记录全都在这台电脑上完成，文件名和路径都不会外传。设置和日志只存在 %LOCALAPPDATA%\OmniSort\omnisort.db 这一个文件里。</p>
         </details>
         <details>
           <summary>完全不联网吗？</summary>
           <p>默认一次都不用。只有你在管理面板里亲自打开检查新版、公告或下载次数时才会获取，而且那时也不发送任何文件信息（检查新版时只带上版本号）。会发出去什么，那个面板上连地址都写得清清楚楚。</p>
+        </details>
+        <details>
+          <summary>会统计下载次数吗？</summary>
+          <p>按下下载按钮时，我们的服务器只记录日期、两位国家代码和所取的版本形式。不记录 IP 地址、浏览器名称和来源页面。每一行都是许多人的合计，无法据此追溯到某个人。程序本身没有变化 — 只有你在管理界面打开的功能才会联网。</p>
         </details>
         <details>
           <summary>免费吗？</summary>
@@ -1141,7 +1201,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.5 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">咨询与问题反馈</a></span>
     
@@ -1266,7 +1326,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.5",
+  "softwareVersion": "0.2.6",
   "description": "先告诉你每个文件要去哪，再动手的 Windows 文件整理工具。",
   "url": "https://omnisort.win/zh-Hans/",
   "inLanguage": "zh-Hans",
@@ -1303,6 +1363,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "默认一次都不用。只有你在管理面板里亲自打开检查新版、公告或下载次数时才会获取，而且那时也不发送任何文件信息（检查新版时只带上版本号）。会发出去什么，那个面板上连地址都写得清清楚楚。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "会统计下载次数吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "按下下载按钮时，我们的服务器只记录日期、两位国家代码和所取的版本形式。不记录 IP 地址、浏览器名称和来源页面。每一行都是许多人的合计，无法据此追溯到某个人。程序本身没有变化 — 只有你在管理界面打开的功能才会联网。"
       }
     },
     {
