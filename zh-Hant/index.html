@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-hUF4yIXw462tTAUVLV+JnwuewbKkgFIGn0kyuFNAmTw=' 'sha256-5rJZ4jsjp23RhdQHeRVN4llzWbdCbrC2DYUkOPMHNtI='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-h0B0ywGi3nG7A+RrJsdwMSO+IewsV2PEMdfrIByPVLs=' 'sha256-5rJZ4jsjp23RhdQHeRVN4llzWbdCbrC2DYUkOPMHNtI='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.zh-Hant.png">
 <title>OmniSort — 移動前先告訴你每個檔案去哪</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>單一執行檔</span>
           <span>10 萬個檔案 ≈ 49 秒</span>
-          <span>825 項測試</span>
+          <span>899 項測試</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">已經踩過的坑</span>
+        <h2>這份清單不是想出來的，是撞上去才有的</h2>
+        <p>移動檔案的程式之所以危險，不是因為功能不夠，而是檔案會在沒人想到的地方消失。下面每一條都是我們真的撞上並修好的。</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>有些檔案進不了資源回收筒</strong><span>網路或卸除式磁碟上的檔案、比資源回收筒還大的檔案、關閉了資源回收筒的磁碟。這時 Windows 會<strong>不詢問就永久刪除</strong>。我們會先確認，做不到就原樣保留並記下原因。</span></div></li>
+          <li><div><strong>移動中拔掉隨身碟，兩份都會沒</strong><span>跨磁碟移動，其實是先複製再刪除原檔。我們會等複製真正寫入磁碟之後才刪原檔。這樣會慢一些，但這才是對的。</span></div></li>
+          <li><div><strong>資料夾可能其實指向別處</strong><span>連接點、8.3 短檔名、管理共用(<code>\\host\C$</code>)、裝置路徑。繞回受保護資料夾的四條路，逐一封堵。</span></div></li>
+          <li><div><strong>剛選好的名字，可能在那一瞬被搶走</strong><span>剛選定一個不重名的新名字，另一個程式就可能用這個名字建檔。我們的呼叫方式讓核心直接拒絕，所以即使如此也不會覆蓋別人的檔案。</span></div></li>
+          <li><div><strong>來自 Mac 的中韓文檔名並不是同一串字元</strong><span>螢幕上同樣顯示 <code>계약서.pdf</code>，但儲存形式不同，規則會悄悄錯過。我們只在比較時對齊——檔名本身絕不改動。</span></div></li>
+          <li><div><strong>能被改的紀錄不算紀錄</strong><span>每次整理都會在前一筆紀錄之上蓋下封印。改一行、刪一筆、塞進一筆假的，後面全部對不上，立刻暴露。</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>不是嘴上說說，是建置在把關</h3>
+          <ul>
+            <li>不永久刪除</li>
+            <li>不覆蓋</li>
+            <li>移動前再次確認</li>
+            <li>拒絕受保護路徑</li>
+            <li>先紀錄，後移動</li>
+            <li>對外只有一條出口</li>
+          </ul>
+          <p>這六條，只要有程式碼違反，<strong>發佈本身就會被攔下。</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">你可以自己查。[管理]介面會顯示這台電腦<strong>實際向外發出的次數</strong>。剛裝好時顯示「從未發生」。</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>用[+ 新增]加入 Downloads 資料夾，再按[分析]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">下載 OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>需要什麼</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">諮詢與問題回報</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。",
   "url": "https://work517.github.io/zh-Hant/",
   "inLanguage": "zh-Hant",

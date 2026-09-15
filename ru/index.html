@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-iGTteSOBRNRLEQef3zWTfxGiSpEQP/BD0mpTv6PPmy8=' 'sha256-KdURl0smcynv2MCPMVtv69JN/wnjHGYLMs7m6onoN9U='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-izh14wnQPpmIkoVxmVMQfaa+0LzWTDXhXCPiydVSAuw=' 'sha256-KdURl0smcynv2MCPMVtv69JN/wnjHGYLMs7m6onoN9U='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.ru.png">
 <title>OmniSort — Показывает, куда попадёт каждый файл до переноса</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>Один исполняемый файл</span>
           <span>100 000 файлов ≈ 49 с</span>
-          <span>Тестов: 825</span>
+          <span>Тестов: 899</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Уже оплачено</span>
+        <h2>Этот список мы не придумали — мы на него наткнулись</h2>
+        <p>Программа, которая перемещает файлы, опасна не нехваткой функций, а тем, что файлы исчезают там, куда никто не смотрит. Всё ниже случилось с нами и было исправлено.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Некоторые файлы не попадают в Корзину</strong><span>Файлы на сетевых и съёмных дисках, файлы больше самой Корзины, диски с отключённой Корзиной. В этих случаях Windows <strong>удаляет их насовсем, не спрашивая</strong>. Мы проверяем заранее, и если нельзя — оставляем файл на месте и записываем причину.</span></div></li>
+          <li><div><strong>Выдернете флешку на полпути — потеряете обе копии</strong><span>Перемещение между дисками — это копирование, а затем удаление оригинала. Мы ждём, пока копия действительно ляжет на диск, и только потом удаляем. Это медленнее — и это правильно.</span></div></li>
+          <li><div><strong>Папка может на самом деле вести в другое место</strong><span>Соединения (junction), короткие имена 8.3, административные общие ресурсы (<code>\\host\C$</code>), пути устройств. Четыре способа вернуться в защищённые папки — каждый перекрыт.</span></div></li>
+          <li><div><strong>Только что выбранное имя могут занять в тот же миг</strong><span>Сразу после того, как мы выбрали свободное имя, другая программа может создать файл с ним. Мы вызываем перемещение так, что ядро само отказывает, — и даже тогда мы не перезаписываем чужой файл.</span></div></li>
+          <li><div><strong>Корейские имена файлов с Mac — это другая строка</strong><span>На экране в обоих случаях читается <code>계약서.pdf</code>, но сохранённая форма разная, и правила молча промахиваются. Мы приводим их к одному виду только при сравнении — само имя файла не трогаем.</span></div></li>
+          <li><div><strong>Журнал, который можно править, — не журнал</strong><span>Каждая уборка запечатывается поверх предыдущей. Измените строку, удалите операцию, вставьте выдуманную — всё последующее перестаёт сходиться, и это видно.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>Не обещания — это обеспечивает сборка</h3>
+          <ul>
+            <li>Без безвозвратного удаления</li>
+            <li>Без перезаписи</li>
+            <li>Повторная проверка перед перемещением</li>
+            <li>Защищённые пути отклоняются</li>
+            <li>Сначала запись, потом перемещение</li>
+            <li>Наружу — ровно один путь</li>
+          </ul>
+          <p>Во всех шести случаях код, который их нарушает, <strong>вообще нельзя выпустить.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Проверьте сами. На экране [Администрирование] видно, <strong>сколько запросов действительно ушло с этого ПК</strong>. Сразу после установки там «ни разу».</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Добавьте папку Downloads кнопкой [+ Добавить] и нажмите [Анализ]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">Скачать OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>Что нужно</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Вопросы и сообщения об ошибках</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.",
   "url": "https://work517.github.io/ru/",
   "inLanguage": "ru",

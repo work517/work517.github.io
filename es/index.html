@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-WFnPmy23nZdez51JemA8OJNvMWQAXT5hTgLttcJOm6Y=' 'sha256-PqIq6wotoNNMv8FgLWqKbBvuimqgmGSgAXBH7hx6r4k='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-HVgdVtkALE53KHhDIMr/bZaYcrBxQbNZakFn7VqhT0Y=' 'sha256-PqIq6wotoNNMv8FgLWqKbBvuimqgmGSgAXBH7hx6r4k='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.es.png">
 <title>OmniSort — Mira adónde va cada archivo antes de moverlo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>Un solo ejecutable</span>
           <span>100 000 archivos ≈ 49 s</span>
-          <span>825 pruebas</span>
+          <span>899 pruebas</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Ya nos costó</span>
+        <h2>Esta lista no la inventamos: nos la encontramos</h2>
+        <p>Un programa que mueve archivos es peligroso no por falta de funciones, sino porque los archivos desaparecen donde nadie mira. Todo lo de abajo nos pasó, y lo arreglamos.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Hay archivos que no pueden ir a la Papelera</strong><span>Archivos en unidades de red o extraíbles, archivos más grandes que la propia papelera, unidades con la papelera desactivada. En esos casos Windows <strong>los borra para siempre, sin preguntar</strong>. Nosotros lo comprobamos antes y, si no se puede, dejamos el archivo y anotamos el motivo.</span></div></li>
+          <li><div><strong>Si sacas el USB a mitad, pierdes las dos copias</strong><span>Mover entre unidades es copiar y luego borrar el original. Esperamos a que la copia haya llegado de verdad al disco antes de borrar nada. Es más lento, y es lo correcto.</span></div></li>
+          <li><div><strong>Una carpeta puede apuntar en realidad a otro sitio</strong><span>Uniones, nombres cortos 8.3, recursos administrativos (<code>\\host\C$</code>), rutas de dispositivo. Cuatro maneras de volver a carpetas protegidas: las cuatro bloqueadas.</span></div></li>
+          <li><div><strong>El nombre que acabas de elegir puede ocuparse en ese instante</strong><span>Justo después de elegir un nombre libre, otro programa puede crear un archivo con él. Hacemos la llamada de modo que el propio núcleo la rechace, así ni siquiera entonces sobrescribimos el archivo de nadie.</span></div></li>
+          <li><div><strong>Los nombres coreanos venidos de un Mac no son la misma cadena</strong><span>En pantalla se lee <code>계약서.pdf</code> igual, pero la forma guardada difiere, así que las reglas fallan en silencio. Las igualamos solo al comparar: el nombre del archivo no se toca.</span></div></li>
+          <li><div><strong>Un registro que se puede editar no es un registro</strong><span>Cada limpieza se sella sobre la anterior. Cambia una fila, borra una operación o cuela una falsa: todo lo posterior deja de cuadrar y se nota.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>No son promesas: lo impone la compilación</h3>
+          <ul>
+            <li>Sin borrado permanente</li>
+            <li>Sin sobrescritura</li>
+            <li>Revisado justo antes de mover</li>
+            <li>Rutas protegidas rechazadas</li>
+            <li>Primero el registro, luego el movimiento</li>
+            <li>Una sola salida al exterior</li>
+          </ul>
+          <p>En los seis casos, el código que los rompa <strong>no puede publicarse siquiera.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Compruébalo tú mismo. La pantalla [Admin] muestra <strong>cuántas peticiones salieron realmente de este PC</strong>. Recién instalado pone «nunca».</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Añade la carpeta Downloads con [+ Añadir] y pulsa [Analizar]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">Descargar OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>Requisitos</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Consultas y errores</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.",
   "url": "https://work517.github.io/es/",
   "inLanguage": "es",

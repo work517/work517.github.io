@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-CU68yISVEYYdSVnEgzZLh9svA7JCWEHby3vpikUDdpA=' 'sha256-epimUiVGG58t5Q+jJ0LXJCca+8G7PvaGWoiKDW+LYf0='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-L8dzfzfEtLB7TRad/ZCjQmZggUjJ47+jt21fFwTlzrU=' 'sha256-epimUiVGG58t5Q+jJ0LXJCca+8G7PvaGWoiKDW+LYf0='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.ko.png">
 <title>OmniSort — 옮기기 전에 보여주는 Windows 파일 정리</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>단일 실행 파일</span>
           <span>10만 파일 ≈ 49초</span>
-          <span>테스트 825개</span>
+          <span>테스트 899개</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">겪고 고친 것</span>
+        <h2>이 목록은 만든 게 아니라, 겪은 것입니다</h2>
+        <p>파일을 옮기는 프로그램이 위험한 이유는 기능이 모자라서가 아니라, 아무도 예상하지 않은 자리에서 파일이 사라지기 때문입니다. 아래는 전부 실제로 겪고 고친 것들입니다.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>휴지통에 안 들어가는 파일이 있습니다</strong><span>네트워크·이동식 드라이브의 파일, 휴지통보다 큰 파일, 휴지통을 꺼 둔 드라이브. 이때 Windows 는 <strong>확인 없이 영구 삭제</strong>합니다. 보내기 전에 되는지 알아보고, 안 되면 그대로 두고 이유를 남깁니다.</span></div></li>
+          <li><div><strong>USB 로 옮기다 뽑으면 둘 다 잃습니다</strong><span>드라이브를 넘는 이동은 복사한 뒤 원본을 지우는 일입니다. 복사본이 디스크에 실제로 닿은 것을 확인한 뒤에 원본을 지웁니다. 그만큼 느려지지만, 그게 맞습니다.</span></div></li>
+          <li><div><strong>폴더가 사실은 다른 곳일 수 있습니다</strong><span>정션·8.3 짧은 이름·관리 공유(<code>\\host\C$</code>)·장치 경로. 보호 폴더로 돌아 들어가는 네 가지 길을 각각 막습니다.</span></div></li>
+          <li><div><strong>이름을 고른 그 찰나에 뺏길 수 있습니다</strong><span>겹치지 않는 새 이름을 고른 직후, 다른 프로그램이 그 이름으로 파일을 만들 수 있습니다. 커널이 거절하도록 호출해서, 그 경우에도 남의 파일을 덮지 않습니다.</span></div></li>
+          <li><div><strong>맥에서 온 한글 파일은 이름이 다릅니다</strong><span>화면에는 <code>계약서.pdf</code> 로 똑같이 보이지만 저장된 형태가 달라, 규칙이 조용히 빗나갑니다. 비교할 때만 맞춰 봅니다 — 파일 이름 자체는 건드리지 않습니다.</span></div></li>
+          <li><div><strong>기록은 고칠 수 있으면 기록이 아닙니다</strong><span>정리할 때마다 앞 기록에 이어 봉인을 찍습니다. 한 줄을 고쳐도, 한 건을 지워도, 없던 걸 끼워 넣어도 그 뒤가 전부 어긋나 드러납니다.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>말이 아니라 빌드가 지킵니다</h3>
+          <ul>
+            <li>영구 삭제 없음</li>
+            <li>덮어쓰기 없음</li>
+            <li>옮기기 직전 재확인</li>
+            <li>보호 경로 거절</li>
+            <li>이동은 기록이 먼저</li>
+            <li>바깥으로 나가는 길은 한 곳</li>
+          </ul>
+          <p>여섯 가지 모두, 어기는 코드가 들어오면 <strong>출시 자체가 막힙니다.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">확인해 보셔도 됩니다. [관리자] 화면에 이 PC 에서 <strong>실제로 바깥으로 나간 횟수</strong>가 나옵니다. 갓 설치한 상태라면 ‘한 번도 없음’ 입니다.</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>[+ 추가] 로 Downloads 폴더를 넣고 [분석] 을 누릅니다</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">OmniSort.exe 내려받기</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>필요한 것</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">문의·버그 신고</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.",
   "url": "https://work517.github.io/",
   "inLanguage": "ko",

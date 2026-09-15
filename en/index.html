@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-c1VTT7HJC2J2A+C/rZlvF5cv7/DboNpfhXMWef1Advg=' 'sha256-HpSgkTaugiEN8A5ZcgEqCMXQav3bQW0eZ5ItCd4Y9qU='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-vpvVYC5kZn1K6hKKi/j9FMf31ec10++Aipurk03tS68=' 'sha256-HpSgkTaugiEN8A5ZcgEqCMXQav3bQW0eZ5ItCd4Y9qU='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="A Windows file organizer that shows you where every file would go before it moves.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="A Windows file organizer that shows you where every file would go before it moves.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.en.png">
 <title>OmniSort — See where every file goes before it moves</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>One executable</span>
           <span>100k files ≈ 49 s</span>
-          <span>825 tests</span>
+          <span>899 tests</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Paid for already</span>
+        <h2>We did not invent this list. We ran into it.</h2>
+        <p>A program that moves files is dangerous not because it lacks features, but because files vanish in places nobody thought to look. Every item below is something we hit and fixed.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Some files cannot go to the Recycle Bin</strong><span>Files on network or removable drives, files bigger than the bin itself, drives with the bin turned off. In those cases Windows <strong>deletes them for good, without asking</strong>. We check first, and if it cannot be done we leave the file alone and log why.</span></div></li>
+          <li><div><strong>Pull the USB mid-move and you lose both copies</strong><span>Moving across drives means copying, then deleting the original. We wait until the copy has actually reached the disk before deleting anything. It is slower — and it is right.</span></div></li>
+          <li><div><strong>A folder may really be somewhere else</strong><span>Junctions, 8.3 short names, admin shares (<code>\\host\C$</code>), device paths. Four ways back into protected folders — each one blocked.</span></div></li>
+          <li><div><strong>The name you just picked can be taken in that instant</strong><span>Right after we pick a free name, another program can create a file with it. We call the move so the kernel itself refuses — so even then we never overwrite someone else's file.</span></div></li>
+          <li><div><strong>Korean filenames from a Mac are not the same string</strong><span>On screen it reads <code>계약서.pdf</code> either way, but the stored form differs, so rules miss it silently. We line them up only when comparing — the filename itself is left untouched.</span></div></li>
+          <li><div><strong>A log you can edit is not a log</strong><span>Every tidy-up is sealed onto the one before it. Edit a single row, delete one operation, slip in a fake — everything after it stops matching, and it shows.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>Not promises — the build enforces them</h3>
+          <ul>
+            <li>No permanent deletion</li>
+            <li>No overwriting</li>
+            <li>Re-checked just before the move</li>
+            <li>Protected paths refused</li>
+            <li>Logged before moved</li>
+            <li>Exactly one way out</li>
+          </ul>
+          <p>For all six, code that breaks them <strong>cannot be released at all.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Check it yourself. The [Admin] screen shows <strong>how many requests actually left this PC</strong>. On a fresh install it reads “never”.</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Add your Downloads folder with [+ Add], then press [Analyze]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">Download OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>What you need</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Questions &amp; bug reports</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "A Windows file organizer that shows you where every file would go before it moves.",
   "url": "https://work517.github.io/en/",
   "inLanguage": "en",

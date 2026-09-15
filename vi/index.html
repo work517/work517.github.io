@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-aBW9lpQOt+z1T9FJISANVr7vfaXNDBa8GUMg/YWYRqg=' 'sha256-QwOe9SFIjNXviXyN5hqn3orAcGPr2Qzp9WUTEYNOZCM='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-PxFQzC6D363TYMd+7yP77OY45l/G1fs1GNoW4VLpokY=' 'sha256-QwOe9SFIjNXviXyN5hqn3orAcGPr2Qzp9WUTEYNOZCM='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Công cụ dọn tệp cho Windows, cho bạn xem trước từng tệp sẽ đi đâu.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="Công cụ dọn tệp cho Windows, cho bạn xem trước từng tệp sẽ đi đâu.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.vi.png">
 <title>OmniSort — Xem từng tệp sẽ đi đâu trước khi chuyển</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>Một tệp thực thi duy nhất</span>
           <span>100.000 tệp ≈ 49 giây</span>
-          <span>825 bài kiểm thử</span>
+          <span>899 bài kiểm thử</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Đã trả giá</span>
+        <h2>Danh sách này không phải do nghĩ ra, mà do đã gặp phải</h2>
+        <p>Một chương trình di chuyển tệp nguy hiểm không phải vì thiếu tính năng, mà vì tệp biến mất ở nơi không ai ngờ. Mọi điều dưới đây đều đã thực sự xảy ra và đã được sửa.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Có những tệp không vào được Thùng rác</strong><span>Tệp trên ổ mạng hoặc ổ rời, tệp lớn hơn cả Thùng rác, ổ đã tắt Thùng rác. Khi đó Windows <strong>xoá vĩnh viễn mà không hỏi</strong>. Chúng tôi kiểm tra trước, nếu không được thì để nguyên tệp và ghi lại lý do.</span></div></li>
+          <li><div><strong>Rút USB giữa chừng là mất cả hai bản</strong><span>Di chuyển qua ổ khác thực chất là chép rồi xoá bản gốc. Chúng tôi đợi bản chép thực sự chạm đĩa rồi mới xoá. Chậm hơn, nhưng đúng.</span></div></li>
+          <li><div><strong>Một thư mục có thể thực ra trỏ đi nơi khác</strong><span>Junction, tên ngắn 8.3, chia sẻ quản trị (<code>\\host\C$</code>), đường dẫn thiết bị. Bốn lối vòng về thư mục được bảo vệ — chặn từng lối một.</span></div></li>
+          <li><div><strong>Cái tên vừa chọn có thể bị chiếm ngay khoảnh khắc đó</strong><span>Ngay sau khi chọn được một tên chưa trùng, chương trình khác có thể tạo tệp với tên đó. Chúng tôi gọi lệnh sao cho chính nhân hệ điều hành từ chối — nên kể cả khi đó cũng không ghi đè tệp của ai.</span></div></li>
+          <li><div><strong>Tên tệp tiếng Hàn từ máy Mac không phải cùng một chuỗi</strong><span>Trên màn hình đều hiện <code>계약서.pdf</code>, nhưng dạng lưu trữ khác nhau nên quy tắc lặng lẽ trượt. Chúng tôi chỉ căn chỉnh khi so sánh — tên tệp thì không đụng tới.</span></div></li>
+          <li><div><strong>Nhật ký mà sửa được thì không phải nhật ký</strong><span>Mỗi lần dọn dẹp đều được niêm phong nối tiếp lần trước. Sửa một dòng, xoá một thao tác, chèn một cái không có thật — mọi thứ phía sau lệch hết, và lộ ra ngay.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>Không phải lời hứa — bản dựng bắt buộc</h3>
+          <ul>
+            <li>Không xoá vĩnh viễn</li>
+            <li>Không ghi đè</li>
+            <li>Kiểm tra lại ngay trước khi di chuyển</li>
+            <li>Từ chối đường dẫn được bảo vệ</li>
+            <li>Ghi nhật ký trước, di chuyển sau</li>
+            <li>Chỉ một lối ra bên ngoài</li>
+          </ul>
+          <p>Cả sáu điều, mã vi phạm <strong>thì không thể phát hành được.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Bạn có thể tự kiểm tra. Màn hình [Quản trị] hiện <strong>số lần thực sự gửi ra khỏi máy này</strong>. Vừa cài xong thì ghi “chưa bao giờ”.</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Thêm thư mục Downloads bằng [+ Thêm] rồi nhấn [Phân tích]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">Tải OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>Cần có gì</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Hỏi đáp &amp; báo lỗi</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "Công cụ dọn tệp cho Windows, cho bạn xem trước từng tệp sẽ đi đâu.",
   "url": "https://work517.github.io/vi/",
   "inLanguage": "vi",

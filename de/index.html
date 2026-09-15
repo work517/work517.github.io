@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-Dkveu2cWOOde1P65zmTodXCqvSsxYkU6Zv/ULn0KIGQ=' 'sha256-dH9ra+8dA4RoMoWE64wjcL9ebYsBTDWxP4vDjkV7+B8='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-WhuOC/CZWmpoUCeytmOPZUhNUTaHbQbDYvWyVc7Fi9g=' 'sha256-dH9ra+8dA4RoMoWE64wjcL9ebYsBTDWxP4vDjkV7+B8='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.de.png">
 <title>OmniSort — Zeigt, wohin jede Datei kommt, bevor sie umzieht</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>Eine einzige exe</span>
           <span>100.000 Dateien ≈ 49 s</span>
-          <span>825 Tests</span>
+          <span>899 Tests</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Schon bezahlt</span>
+        <h2>Diese Liste haben wir nicht erdacht, sondern erlebt</h2>
+        <p>Ein Programm, das Dateien verschiebt, ist nicht gefährlich, weil ihm Funktionen fehlen, sondern weil Dateien dort verschwinden, wo niemand hinsieht. Alles hier unten ist uns passiert — und behoben.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Manche Dateien kommen nicht in den Papierkorb</strong><span>Dateien auf Netzwerk- oder Wechsellaufwerken, Dateien größer als der Papierkorb selbst, Laufwerke mit abgeschaltetem Papierkorb. In diesen Fällen <strong>löscht Windows sie endgültig, ohne zu fragen</strong>. Wir prüfen vorher; geht es nicht, bleibt die Datei liegen und der Grund wird vermerkt.</span></div></li>
+          <li><div><strong>Ziehen Sie den USB-Stick mittendrin ab, sind beide Kopien weg</strong><span>Ein Verschieben über Laufwerksgrenzen ist Kopieren und danach Löschen des Originals. Wir warten, bis die Kopie wirklich auf der Platte ist, bevor wir etwas löschen. Das dauert länger — und ist richtig.</span></div></li>
+          <li><div><strong>Ein Ordner kann in Wahrheit woanders liegen</strong><span>Junctions, 8.3-Kurznamen, administrative Freigaben (<code>\\host\C$</code>), Gerätepfade. Vier Wege zurück in geschützte Ordner — jeder einzeln blockiert.</span></div></li>
+          <li><div><strong>Der gerade gewählte Name kann im selben Moment belegt werden</strong><span>Direkt nachdem wir einen freien Namen gewählt haben, kann ein anderes Programm eine Datei damit anlegen. Wir rufen das Verschieben so auf, dass der Kernel selbst ablehnt — auch dann überschreiben wir niemandes Datei.</span></div></li>
+          <li><div><strong>Koreanische Dateinamen von einem Mac sind nicht dieselbe Zeichenfolge</strong><span>Auf dem Bildschirm steht so oder so <code>계약서.pdf</code>, doch die gespeicherte Form unterscheidet sich, und Regeln greifen stillschweigend daneben. Wir gleichen sie nur beim Vergleichen an — der Dateiname selbst bleibt unberührt.</span></div></li>
+          <li><div><strong>Ein Protokoll, das man ändern kann, ist keins</strong><span>Jedes Aufräumen wird auf das vorige gesiegelt. Ändern Sie eine Zeile, löschen Sie einen Vorgang, schieben Sie einen erfundenen ein — alles danach passt nicht mehr, und das fällt auf.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>Keine Versprechen — der Build erzwingt sie</h3>
+          <ul>
+            <li>Kein endgültiges Löschen</li>
+            <li>Kein Überschreiben</li>
+            <li>Kurz vor dem Verschieben erneut geprüft</li>
+            <li>Geschützte Pfade abgelehnt</li>
+            <li>Erst protokollieren, dann verschieben</li>
+            <li>Genau ein Weg nach draußen</li>
+          </ul>
+          <p>Bei allen sechs gilt: Code, der sie verletzt, <strong>lässt sich gar nicht veröffentlichen.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Prüfen Sie es selbst. Der [Verwaltung]-Bildschirm zeigt, <strong>wie viele Anfragen diesen PC tatsächlich verlassen haben</strong>. Frisch installiert steht dort „nie“.</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Mit [+ Hinzufügen] den Ordner Downloads eintragen und [Analysieren] klicken</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">OmniSort.exe herunterladen</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>Voraussetzungen</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Fragen &amp; Fehler melden</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.",
   "url": "https://work517.github.io/de/",
   "inLanguage": "de",

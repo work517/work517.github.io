@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-jdt61/0Do7B3/AqWrv8EvJUDFVsjX7p7eb1DyMkLMvs=' 'sha256-JP9GKRPwz6IZh/uVL2UYo+VEtC4GnsfyrPCPhsgVHtg='; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-AXnSnhHxNwHoEDY5GyDz9QpECRSIJ/vh5YWNpSrr/yY=' 'sha256-JP9GKRPwz6IZh/uVL2UYo+VEtC4GnsfyrPCPhsgVHtg='; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.">
 <meta name="color-scheme" content="light dark">
@@ -53,9 +53,7 @@
 <meta name="twitter:description" content="Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.">
 <meta name="twitter:image" content="https://work517.github.io/assets/og.it.png">
 <title>OmniSort — Vedi dove va ogni file prima di spostarlo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
 <style>
   :root {
     /* 공유 아이콘. 색은 currentColor 로 칠하므로 모양만 담는다. */
@@ -78,8 +76,8 @@
     --danger-dim: #FBE9E9;
     --shadow:     0 1px 2px rgba(19, 28, 37, .06), 0 8px 24px -12px rgba(19, 28, 37, .18);
 
-    --sans: "IBM Plex Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "D2Coding", monospace;
 
     --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
     --step-0:  clamp(.95rem, .92rem + .15vw, 1.02rem);
@@ -430,6 +428,16 @@
   .reqs dt { color: var(--muted); }
   .reqs dd { margin: 0; }
   .checksum { font-family: var(--mono); font-size: .72rem !important; word-break: break-all; }
+
+  /* 겪고 고친 것 — #safety 와 같은 틀을 쓰되, 마지막 한 줄만 따로 둔다 */
+  #paid .protected p { margin: .8rem 0 0; font-size: .86rem; color: var(--muted); }
+  /* 파일 이름을 보여주는 자리. 기본 monospace 에는 한글이 없어서 시스템 글꼴로
+     떨어지는데, 그 글꼴이 한 글자를 넓게 그려 '계 약 서 .pdf' 처럼 벌어진다.
+     이 문단의 요지가 '똑같이 보인다' 여서, 벌어지면 말이 안 된다. */
+  #paid .checks code { font-family: var(--sans); background: var(--surface-2);
+    padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .paid-note { margin: 1.6rem 0 0; padding: .9rem 1.1rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--line); font-size: .9rem; }
   .dl-card .cli pre { padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; }
 
   /* FAQ */
@@ -511,10 +519,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.3</span>
+          <span>v0.2.4</span>
           <span>Un solo eseguibile</span>
           <span>100.000 file ≈ 49 s</span>
-          <span>825 test</span>
+          <span>899 test</span>
         </div>
       </div>
 
@@ -840,6 +848,40 @@
   </section>
 
   
+  <section id="paid">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Già pagato</span>
+        <h2>Questo elenco non l'abbiamo inventato: ci siamo andati a sbattere</h2>
+        <p>Un programma che sposta file è pericoloso non perché gli manchino funzioni, ma perché i file spariscono dove nessuno guarda. Tutto ciò che segue ci è successo, ed è stato risolto.</p>
+      </div>
+      <div class="safety">
+        <ul class="checks">
+          <li><div><strong>Alcuni file non possono finire nel Cestino</strong><span>File su unità di rete o rimovibili, file più grandi del Cestino stesso, unità con il Cestino disattivato. In questi casi Windows <strong>li cancella per sempre, senza chiedere</strong>. Noi verifichiamo prima e, se non si può, lasciamo il file dov'è e annotiamo il perché.</span></div></li>
+          <li><div><strong>Se togli la chiavetta a metà, perdi entrambe le copie</strong><span>Spostare tra unità significa copiare e poi cancellare l'originale. Aspettiamo che la copia sia davvero arrivata sul disco prima di cancellare. È più lento, ed è la cosa giusta.</span></div></li>
+          <li><div><strong>Una cartella può in realtà puntare altrove</strong><span>Giunzioni, nomi brevi 8.3, condivisioni amministrative (<code>\\host\C$</code>), percorsi di dispositivo. Quattro strade per rientrare nelle cartelle protette: tutte sbarrate.</span></div></li>
+          <li><div><strong>Il nome appena scelto può essere preso in quell'istante</strong><span>Subito dopo aver scelto un nome libero, un altro programma può creare un file con quel nome. Chiamiamo lo spostamento in modo che sia il kernel a rifiutare: nemmeno allora sovrascriviamo il file di qualcun altro.</span></div></li>
+          <li><div><strong>I nomi di file coreani arrivati da un Mac non sono la stessa stringa</strong><span>A schermo si legge <code>계약서.pdf</code> in entrambi i casi, ma la forma salvata è diversa e le regole mancano il bersaglio in silenzio. Le allineiamo solo per il confronto: il nome del file non viene toccato.</span></div></li>
+          <li><div><strong>Un registro che si può modificare non è un registro</strong><span>Ogni riordino viene sigillato su quello precedente. Cambia una riga, cancella un'operazione, infilane una falsa: tutto ciò che segue non torna più, e si vede.</span></div></li>
+        </ul>
+        <div class="protected">
+          <h3>Non promesse: è la build a imporle</h3>
+          <ul>
+            <li>Nessuna eliminazione definitiva</li>
+            <li>Nessuna sovrascrittura</li>
+            <li>Ricontrollato appena prima di spostare</li>
+            <li>Percorsi protetti rifiutati</li>
+            <li>Prima il registro, poi lo spostamento</li>
+            <li>Una sola via verso l'esterno</li>
+          </ul>
+          <p>Per tutti e sei, il codice che li viola <strong>non può proprio essere pubblicato.</strong></p>
+        </div>
+      </div>
+      <p class="paid-note">Verificalo tu stesso. La schermata [Amministrazione] mostra <strong>quante richieste sono davvero uscite da questo PC</strong>. Appena installato, dice «mai».</p>
+    </div>
+  </section>
+
+  
   <section id="cli">
     <div class="wrap">
       <div class="section-head">
@@ -965,7 +1007,7 @@
             <li>Aggiungi la cartella Downloads con [+ Aggiungi] e premi [Analizza]</li>
           </ol>
           <a class="btn btn-primary" href="https://github.com/work517/work517.github.io/releases">Scarica OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.3 · 29.0 MB · SHA-256 <code>622d6ecabe1f9c816e9c47fdfac0c3bdfcb14796200576bae5cffab5ee0dd059</code></p>
+          <p class="checksum" id="release-facts">v0.2.4 · 29.1 MB · SHA-256 <code>70b01412a96ed532a004968af69096011551df52822d67a8fc45d6e9b2de9e89</code></p>
         </div>
         <div class="dl-card">
           <h3>Cosa serve</h3>
@@ -1033,8 +1075,9 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.3 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.4 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
+    <span><a href="https://github.com/work517/work517.github.io/issues">Domande e segnalazioni</a></span>
     
   </div>
 </footer>
@@ -1147,7 +1190,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.3",
+  "softwareVersion": "0.2.4",
   "description": "Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.",
   "url": "https://work517.github.io/it/",
   "inLanguage": "it",
