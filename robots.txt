@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://work517.github.io/sitemap.xml
+Sitemap: https://omnisort.win/sitemap.xml
