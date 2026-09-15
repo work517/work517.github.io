@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-PDs6/A6QxWvqVcoSpNYdsjWQMPoLB/Zusy2NevY1+A8=' 'sha256-rRngEhBR77rwO067KSFv2nuCoByQd2OimIrdANJBHNk='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-6DXi0cYRZRBFAgBBqfOGzCovsjJqF+Hz31U8h4u3jAk=' 'sha256-rRngEhBR77rwO067KSFv2nuCoByQd2OimIrdANJBHNk='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="title" content="OmniSort — 移动前先告诉你每个文件去哪">
 <meta name="description" content="先告诉你每个文件要去哪，再动手的 Windows 文件整理工具。">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)">
@@ -559,6 +560,17 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------- 휴대폰에서 너무 작던 것
+     표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
+     없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
+     넘치지 않는다. 이 규칙은 **맨 끝에** 둔다 — 같은 힘이면 나중 것이 이긴다. */
+  @media (max-width: 900px) {
+    /* 선택자 힘을 원래 규칙과 맞춘다. `.preview th` 로는 `table.preview th` 를
+       못 이긴다 (한 번 졌다). */
+    table.preview th, .report-table th, table.cats th { font-size: .82rem; letter-spacing: .03em; }
+    /* 손가락으로 누르는 자리도 같이. 35px 은 엄지에 작다. */
+    .langpick select { min-height: 40px; }
+  }
 
   .langpick select {
     font: inherit; font-size: var(--step--1); color: var(--ink-soft);
@@ -625,10 +637,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.6</span>
+          <span>v0.2.7</span>
           <span>单个可执行文件</span>
           <span>10 万个文件 ≈ 49 秒</span>
-          <span>1,191 项测试</span>
+          <span>1,193 项测试</span>
         </div>
       </div>
 
@@ -1115,12 +1127,12 @@
             <li>用[+ 添加]加入 Downloads 文件夹，再点[分析]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">下载 OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
           <div class="dl-alt">
             <strong>还有文件夹版</strong>
             <p>同一个程序，只是 Qt 库单独放在 <code>_internal</code> 文件夹里。您可以换成自己想用的版本（LGPL-3.0）。单文件版被杀毒软件拦下时也请试试这个。</p>
             <a href="https://dl.omnisort.win/folder">获取文件夹版 zip</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1201,7 +1213,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">咨询与问题反馈</a></span>
     
@@ -1326,7 +1338,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.6",
+  "softwareVersion": "0.2.7",
   "description": "先告诉你每个文件要去哪，再动手的 Windows 文件整理工具。",
   "url": "https://omnisort.win/zh-Hans/",
   "inLanguage": "zh-Hans",

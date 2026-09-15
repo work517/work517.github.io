@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-eipVh9yT6gwt33Eq62cHwBMoDT+9AMhfWYg5wTeAysM=' 'sha256-XJl5Mb44bR6uSgHXCavLElt55arq6MHf4VEBTSXfHlk='; worker-src 'self'; style-src 'sha256-JY2sh+6Nrs1n5vj5KCYWvNdquX5QDimhJNm7fC1vcz4='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-fWAFN5TP6S8u9BQ/5QTa+sYyQH1ctJR1CndkxELNlLc=' 'sha256-XJl5Mb44bR6uSgHXCavLElt55arq6MHf4VEBTSXfHlk='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="title" content="OmniSort — 動かす前に行き先を見せる Windows ファイル整理">
 <meta name="description" content="動かす前に、どのファイルがどこへ行くのかを先に見せる Windows のファイル整理ツール。">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)">
@@ -559,6 +560,17 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------- 휴대폰에서 너무 작던 것
+     표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
+     없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
+     넘치지 않는다. 이 규칙은 **맨 끝에** 둔다 — 같은 힘이면 나중 것이 이긴다. */
+  @media (max-width: 900px) {
+    /* 선택자 힘을 원래 규칙과 맞춘다. `.preview th` 로는 `table.preview th` 를
+       못 이긴다 (한 번 졌다). */
+    table.preview th, .report-table th, table.cats th { font-size: .82rem; letter-spacing: .03em; }
+    /* 손가락으로 누르는 자리도 같이. 35px 은 엄지에 작다. */
+    .langpick select { min-height: 40px; }
+  }
 
   .langpick select {
     font: inherit; font-size: var(--step--1); color: var(--ink-soft);
@@ -625,10 +637,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.6</span>
+          <span>v0.2.7</span>
           <span>実行ファイル一つ</span>
           <span>10万ファイル ≈ 49秒</span>
-          <span>テスト 1,191 件</span>
+          <span>テスト 1,193 件</span>
         </div>
       </div>
 
@@ -1115,12 +1127,12 @@
             <li>[+ 追加] で Downloads フォルダーを入れ、[分析] を押します</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">OmniSort.exe をダウンロード</a>
-          <p class="checksum" id="release-facts">v0.2.6 · 30.0 MB · SHA-256 <code>9022c1767bec542afd455be19440c04c29e00758a90838d2b49c5b39fd134ee8</code></p>
+          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
           <div class="dl-alt">
             <strong>フォルダー版もあります</strong>
             <p>同じプログラムですが、Qt ライブラリが <code>_internal</code> フォルダーに分かれて入っています。お好きな版に差し替えられます（LGPL-3.0）。1ファイル版がウイルス対策ソフトに止められたときもこちらをお試しください。</p>
             <a href="https://dl.omnisort.win/folder">フォルダー版 zip を入手</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.6-folder.zip · 40.3 MB · SHA-256 <code>0f38d748ae3a29e2cf333511e7e415a2a74ea0be49c3e7e641c8c1241c87dd1c</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1201,7 +1213,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.6 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">お問い合わせ・不具合の報告</a></span>
     
@@ -1326,7 +1338,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.6",
+  "softwareVersion": "0.2.7",
   "description": "動かす前に、どのファイルがどこへ行くのかを先に見せる Windows のファイル整理ツール。",
   "url": "https://omnisort.win/ja/",
   "inLanguage": "ja",
