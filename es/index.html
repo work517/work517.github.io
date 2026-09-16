@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-jXVtI9ykyckP9ID0W9RoyutLwY9l0szOWRwo90xSp8c=' 'sha256-c4G87j9wRed8+LBDNSKKyQXK1d6cBeJILWfZIePL1HI='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-jXVtI9ykyckP9ID0W9RoyutLwY9l0szOWRwo90xSp8c=' 'sha256-c4G87j9wRed8+LBDNSKKyQXK1d6cBeJILWfZIePL1HI='; worker-src 'self'; style-src 'sha256-z2iPV8Iz8k0UngKSvoLXpKs0paQmNElLeNP7aTaKZlg='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Mira adónde va cada archivo antes de moverlo">
 <meta name="description" content="Un organizador de archivos para Windows que te enseña adónde iría cada archivo antes de moverlo.">
@@ -211,7 +211,11 @@
     border-bottom: 1px solid var(--line);
   }
   .topbar-inner { display: flex; align-items: center; gap: 1.5rem; height: 58px; }
-  .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; letter-spacing: -.02em; }
+  /* 로고는 맨 위로 돌아가는 링크다. 사람들은 어느 사이트에서든 그걸 먼저 누른다 —
+     span 으로 두면 눌러도 아무 일이 없어, 고장 났다고 읽힌다. */
+  .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; letter-spacing: -.02em;
+           text-decoration: none; color: inherit; }
+  .brand:hover { color: var(--accent); }
   .brand-mark { width: 26px; height: 26px; border-radius: 7px; flex: none; }
   .topnav { margin-left: auto; display: flex; gap: 1.4rem; font-size: var(--step--1); }
   /* 눈에는 안 보이지만 스크린 리더는 읽는다. 정의가 없으면 그냥 다 보인다. */
@@ -544,7 +548,18 @@
   .faq summary::-webkit-details-marker { display: none; }
   .faq summary::after { content: "+"; margin-left: auto; color: var(--muted); font-family: var(--mono); }
   .faq details[open] summary::after { content: "−"; }
-  .faq p { padding: 0 1.1rem 1.1rem; color: var(--muted); font-size: var(--step--1); max-width: 72ch; }
+  /* 답글은 상자 폭을 다 쓴다.
+     여기에 72ch 를 주고 있었는데, ch 는 '0' 한 글자 너비라 라틴에 맞는 단위다.
+     한글·가나·한자는 한 글자가 그 두 배여서 같은 72ch 가 37자밖에 안 들어갔다.
+     상자는 1140px 인데 글은 596px 에서 멈추니, 펼친 답글마다 오른쪽 절반이
+     비어 고장 난 것처럼 보였다. 답글은 두세 줄짜리라 긴 줄의 부담이 적으니
+     상자를 채우게 둔다 — 줄 길이를 재는 자리는 본문 쪽(.section-head)이다. */
+  .faq p { padding: 0 1.1rem 1.1rem; color: var(--muted); font-size: var(--step--1); }
+  /* 라틴·키릴은 한 글자가 CJK 의 절반이라, 같은 1140px 상자를 다 채우면 한 줄이
+     150자를 넘는다 (실제로 재 보니 161자). 한글은 같은 폭이 70자라 읽을 만하다.
+     그래서 상한은 글자가 좁은 쪽에만 둔다 — 한 값으로 열두 언어를 맞추려 들면
+     한쪽은 반쯤 비고 다른 쪽은 눈이 줄을 놓친다. */
+  html:not([lang="ko"]):not([lang^="ja"]):not([lang^="zh"]) .faq p { max-width: 100ch; }
 
   footer { border-top: 1px solid var(--line); padding: 2.5rem 0 3.5rem; color: var(--muted); font-size: var(--step--1); }
   .foot-grid { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; }
@@ -597,9 +612,12 @@
 </head>
 <body>
 
+
+<span id="top" aria-hidden="true"></span>
+
 <header class="topbar">
   <div class="wrap topbar-inner">
-    <span class="brand">
+    <a class="brand" href="#top">
       <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
         <rect width="64" height="64" rx="14" fill="#9E5E0A"/>
         <g fill="#fff">
@@ -610,7 +628,7 @@
         </g>
       </svg>
       OmniSort
-    </span>
+    </a>
     <nav class="topnav">
       <a href="#how">Cómo funciona</a>
       <a href="#rules">Reglas de clasificación</a>
