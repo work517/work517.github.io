@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-fWAFN5TP6S8u9BQ/5QTa+sYyQH1ctJR1CndkxELNlLc=' 'sha256-XJl5Mb44bR6uSgHXCavLElt55arq6MHf4VEBTSXfHlk='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-0TfcYo4LdynqYk/GSO30RbausqK9RiW5mcaA1A9gjsg=' 'sha256-im115sjBSYw4JTTnQS41P7qELFyRtGV0uPmwbltHLDk='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 動かす前に行き先を見せる Windows ファイル整理">
 <meta name="description" content="動かす前に、どのファイルがどこへ行くのかを先に見せる Windows のファイル整理ツール。">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>実行ファイル一つ</span>
           <span>10万ファイル ≈ 49秒</span>
-          <span>テスト 1,193 件</span>
+          <span>テスト 1,286 件</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>[+ 追加] で Downloads フォルダーを入れ、[分析] を押します</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">OmniSort.exe をダウンロード</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>フォルダー版もあります</strong>
             <p>同じプログラムですが、Qt ライブラリが <code>_internal</code> フォルダーに分かれて入っています。お好きな版に差し替えられます（LGPL-3.0）。1ファイル版がウイルス対策ソフトに止められたときもこちらをお試しください。</p>
             <a href="https://dl.omnisort.win/folder">フォルダー版 zip を入手</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">更新履歴</span>
+        <h2>いつ何が変わったか</h2>
+        <p>日付は韓国時間（KST）です。詳しい内容はソフトの中でも見られます。</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> 新しい版の確認・ルール提案・フォルダー見張り</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 管理画面の誤った説明と、管理者権限の警告を直しました</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> ダウンロードを当方から直接お渡しします</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> アプリの色を紹介ページに合わせ、フォルダー版を前に出しました</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> ウェブフォントを外しました — ページを開いても外には出ません</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>インターネットはまったく使いませんか？</summary>
-          <p>既定では一度も使いません。管理画面で新版確認・お知らせ・ダウンロード数を自分でオンにしたときだけ受け取り、そのときもファイルの情報は送りません（新版確認に含まれるのは版番号だけです）。何が外に出るかは、アドレスまでその画面に書いてあります。</p>
+          <p>既定でオンなのは<b>新しい版の確認</b>ひとつだけです。1日に1回、版番号だけを添えて尋ねます — ファイル名もパスも件数も出ません。オンであることは初回起動時にお知らせし、お知らせの行からすぐにオフにできます。お知らせとダウンロード数はオンにしたときだけ取得します。何が出ていくかは管理画面にアドレスまで書いてあります。</p>
         </details>
         <details>
           <summary>ダウンロード数を数えていますか？</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">お問い合わせ・不具合の報告</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "動かす前に、どのファイルがどこへ行くのかを先に見せる Windows のファイル整理ツール。",
   "url": "https://omnisort.win/ja/",
   "inLanguage": "ja",
@@ -1374,7 +1405,7 @@
       "name": "インターネットはまったく使いませんか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "既定では一度も使いません。管理画面で新版確認・お知らせ・ダウンロード数を自分でオンにしたときだけ受け取り、そのときもファイルの情報は送りません（新版確認に含まれるのは版番号だけです）。何が外に出るかは、アドレスまでその画面に書いてあります。"
+        "text": "既定でオンなのは新しい版の確認ひとつだけです。1日に1回、版番号だけを添えて尋ねます — ファイル名もパスも件数も出ません。オンであることは初回起動時にお知らせし、お知らせの行からすぐにオフにできます。お知らせとダウンロード数はオンにしたときだけ取得します。何が出ていくかは管理画面にアドレスまで書いてあります。"
       }
     },
     {

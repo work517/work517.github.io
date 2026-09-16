@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-zuswEyCrDtVg5bvWU5pxns+/KUph1wo08rB4NmNqH8w=' 'sha256-XAHSt8YUoJNdtau09Bqa5sS9rOyOd25RTRQ68PQFZsw='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-vmQ3kciwnS03S2HY2YE0h4dxydimuxK1oSEzO4VWLMQ=' 'sha256-TGgzASCXdrUFpWOKO+7g/IHf1KFSNnp6CyIhEOh8YKo='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 옮기기 전에 보여주는 Windows 파일 정리">
 <meta name="description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>단일 실행 파일</span>
           <span>10만 파일 ≈ 49초</span>
-          <span>테스트 1,193개</span>
+          <span>테스트 1,286개</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>[+ 추가] 로 Downloads 폴더를 넣고 [분석] 을 누릅니다</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">OmniSort.exe 내려받기</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>폴더형도 있습니다</strong>
             <p>같은 프로그램인데 Qt 라이브러리가 <code>_internal</code> 폴더에 따로 들어 있습니다. 원하는 판으로 바꿔 끼울 수 있습니다 (LGPL-3.0). 한 파일짜리가 백신에 걸릴 때도 이쪽을 받아 보세요.</p>
             <a href="https://dl.omnisort.win/folder">폴더형 zip 받기</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">업데이트 내역</span>
+        <h2>언제 무엇이 바뀌었는지</h2>
+        <p>날짜는 한국 시각(KST)입니다. 자세한 내용은 프로그램 안에서도 볼 수 있습니다.</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> 새 판 확인 · 규칙 추천 · 폴더 지켜보기</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 관리자 화면의 틀린 설명과 관리자 권한 경고를 고쳤습니다</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> 내려받기를 우리 자리에서 직접 줍니다</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> 앱 색을 소개 페이지와 맞추고, 폴더형 배포본을 꺼냈습니다</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> 웹폰트를 걷어냈습니다 — 페이지를 열어도 바깥으로 나가지 않습니다</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>인터넷을 전혀 쓰지 않나요?</summary>
-          <p>기본은 한 번도 쓰지 않습니다. 관리자 화면에서 새 판 확인·공지·내려받기 수를 직접 켰을 때만 받아 오며, 그때도 파일 정보는 보내지 않습니다 (새 판 확인에는 판 번호만 담깁니다). 무엇이 나가는지는 그 화면에 주소까지 적혀 있습니다.</p>
+          <p>기본으로 켜진 것은 <b>새 판 확인 하나</b>입니다. 하루 한 번, 판 번호만 담아 한 번 물어봅니다 — 파일 이름도 경로도 개수도 나가지 않습니다. 켜져 있다는 것을 첫 실행에 알려 드리고, 새 판 알림 줄에서 바로 끌 수 있습니다. 공지와 내려받기 수는 켜야만 받아 옵니다. 무엇이 나가는지는 관리자 화면에 주소까지 적혀 있습니다.</p>
         </details>
         <details>
           <summary>내려받기 수를 세나요?</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">문의·버그 신고</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.",
   "url": "https://omnisort.win/",
   "inLanguage": "ko",
@@ -1374,7 +1405,7 @@
       "name": "인터넷을 전혀 쓰지 않나요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "기본은 한 번도 쓰지 않습니다. 관리자 화면에서 새 판 확인·공지·내려받기 수를 직접 켰을 때만 받아 오며, 그때도 파일 정보는 보내지 않습니다 (새 판 확인에는 판 번호만 담깁니다). 무엇이 나가는지는 그 화면에 주소까지 적혀 있습니다."
+        "text": "기본으로 켜진 것은 새 판 확인 하나입니다. 하루 한 번, 판 번호만 담아 한 번 물어봅니다 — 파일 이름도 경로도 개수도 나가지 않습니다. 켜져 있다는 것을 첫 실행에 알려 드리고, 새 판 알림 줄에서 바로 끌 수 있습니다. 공지와 내려받기 수는 켜야만 받아 옵니다. 무엇이 나가는지는 관리자 화면에 주소까지 적혀 있습니다."
       }
     },
     {

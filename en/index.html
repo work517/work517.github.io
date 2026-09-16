@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-xTimpT4KU+Gd9Qk56MmLDFWvCQ2wfcx1eNscxQMkLgk=' 'sha256-XkP0FCyu072yhm5G6OTCCqtczMAAzlEp+lBLlmj6OGs='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-cY1pO5qFoCUmZZ6WqvGvwuYKsfe7U1Jp5Fiux3l6Zh0=' 'sha256-z3DEACNQ1dlFYXyLmJ9peQFR9PrDXojPbTOrwoARR90='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — See where every file goes before it moves">
 <meta name="description" content="A Windows file organizer that shows you where every file would go before it moves.">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>One executable</span>
           <span>100k files ≈ 49 s</span>
-          <span>1,193 tests</span>
+          <span>1,286 tests</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>Add your Downloads folder with [+ Add], then press [Analyze]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Download OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>There is also a folder build</strong>
             <p>The same program, but the Qt libraries sit separately in an <code>_internal</code> folder. You can swap them for a build of your choice (LGPL-3.0). Try this one too if antivirus blocks the single file.</p>
             <a href="https://dl.omnisort.win/folder">Get the folder build zip</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">What changed</span>
+        <h2>What changed, and when</h2>
+        <p>Dates are Korea Standard Time (KST). The full detail is also inside the program.</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> Update check · rule suggestions · folder watching</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Fixed a wrong caption in the admin screen and the elevated-rights warning</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Downloads now come straight from us</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Matched the app's colours to this page and brought out the folder build</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Dropped the web fonts — opening this page reaches nobody</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>Does it use the internet at all?</summary>
-          <p>Not by default — not even once. It only fetches when you yourself turn on update checks, notices or download counts in the Admin panel, and even then no file information is sent (an update check carries only the version number). That screen spells out what goes out, right down to the address.</p>
+          <p>Just <b>one</b> thing is on by default: the check for a newer version. Once a day it asks, carrying nothing but the version number — no file names, no paths, no counts. We tell you it is on the first time you run the program, and you can switch it off right from the notice. News and download counts are fetched only if you turn them on. The admin screen lists every address that is used.</p>
         </details>
         <details>
           <summary>Do you count downloads?</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Questions &amp; bug reports</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "A Windows file organizer that shows you where every file would go before it moves.",
   "url": "https://omnisort.win/en/",
   "inLanguage": "en",
@@ -1374,7 +1405,7 @@
       "name": "Does it use the internet at all?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not by default — not even once. It only fetches when you yourself turn on update checks, notices or download counts in the Admin panel, and even then no file information is sent (an update check carries only the version number). That screen spells out what goes out, right down to the address."
+        "text": "Just one thing is on by default: the check for a newer version. Once a day it asks, carrying nothing but the version number — no file names, no paths, no counts. We tell you it is on the first time you run the program, and you can switch it off right from the notice. News and download counts are fetched only if you turn them on. The admin screen lists every address that is used."
       }
     },
     {

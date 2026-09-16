@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-GaZtqYVDFm0qe4j35ZTa4lN1tNbvbM0pt88W1qujJmo=' 'sha256-AOS+eYL5/OUUKyEpYlzxU1kdUFH0r0YxI5HBBHOZsgg='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-kods6Ltgc1qYR8Mvqzn3iBSOO6ylJcfSPDig/lDW1HY=' 'sha256-mqSAI/YaXNrMtXgqcViWyguYBj0j1sW1PXmSG7v1pIo='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Voyez où va chaque fichier avant de le déplacer">
 <meta name="description" content="Un outil de rangement de fichiers pour Windows qui montre où irait chaque fichier avant de le déplacer.">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>Un seul exécutable</span>
           <span>100 000 fichiers ≈ 49 s</span>
-          <span>1,193 tests</span>
+          <span>1,286 tests</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>Ajoutez le dossier Downloads avec [+ Ajouter], puis cliquez sur [Analyser]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Télécharger OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>Il existe aussi une version en dossier</strong>
             <p>Le même programme, mais les bibliothèques Qt sont à part, dans un dossier <code>_internal</code>. Vous pouvez les remplacer par la version de votre choix (LGPL-3.0). Essayez aussi celle-ci si l’antivirus bloque le fichier unique.</p>
             <a href="https://dl.omnisort.win/folder">Télécharger le zip en dossier</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Nouveautés</span>
+        <h2>Ce qui a changé, et quand</h2>
+        <p>Les dates sont à l’heure de Corée (KST). Le détail complet est aussi dans le programme.</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> Vérification de version · règles suggérées · surveillance des dossiers</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Correction d’un texte faux dans l’écran d’administration et de l’avertissement de droits</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Les téléchargements viennent désormais directement de chez nous</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Couleurs de l’application accordées à cette page, version en dossier mise en avant</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Polices web retirées — ouvrir cette page ne contacte personne</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>Il n'utilise vraiment pas internet ?</summary>
-          <p>Par défaut, jamais. Il ne récupère quelque chose que si vous activez vous-même, dans le Panneau d'administration, la vérification de version, les annonces ou le nombre de téléchargements — et même alors, aucune information sur vos fichiers n'est envoyée (la vérification de version ne transmet que le numéro de version). Ce même écran indique ce qui sort, adresse comprise.</p>
+          <p>Une <b>seule</b> chose est active d’origine : la vérification d’une nouvelle version. Une fois par jour, elle demande en n’emportant que le numéro de version — ni noms de fichiers, ni chemins, ni décomptes. Nous vous prévenons qu’elle est active au premier lancement, et vous pouvez la couper depuis l’avis lui-même. Les actualités et le nombre de téléchargements ne sont demandés que si vous les activez. L’écran d’administration liste chaque adresse utilisée.</p>
         </details>
         <details>
           <summary>Comptez-vous les téléchargements ?</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Questions et bugs</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "Un outil de rangement de fichiers pour Windows qui montre où irait chaque fichier avant de le déplacer.",
   "url": "https://omnisort.win/fr/",
   "inLanguage": "fr",
@@ -1374,7 +1405,7 @@
       "name": "Il n'utilise vraiment pas internet ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Par défaut, jamais. Il ne récupère quelque chose que si vous activez vous-même, dans le Panneau d'administration, la vérification de version, les annonces ou le nombre de téléchargements — et même alors, aucune information sur vos fichiers n'est envoyée (la vérification de version ne transmet que le numéro de version). Ce même écran indique ce qui sort, adresse comprise."
+        "text": "Une seule chose est active d’origine : la vérification d’une nouvelle version. Une fois par jour, elle demande en n’emportant que le numéro de version — ni noms de fichiers, ni chemins, ni décomptes. Nous vous prévenons qu’elle est active au premier lancement, et vous pouvez la couper depuis l’avis lui-même. Les actualités et le nombre de téléchargements ne sont demandés que si vous les activez. L’écran d’administration liste chaque adresse utilisée."
       }
     },
     {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-nGeUaDnk9DNYQoYEnIbe11UVxXhKM6OM3e1TfcEx+q0=' 'sha256-38pyzTiq2hjsiQdpLrhWnJHxpD4ugY4SsKarRD3XGgI='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-Lqs7515MOdaLJUIZOsc6ByfDShhMuv+2SUEYbbIqHlk=' 'sha256-3rAVefR84W4yLm+/FfVIuA4R+jcJKTlEZ7XajOyr7ag='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Показывает, куда попадёт каждый файл до переноса">
 <meta name="description" content="Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>Один исполняемый файл</span>
           <span>100 000 файлов ≈ 49 с</span>
-          <span>Тестов: 1,193</span>
+          <span>Тестов: 1,286</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>Добавьте папку Downloads кнопкой [+ Добавить] и нажмите [Анализ]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Скачать OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>Есть и папочная сборка</strong>
             <p>Та же программа, но библиотеки Qt лежат отдельно, в папке <code>_internal</code>. Их можно заменить на любую сборку (LGPL-3.0). Попробуйте и эту, если антивирус блокирует однофайловую.</p>
             <a href="https://dl.omnisort.win/folder">Скачать zip папочной сборки</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Что изменилось</span>
+        <h2>Что и когда изменилось</h2>
+        <p>Даты — по корейскому времени (KST). Подробности есть и внутри программы.</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> Проверка версии · подсказки правил · присмотр за папками</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Исправлена неверная подпись в окне администратора и предупреждение о правах</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Загрузки теперь идут прямо от нас</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Цвета программы сведены с этой страницей, папочная сборка вынесена на вид</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Убраны веб-шрифты — открытие этой страницы никуда не обращается</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>Он совсем не выходит в интернет?</summary>
-          <p>По умолчанию — ни разу. Данные загружаются, только если вы сами включите в панели администрирования проверку обновлений, объявления или число скачиваний, и даже тогда сведения о файлах не отправляются (при проверке обновлений передаётся только номер версии). Что именно уходит наружу, вплоть до адреса, написано там же.</p>
+          <p>По умолчанию включено <b>только одно</b> — проверка новой версии. Раз в день она спрашивает, унося с собой лишь номер версии: ни имён файлов, ни путей, ни количеств. При первом запуске мы сообщаем, что она включена, и её можно выключить прямо в уведомлении. Новости и число загрузок запрашиваются, только если вы их включите. В окне администратора перечислены все используемые адреса.</p>
         </details>
         <details>
           <summary>Вы считаете загрузки?</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Вопросы и сообщения об ошибках</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "Программа для уборки файлов в Windows, которая сначала показывает, куда попадёт каждый файл.",
   "url": "https://omnisort.win/ru/",
   "inLanguage": "ru",
@@ -1374,7 +1405,7 @@
       "name": "Он совсем не выходит в интернет?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "По умолчанию — ни разу. Данные загружаются, только если вы сами включите в панели администрирования проверку обновлений, объявления или число скачиваний, и даже тогда сведения о файлах не отправляются (при проверке обновлений передаётся только номер версии). Что именно уходит наружу, вплоть до адреса, написано там же."
+        "text": "По умолчанию включено только одно — проверка новой версии. Раз в день она спрашивает, унося с собой лишь номер версии: ни имён файлов, ни путей, ни количеств. При первом запуске мы сообщаем, что она включена, и её можно выключить прямо в уведомлении. Новости и число загрузок запрашиваются, только если вы их включите. В окне администратора перечислены все используемые адреса."
       }
     },
     {

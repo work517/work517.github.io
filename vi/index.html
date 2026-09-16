@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-aFWEMZJ2VzRMvInnXhKkI0+5NzH9f6LbDiwlIeQIe7k=' 'sha256-bjX6vmcpTdQBHYTXO5bVK6TkusQGKH9oI8d4mqhmn3E='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-uVsbk4xR3JW1ai4wEWNuu6CR/KWPXs2+f/exG+HIwFc=' 'sha256-b/EzQEpNK4dpCtS8fvlxkyIaVcqpaF8Z4bzZwh4dFZE='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Xem từng tệp sẽ đi đâu trước khi chuyển">
 <meta name="description" content="Công cụ dọn tệp cho Windows, cho bạn xem trước từng tệp sẽ đi đâu.">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>Một tệp thực thi duy nhất</span>
           <span>100.000 tệp ≈ 49 giây</span>
-          <span>1,193 bài kiểm thử</span>
+          <span>1,286 bài kiểm thử</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>Thêm thư mục Downloads bằng [+ Thêm] rồi nhấn [Phân tích]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">Tải OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>Còn có bản thư mục</strong>
             <p>Vẫn là chương trình đó, nhưng thư viện Qt nằm riêng trong thư mục <code>_internal</code>. Bạn có thể thay bằng bản mình muốn (LGPL-3.0). Khi phần mềm diệt vi-rút chặn bản một tệp thì cũng hãy thử bản này.</p>
             <a href="https://dl.omnisort.win/folder">Tải zip bản thư mục</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Có gì mới</span>
+        <h2>Đã thay đổi gì, và khi nào</h2>
+        <p>Ngày theo giờ Hàn Quốc (KST). Chi tiết đầy đủ cũng có trong chương trình.</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> Kiểm tra bản mới · gợi ý quy tắc · trông chừng thư mục</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Sửa một dòng sai trong màn hình quản trị và lời nhắc quyền quản trị</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Tải về nay đến thẳng từ chúng tôi</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Màu của ứng dụng khớp với trang này, và đưa bản thư mục ra trước</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Bỏ phông chữ web — mở trang này không liên hệ tới ai</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>Có hoàn toàn không dùng Internet không?</summary>
-          <p>Mặc định là không dùng lần nào. Chỉ khi bạn tự bật kiểm tra phiên bản mới, thông báo hay số lượt tải trong Bảng quản trị thì mới nhận dữ liệu, và kể cả khi đó cũng không gửi thông tin tệp nào (kiểm tra phiên bản mới chỉ kèm số phiên bản). Những gì gửi ra ngoài được ghi rõ ngay trên màn hình đó, kèm cả địa chỉ.</p>
+          <p>Chỉ <b>một</b> thứ được bật sẵn: việc kiểm tra bản mới. Mỗi ngày một lần, nó hỏi và chỉ mang theo số phiên bản — không tên tệp, không đường dẫn, không số lượng. Chúng tôi báo cho bạn biết nó đang bật ngay lần chạy đầu tiên, và bạn có thể tắt ngay tại dòng thông báo. Tin tức và số lượt tải chỉ được lấy khi bạn bật. Màn hình quản trị liệt kê mọi địa chỉ được dùng.</p>
         </details>
         <details>
           <summary>Bạn có đếm lượt tải không?</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">Hỏi đáp &amp; báo lỗi</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "Công cụ dọn tệp cho Windows, cho bạn xem trước từng tệp sẽ đi đâu.",
   "url": "https://omnisort.win/vi/",
   "inLanguage": "vi",
@@ -1374,7 +1405,7 @@
       "name": "Có hoàn toàn không dùng Internet không?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Mặc định là không dùng lần nào. Chỉ khi bạn tự bật kiểm tra phiên bản mới, thông báo hay số lượt tải trong Bảng quản trị thì mới nhận dữ liệu, và kể cả khi đó cũng không gửi thông tin tệp nào (kiểm tra phiên bản mới chỉ kèm số phiên bản). Những gì gửi ra ngoài được ghi rõ ngay trên màn hình đó, kèm cả địa chỉ."
+        "text": "Chỉ một thứ được bật sẵn: việc kiểm tra bản mới. Mỗi ngày một lần, nó hỏi và chỉ mang theo số phiên bản — không tên tệp, không đường dẫn, không số lượng. Chúng tôi báo cho bạn biết nó đang bật ngay lần chạy đầu tiên, và bạn có thể tắt ngay tại dòng thông báo. Tin tức và số lượt tải chỉ được lấy khi bạn bật. Màn hình quản trị liệt kê mọi địa chỉ được dùng."
       }
     },
     {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-dRysWzrVxXClkJA71J6A+CNXlr2QVM45O5/YYCl4Jew=' 'sha256-6iPYwHsdaEdY5Ig797LsZeA64f3B+P4RHysWZbi/swo='; worker-src 'self'; style-src 'sha256-5NabFg9KGL5lfEM+/2ekk61AQ6x7rZU8OMkBWs8H4bo='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-I6p1y9pEI96Um8hiTG3a2Wo0Ch1T4JlgI47qtW75wOM=' 'sha256-U9E5NjNK7ebUS9Res2Sfp5JSQlG/tSzkdC5tFnxLmw0='; worker-src 'self'; style-src 'sha256-ti39BXXsjveGWHhBPeKybd7pvJA4gKh1qEEpKXlf1EA='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 移動前先告訴你每個檔案去哪">
 <meta name="description" content="先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。">
@@ -560,6 +560,19 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+  /* ------------------------------------------------------- 업데이트 내역
+     날짜와 한 줄 요약. 받기 직전에 "이게 언제 것인지" 를 보는 자리라 표처럼
+     읽혀야 한다 — 좁은 화면에서는 날짜가 위로 올라가 두 줄이 된다. */
+  .updates { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .updates li { display: grid; grid-template-columns: 11rem 1fr; gap: .2rem 1.1rem;
+                padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+  .updates li:last-child { border-bottom: 0; }
+  .up-when { font-family: var(--mono); font-size: var(--step--1); color: var(--muted);
+             white-space: nowrap; }
+  .up-what { color: var(--ink-soft); }
+  .up-what b { color: var(--ink); margin-right: .4rem; }
+  @media (max-width: 640px) { .updates li { grid-template-columns: 1fr; } }
+
   /* ------------------------------------------------- 휴대폰에서 너무 작던 것
      표 머리글의 .72rem 은 대문자 라틴 라벨을 염두에 둔 크기다. 한글에는 대문자가
      없어 작기만 하다 (375px 에서 11.5px). 표는 제 칸에서 옆으로 밀리므로 넓어져도
@@ -637,10 +650,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.7</span>
+          <span>v0.2.8</span>
           <span>單一執行檔</span>
           <span>10 萬個檔案 ≈ 49 秒</span>
-          <span>1,193 項測試</span>
+          <span>1,286 項測試</span>
         </div>
       </div>
 
@@ -1127,12 +1140,12 @@
             <li>用[+ 新增]加入 Downloads 資料夾，再按[分析]</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">下載 OmniSort.exe</a>
-          <p class="checksum" id="release-facts">v0.2.7 · 30.0 MB · SHA-256 <code>99950a5b29f32c54cef212bce9b951bde98951bcaaa592e64718d90339fce0fc</code></p>
+          <p class="checksum" id="release-facts">v0.2.8 · 30.0 MB · SHA-256 <code>a43dc728d3877c9e9dcfe485aeb940248b517ca5775c478f943ade106251876a</code></p>
           <div class="dl-alt">
             <strong>還有資料夾版</strong>
             <p>同一個程式，只是 Qt 函式庫單獨放在 <code>_internal</code> 資料夾裡。您可以換成自己想用的版本（LGPL-3.0）。單檔版被防毒軟體擋下時也請試試這個。</p>
             <a href="https://dl.omnisort.win/folder">取得資料夾版 zip</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.7-folder.zip · 40.3 MB · SHA-256 <code>eec414895686b920467356ef0871dcfec6c3a2dfcf0cf2bb3fd3b373400a597a</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.8-folder.zip · 40.3 MB · SHA-256 <code>77b518b1846383b02beb589b2bee3f8a86cb66adabb757bf3d1a7f4692594cdc</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1163,6 +1176,24 @@
   </section>
 
   
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">更新紀錄</span>
+        <h2>什麼時候改了什麼</h2>
+        <p>日期為韓國時間（KST）。詳細內容在程式裡也看得到。</p>
+      </div>
+      <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> 檢查新版本 · 規則建議 · 看守資料夾</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 修正了管理畫面裡不實的說明與系統管理員權限提醒</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> 下載改由我們直接提供</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> 把程式配色與介紹頁對齊，並把資料夾版擺到明處</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> 拿掉了網頁字型 —— 開啟這個頁面不會連到外面</span></li>
+      </ul>
+    </div>
+  </section>
+
+  
   <section id="faq">
     <div class="wrap">
       <div class="section-head">
@@ -1176,7 +1207,7 @@
         </details>
         <details>
           <summary>完全不連網嗎？</summary>
-          <p>預設一次都不用。只有你在管理面板裡親自開啟檢查新版、公告或下載次數時才會取得，而且那時也不送出任何檔案資訊（檢查新版時只帶上版本號）。會送出什麼，那個面板上連位址都寫得清清楚楚。</p>
+          <p>預設開啟的只有<b>檢查新版本</b>這一項。每天一次，只帶版本號去問 —— 不會帶檔名、路徑或數量。首次執行時會告訴你它是開著的，也可以直接在提示列裡關掉。公告與下載次數只有你開啟時才會取得。什麼會送出去，管理畫面裡連位址都寫著。</p>
         </details>
         <details>
           <summary>會統計下載次數嗎？</summary>
@@ -1213,7 +1244,7 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.7 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.8 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><a href="mailto:projectteamforyou@gmail.com">諮詢與問題回報</a></span>
     
@@ -1338,7 +1369,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.7",
+  "softwareVersion": "0.2.8",
   "description": "先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。",
   "url": "https://omnisort.win/zh-Hant/",
   "inLanguage": "zh-Hant",
@@ -1374,7 +1405,7 @@
       "name": "完全不連網嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "預設一次都不用。只有你在管理面板裡親自開啟檢查新版、公告或下載次數時才會取得，而且那時也不送出任何檔案資訊（檢查新版時只帶上版本號）。會送出什麼，那個面板上連位址都寫得清清楚楚。"
+        "text": "預設開啟的只有檢查新版本這一項。每天一次，只帶版本號去問 —— 不會帶檔名、路徑或數量。首次執行時會告訴你它是開著的，也可以直接在提示列裡關掉。公告與下載次數只有你開啟時才會取得。什麼會送出去，管理畫面裡連位址都寫著。"
       }
     },
     {
