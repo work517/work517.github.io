@@ -1,11 +1,11 @@
 # work517.github.io
 
-[OmniSort](https://work517.github.io/) 소개 페이지입니다. 12개 언어로 나옵니다.
+[OmniSort](https://omnisort.win/) 소개 페이지입니다. 12개 언어로 나옵니다.
 
 | | |
 | --- | --- |
-| 사이트 | https://work517.github.io/ |
-| 내려받기 | [Releases](https://github.com/work517/work517.github.io/releases) |
+| 사이트 | **https://omnisort.win/** |
+| 내려받기 | [omnisort.win 에서 바로](https://omnisort.win/#download) |
 
 ## 이 저장소에 있는 것
 
@@ -38,3 +38,8 @@ Windows 용 파일 정리 도구입니다. Downloads 같은 폴더를 훑어 확
 
 `notices.json` 을 고치면 앱의 [관리자 > 공지] 에 뜹니다. `kind` 가 `promo` 면
 화면에 **광고**라고 적혀 나갑니다. 소식인 척하는 광고는 쓰지 않습니다.
+
+## 같은 사람이 만든 것
+
+- [SoundDesk](https://sounddesk.win/) — Windows 앱별 볼륨·음소거와 출력 장치 전환.
+  12개 언어. 설치 없이 실행 파일 하나입니다.
