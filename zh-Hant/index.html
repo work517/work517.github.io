@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-I6p1y9pEI96Um8hiTG3a2Wo0Ch1T4JlgI47qtW75wOM=' 'sha256-5xQXByRT251QBhba52mYMfDrMSrNQBuPxEeQ00BrMjU='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-I6p1y9pEI96Um8hiTG3a2Wo0Ch1T4JlgI47qtW75wOM=' 'sha256-+oEVKPxTNY4VW1RJ9QQ0/BEZWYJqlR4rsebKZVPsOOQ=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 移動前先告訴你每個檔案去哪">
 <meta name="description" content="先告訴你每個檔案要去哪，再動手的 Windows 檔案整理工具。">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>你們統計造訪量和下載量嗎？</summary>
           <p>統計。上面顯示的<b>累計造訪</b>和<b>下載</b>就是這兩個數字 — 我們公開，不隱藏。伺服器只保留日期、兩位國家代碼和所取的版本形式。不記錄 IP，不記錄瀏覽器名稱，也不記錄來源。每一行都是許多人的合計，無法回溯到某一個人。程式本身唯一向外詢問的只有新版本檢查。</p>
+          <p data-block="analytics">此外，本頁使用 <b>Cloudflare 網頁分析</b>。我們開啟它是為了了解哪些頁面被閱讀，在這個過程中來源、瀏覽器類型和國家會傳給 Cloudflare。它不設定 Cookie，也不產生裝置指紋，但我們明確寫出：<b>離開我們自己伺服器的只有這一項</b>。</p>
         </details>
         <details>
           <summary>免費嗎？</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "你們統計造訪量和下載量嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "統計。上面顯示的累計造訪和下載就是這兩個數字 — 我們公開，不隱藏。伺服器只保留日期、兩位國家代碼和所取的版本形式。不記錄 IP，不記錄瀏覽器名稱，也不記錄來源。每一行都是許多人的合計，無法回溯到某一個人。程式本身唯一向外詢問的只有新版本檢查。"
+        "text": "統計。上面顯示的累計造訪和下載就是這兩個數字 — 我們公開，不隱藏。伺服器只保留日期、兩位國家代碼和所取的版本形式。不記錄 IP，不記錄瀏覽器名稱，也不記錄來源。每一行都是許多人的合計，無法回溯到某一個人。程式本身唯一向外詢問的只有新版本檢查。\n          此外，本頁使用 Cloudflare 網頁分析。我們開啟它是為了了解哪些頁面被閱讀，在這個過程中來源、瀏覽器類型和國家會傳給 Cloudflare。它不設定 Cookie，也不產生裝置指紋，但我們明確寫出：離開我們自己伺服器的只有這一項。"
       }
     },
     {

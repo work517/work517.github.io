@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-vmQ3kciwnS03S2HY2YE0h4dxydimuxK1oSEzO4VWLMQ=' 'sha256-kBGCmURWsNp67F0zeLnbMHJz3II+YrLyDjhIVFdqXks='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-vmQ3kciwnS03S2HY2YE0h4dxydimuxK1oSEzO4VWLMQ=' 'sha256-ijUsyVWLna8FDJGhjT/6CT4I1J7nTEv3vvwYmHdBRks=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 옮기기 전에 보여주는 Windows 파일 정리">
 <meta name="description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>접속과 내려받기 수를 세나요?</summary>
           <p>셉니다. 위에 적어 둔 <b>누적 접속</b>과 <b>내려받기</b>가 그 숫자입니다 — 숨기지 않고 그대로 보여 드립니다. 우리 서버가 남기는 것은 날짜·나라 두 글자·받은 모양뿐입니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다.</p>
+          <p data-block="analytics">여기에 더해 이 페이지는 <b>Cloudflare 웹 분석기</b>를 씁니다. 어느 페이지를 얼마나 보는지 알려고 켰고, 그 과정에서 들어온 길·브라우저 종류·나라가 Cloudflare 로 넘어갑니다. 쿠키는 쓰지 않고 기기를 알아보는 지문도 만들지 않지만, <b>우리 서버 밖으로 나가는 것은 이것 하나</b>라는 점은 분명히 적어 둡니다.</p>
         </details>
         <details>
           <summary>무료인가요?</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "접속과 내려받기 수를 세나요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "셉니다. 위에 적어 둔 누적 접속과 내려받기가 그 숫자입니다 — 숨기지 않고 그대로 보여 드립니다. 우리 서버가 남기는 것은 날짜·나라 두 글자·받은 모양뿐입니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다."
+        "text": "셉니다. 위에 적어 둔 누적 접속과 내려받기가 그 숫자입니다 — 숨기지 않고 그대로 보여 드립니다. 우리 서버가 남기는 것은 날짜·나라 두 글자·받은 모양뿐입니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다.\n          여기에 더해 이 페이지는 Cloudflare 웹 분석기를 씁니다. 어느 페이지를 얼마나 보는지 알려고 켰고, 그 과정에서 들어온 길·브라우저 종류·나라가 Cloudflare 로 넘어갑니다. 쿠키는 쓰지 않고 기기를 알아보는 지문도 만들지 않지만, 우리 서버 밖으로 나가는 것은 이것 하나라는 점은 분명히 적어 둡니다."
       }
     },
     {

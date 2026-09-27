@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-kods6Ltgc1qYR8Mvqzn3iBSOO6ylJcfSPDig/lDW1HY=' 'sha256-QK3Uc53MdS29nYog8XNNsQBt9Nhp2JpJ026sjQDWi2k='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-kods6Ltgc1qYR8Mvqzn3iBSOO6ylJcfSPDig/lDW1HY=' 'sha256-MaLwuoKGjFiMxCtcaJN6Ct6dykf/FCX8EeYhilLEm9Y=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Voyez où va chaque fichier avant de le déplacer">
 <meta name="description" content="Un outil de rangement de fichiers pour Windows qui montre où irait chaque fichier avant de le déplacer.">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>Comptez-vous les visites et les téléchargements ?</summary>
           <p>Oui. Les chiffres <b>Visites totales</b> et <b>Télécharger</b> ci-dessus sont ces nombres — nous les montrons au lieu de les cacher. Notre serveur ne garde que la date, un code pays à deux lettres et la forme téléchargée. Ni IP, ni nom de navigateur, ni provenance. Chaque ligne est la somme de nombreuses personnes : impossible de remonter à quelqu'un. La seule chose que le programme demande de lui-même à l'extérieur, c'est la vérification de version.</p>
+          <p data-block="analytics">En plus, cette page utilise <b>Cloudflare Web Analytics</b>. Nous l'avons activé pour voir quelles pages sont lues et, ce faisant, la provenance, le type de navigateur et le pays partent chez Cloudflare. Aucun cookie, aucune empreinte d'appareil, mais nous l'écrivons clairement : <b>c'est la seule chose qui sort de notre propre serveur</b>.</p>
         </details>
         <details>
           <summary>Est-ce gratuit ?</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "Comptez-vous les visites et les téléchargements ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Oui. Les chiffres Visites totales et Télécharger ci-dessus sont ces nombres — nous les montrons au lieu de les cacher. Notre serveur ne garde que la date, un code pays à deux lettres et la forme téléchargée. Ni IP, ni nom de navigateur, ni provenance. Chaque ligne est la somme de nombreuses personnes : impossible de remonter à quelqu'un. La seule chose que le programme demande de lui-même à l'extérieur, c'est la vérification de version."
+        "text": "Oui. Les chiffres Visites totales et Télécharger ci-dessus sont ces nombres — nous les montrons au lieu de les cacher. Notre serveur ne garde que la date, un code pays à deux lettres et la forme téléchargée. Ni IP, ni nom de navigateur, ni provenance. Chaque ligne est la somme de nombreuses personnes : impossible de remonter à quelqu'un. La seule chose que le programme demande de lui-même à l'extérieur, c'est la vérification de version.\n          En plus, cette page utilise Cloudflare Web Analytics. Nous l'avons activé pour voir quelles pages sont lues et, ce faisant, la provenance, le type de navigateur et le pays partent chez Cloudflare. Aucun cookie, aucune empreinte d'appareil, mais nous l'écrivons clairement : c'est la seule chose qui sort de notre propre serveur."
       }
     },
     {

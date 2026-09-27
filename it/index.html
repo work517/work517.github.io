@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-YpAEz1yB4cMCqI6gDItanUX1+dNBpePw8lKwPLBBmtQ=' 'sha256-tn4C/qVpXFYRALbRX3BqDnz2XvfqXmQv/91dF/6GN6w='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-YpAEz1yB4cMCqI6gDItanUX1+dNBpePw8lKwPLBBmtQ=' 'sha256-E8MHYqrgxOl4Y7YKN36uQ7AH9xxG0gEDKvTKzkR7TIo=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Vedi dove va ogni file prima di spostarlo">
 <meta name="description" content="Un riordinatore di file per Windows che mostra dove finirebbe ogni file prima di spostarlo.">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>Contate visite e download?</summary>
           <p>Sì. I numeri <b>Visite totali</b> e <b>Scarica</b> qui sopra sono proprio quelli: li mostriamo invece di nasconderli. Il nostro server conserva solo la data, un codice paese di due lettere e quale forma è stata presa. Niente IP, niente nome del browser, niente provenienza. Ogni riga è la somma di molte persone, quindi non si risale a nessuno. L'unica cosa che il programma chiede da sé all'esterno è il controllo della versione.</p>
+          <p data-block="analytics">In più questa pagina usa <b>Cloudflare Web Analytics</b>. L'abbiamo attivato per vedere quali pagine vengono lette e, così facendo, provenienza, tipo di browser e paese arrivano a Cloudflare. Non mette cookie e non crea un'impronta del dispositivo, ma lo scriviamo chiaro: <b>questa è l'unica cosa che esce dal nostro server</b>.</p>
         </details>
         <details>
           <summary>È gratuito?</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "Contate visite e download?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sì. I numeri Visite totali e Scarica qui sopra sono proprio quelli: li mostriamo invece di nasconderli. Il nostro server conserva solo la data, un codice paese di due lettere e quale forma è stata presa. Niente IP, niente nome del browser, niente provenienza. Ogni riga è la somma di molte persone, quindi non si risale a nessuno. L'unica cosa che il programma chiede da sé all'esterno è il controllo della versione."
+        "text": "Sì. I numeri Visite totali e Scarica qui sopra sono proprio quelli: li mostriamo invece di nasconderli. Il nostro server conserva solo la data, un codice paese di due lettere e quale forma è stata presa. Niente IP, niente nome del browser, niente provenienza. Ogni riga è la somma di molte persone, quindi non si risale a nessuno. L'unica cosa che il programma chiede da sé all'esterno è il controllo della versione.\n          In più questa pagina usa Cloudflare Web Analytics. L'abbiamo attivato per vedere quali pagine vengono lette e, così facendo, provenienza, tipo di browser e paese arrivano a Cloudflare. Non mette cookie e non crea un'impronta del dispositivo, ma lo scriviamo chiaro: questa è l'unica cosa che esce dal nostro server."
       }
     },
     {

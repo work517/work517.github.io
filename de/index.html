@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-yUWFABXmLgmbha9SvD8bJAZ/HX6HkNlxj34YreZeUZs=' 'sha256-GvhJ2zY6EP2oE9G+ONRUVq3F8QabZB8CLZCyi5bP2VU='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-yUWFABXmLgmbha9SvD8bJAZ/HX6HkNlxj34YreZeUZs=' 'sha256-srIkesY9miq1tDufoXMXYdmVE3GQTfjU/v7GJEiaq20=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Zeigt, wohin jede Datei kommt, bevor sie umzieht">
 <meta name="description" content="Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>Zählen Sie Besuche und Downloads?</summary>
           <p>Ja. Die Zahlen <b>Besuche gesamt</b> und <b>Herunterladen</b> oben sind genau das — wir zeigen sie, statt sie zu verstecken. Unser Server behält nur das Datum, ein Ländercode aus zwei Buchstaben und welche Form geholt wurde. Keine IP, kein Browsername, keine Herkunft. Jede Zeile ist die Summe vieler Menschen und lässt sich nicht auf eine zurückführen. Das Einzige, was das Programm von sich aus nach draußen fragt, ist die Versionsprüfung.</p>
+          <p data-block="analytics">Zusätzlich nutzt diese Seite <b>Cloudflare Web Analytics</b>. Wir haben es eingeschaltet, um zu sehen, welche Seiten gelesen werden; dabei gehen Herkunft, Browsertyp und Land an Cloudflare. Es setzt keine Cookies und bildet keinen Geräte-Fingerabdruck, aber wir schreiben es deutlich hin: <b>das ist das Einzige, was unseren eigenen Server verlässt</b>.</p>
         </details>
         <details>
           <summary>Ist es kostenlos?</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "Zählen Sie Besuche und Downloads?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja. Die Zahlen Besuche gesamt und Herunterladen oben sind genau das — wir zeigen sie, statt sie zu verstecken. Unser Server behält nur das Datum, ein Ländercode aus zwei Buchstaben und welche Form geholt wurde. Keine IP, kein Browsername, keine Herkunft. Jede Zeile ist die Summe vieler Menschen und lässt sich nicht auf eine zurückführen. Das Einzige, was das Programm von sich aus nach draußen fragt, ist die Versionsprüfung."
+        "text": "Ja. Die Zahlen Besuche gesamt und Herunterladen oben sind genau das — wir zeigen sie, statt sie zu verstecken. Unser Server behält nur das Datum, ein Ländercode aus zwei Buchstaben und welche Form geholt wurde. Keine IP, kein Browsername, keine Herkunft. Jede Zeile ist die Summe vieler Menschen und lässt sich nicht auf eine zurückführen. Das Einzige, was das Programm von sich aus nach draußen fragt, ist die Versionsprüfung.\n          Zusätzlich nutzt diese Seite Cloudflare Web Analytics. Wir haben es eingeschaltet, um zu sehen, welche Seiten gelesen werden; dabei gehen Herkunft, Browsertyp und Land an Cloudflare. Es setzt keine Cookies und bildet keinen Geräte-Fingerabdruck, aber wir schreiben es deutlich hin: das ist das Einzige, was unseren eigenen Server verlässt."
       }
     },
     {

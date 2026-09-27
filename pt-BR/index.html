@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-3IshyoYn8rdigjlwhE6NMAAweOsqZYN008eTQd47CNw=' 'sha256-IfORyIedbjLT1jeMAORvcA7yhgM6UKfnjEwdY7S00O0='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-3IshyoYn8rdigjlwhE6NMAAweOsqZYN008eTQd47CNw=' 'sha256-Eh1x2NOmDsAuxPD6bEpIJjAr6Pt20SuB11cfwV5N6ec=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Veja para onde vai cada arquivo antes de mover">
 <meta name="description" content="Um organizador de arquivos para Windows que mostra para onde cada arquivo iria antes de mover.">
@@ -1240,6 +1240,7 @@
         <details>
           <summary>Vocês contam visitas e downloads?</summary>
           <p>Contamos. Os números de <b>Visitas totais</b> e <b>Baixar</b> acima são esses — mostramos em vez de esconder. Nosso servidor guarda apenas a data, um código de país de duas letras e qual formato foi levado. Sem IP, sem nome de navegador, sem origem. Cada linha é a soma de muitas pessoas, então não dá para chegar a uma. A única coisa que o programa pergunta por conta própria lá fora é a verificação de versão.</p>
+          <p data-block="analytics">Além disso, esta página usa o <b>Cloudflare Web Analytics</b>. Ligamos para ver quais páginas são lidas e, nesse caminho, a origem, o tipo de navegador e o país vão para a Cloudflare. Não usa cookies nem cria impressão digital do aparelho, mas deixamos escrito com clareza: <b>isto é a única coisa que sai do nosso próprio servidor</b>.</p>
         </details>
         <details>
           <summary>É grátis?</summary>
@@ -1431,6 +1432,7 @@
     });
   }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3ca050c8e42a47a795753bbc0cfc68e1"}'></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1482,7 +1484,7 @@
       "name": "Vocês contam visitas e downloads?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Contamos. Os números de Visitas totais e Baixar acima são esses — mostramos em vez de esconder. Nosso servidor guarda apenas a data, um código de país de duas letras e qual formato foi levado. Sem IP, sem nome de navegador, sem origem. Cada linha é a soma de muitas pessoas, então não dá para chegar a uma. A única coisa que o programa pergunta por conta própria lá fora é a verificação de versão."
+        "text": "Contamos. Os números de Visitas totais e Baixar acima são esses — mostramos em vez de esconder. Nosso servidor guarda apenas a data, um código de país de duas letras e qual formato foi levado. Sem IP, sem nome de navegador, sem origem. Cada linha é a soma de muitas pessoas, então não dá para chegar a uma. A única coisa que o programa pergunta por conta própria lá fora é a verificação de versão.\n          Além disso, esta página usa o Cloudflare Web Analytics. Ligamos para ver quais páginas são lidas e, nesse caminho, a origem, o tipo de navegador e o país vão para a Cloudflare. Não usa cookies nem cria impressão digital do aparelho, mas deixamos escrito com clareza: isto é a única coisa que sai do nosso próprio servidor."
       }
     },
     {
