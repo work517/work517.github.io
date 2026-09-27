@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-vmQ3kciwnS03S2HY2YE0h4dxydimuxK1oSEzO4VWLMQ=' 'sha256-UB7d/kR8gXpMew/WpIGDG+2c08NF1CBgYMDK0/g9440='; worker-src 'self'; style-src 'sha256-z2iPV8Iz8k0UngKSvoLXpKs0paQmNElLeNP7aTaKZlg='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-vmQ3kciwnS03S2HY2YE0h4dxydimuxK1oSEzO4VWLMQ=' 'sha256-kBGCmURWsNp67F0zeLnbMHJz3II+YrLyDjhIVFdqXks='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 옮기기 전에 보여주는 Windows 파일 정리">
 <meta name="description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
@@ -290,6 +290,11 @@
   .facts { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-family: var(--mono); font-size: var(--step--1); color: var(--muted); }
   .facts span::before { content: "· "; color: var(--line); }
   .facts span:first-child::before { content: ""; }
+  /* 누적 숫자는 사실 줄 바로 아래 한 단 낮춰 붙인다. 자랑이 아니라 근거라서
+     크게 쓰지 않는다. 숫자만 살짝 진하게 해 눈이 먼저 닿게 한다. */
+  .counters { margin-top: .5rem; }
+  .counters b { font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .counters[hidden] { display: none; }
 
   /* --------------------------------------------------- 히어로 미리보기 패널 */
   .panel {
@@ -671,7 +676,12 @@
           <span>v0.2.8</span>
           <span>단일 실행 파일</span>
           <span>10만 파일 ≈ 49초</span>
-          <span>테스트 1,286개</span>
+          <span>테스트 1,395개</span>
+        </div>
+        
+        <div class="facts counters" id="counters" hidden>
+          <span>누적 접속 <b id="count-visits" class="notranslate" translate="no">0</b></span>
+          <span>내려받기 <b id="count-downloads" class="notranslate" translate="no">0</b></span>
         </div>
       </div>
 
@@ -1206,7 +1216,7 @@
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 관리자 화면의 틀린 설명과 관리자 권한 경고를 고쳤습니다</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> 내려받기를 우리 자리에서 직접 줍니다</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> 앱 색을 소개 페이지와 맞추고, 폴더형 배포본을 꺼냈습니다</span></li>
-          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> 웹폰트를 걷어냈습니다 — 페이지를 열어도 바깥으로 나가지 않습니다</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> 웹폰트를 걷어냈습니다 — 글꼴 때문에 바깥으로 나가는 일이 없습니다</span></li>
       </ul>
     </div>
   </section>
@@ -1228,8 +1238,8 @@
           <p>기본으로 켜진 것은 <b>새 판 확인 하나</b>입니다. 하루 한 번, 판 번호만 담아 한 번 물어봅니다 — 파일 이름도 경로도 개수도 나가지 않습니다. 켜져 있다는 것을 첫 실행에 알려 드리고, 새 판 알림 줄에서 바로 끌 수 있습니다. 공지와 내려받기 수는 켜야만 받아 옵니다. 무엇이 나가는지는 관리자 화면에 주소까지 적혀 있습니다.</p>
         </details>
         <details>
-          <summary>내려받기 수를 세나요?</summary>
-          <p>내려받기 단추를 누르면 우리 서버가 날짜·나라 두 글자·받은 모양만 세어 둡니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 이건 이 페이지에서 받을 때의 이야기이고, 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다.</p>
+          <summary>접속과 내려받기 수를 세나요?</summary>
+          <p>셉니다. 위에 적어 둔 <b>누적 접속</b>과 <b>내려받기</b>가 그 숫자입니다 — 숨기지 않고 그대로 보여 드립니다. 우리 서버가 남기는 것은 날짜·나라 두 글자·받은 모양뿐입니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다.</p>
         </details>
         <details>
           <summary>무료인가요?</summary>
@@ -1275,7 +1285,9 @@
     <span>통신판매업 신고번호 제2026-경북봉화-0037호</span><br>
     <span>경상북도 봉화군 상운면 예봉로 1166-68</span><span class="sep">·</span>
     <span>070-7620-7256</span><span class="sep">·</span>
-    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span>
+    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span><br>
+    <span>서비스 제공 <a href="https://projectteamforyou.com" rel="noopener">Projectteamforyou</a></span><span class="sep">·</span>
+    <span>&copy; Copyright 2026, Projectteamforyou</span>
   </div>
 </footer>
 
@@ -1365,6 +1377,45 @@
   })();
 </script>
 <script>
+  (function () {
+    // 누적 접속 · 내려받기. 숫자는 우리 워커에서 온다 (Cloudflare 웹 분석기는
+    // 대시보드 전용이라 공개 API 가 없다 — 보여 줄 숫자는 우리가 센다).
+    var base = "https://dl.omnisort.win";
+    var box = document.getElementById("counters");
+    if (!base || !box) { return; }
+
+    // 한 번 연 것을 한 번 센다. 언어를 바꿔 가며 눌러도 한 사람은 한 번이다.
+    try {
+      if (!sessionStorage.getItem("os-v")) {
+        sessionStorage.setItem("os-v", "1");
+        fetch(base + "/v", { mode: "no-cors", cache: "no-store" }).catch(function () {});
+      }
+    } catch (e) {
+      // 사생활 보호 창에서는 sessionStorage 가 throw 한다. 세는 것을 건너뛸 뿐
+      // 페이지는 그대로 돈다.
+    }
+
+    function put(id, value) {
+      var slot = document.getElementById(id);
+      if (!slot) { return; }
+      try { slot.textContent = Number(value).toLocaleString(); }
+      catch (e) { slot.textContent = String(value); }
+    }
+
+    fetch(base + "/stats.json", { cache: "no-store" })
+      .then(function (answer) { return answer.ok ? answer.json() : null; })
+      .then(function (data) {
+        if (!data) { return; }
+        put("count-visits", data.visits || 0);
+        put("count-downloads", data.total || 0);
+        // 숫자가 들어온 뒤에야 보여 준다. 못 받아 오면 '—' 대신 칸이 없다 —
+        // 0 을 띄우면 아무도 안 받은 것처럼 보인다 (사실이 아니다).
+        box.hidden = false;
+      })
+      .catch(function () {});
+  })();
+</script>
+<script>
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
     window.addEventListener("load", function () {
       navigator.serviceWorker.register("sw.js").then(function () {
@@ -1428,10 +1479,10 @@
     },
     {
       "@type": "Question",
-      "name": "내려받기 수를 세나요?",
+      "name": "접속과 내려받기 수를 세나요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "내려받기 단추를 누르면 우리 서버가 날짜·나라 두 글자·받은 모양만 세어 둡니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 이건 이 페이지에서 받을 때의 이야기이고, 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다."
+        "text": "셉니다. 위에 적어 둔 누적 접속과 내려받기가 그 숫자입니다 — 숨기지 않고 그대로 보여 드립니다. 우리 서버가 남기는 것은 날짜·나라 두 글자·받은 모양뿐입니다. IP 도, 브라우저 이름도, 어디서 왔는지도 적지 않습니다. 한 줄이 여러 사람의 합이라 되짚어 한 사람을 찾을 수 없습니다. 프로그램이 스스로 바깥에 묻는 것은 새 판 확인 하나뿐입니다."
       }
     },
     {

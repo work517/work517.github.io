@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-yUWFABXmLgmbha9SvD8bJAZ/HX6HkNlxj34YreZeUZs=' 'sha256-IQHkY+slhC/iwC0VL7JwHiCw4KblhkfajNbqbRIEa7I='; worker-src 'self'; style-src 'sha256-z2iPV8Iz8k0UngKSvoLXpKs0paQmNElLeNP7aTaKZlg='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-yUWFABXmLgmbha9SvD8bJAZ/HX6HkNlxj34YreZeUZs=' 'sha256-GvhJ2zY6EP2oE9G+ONRUVq3F8QabZB8CLZCyi5bP2VU='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Zeigt, wohin jede Datei kommt, bevor sie umzieht">
 <meta name="description" content="Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.">
@@ -290,6 +290,11 @@
   .facts { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-family: var(--mono); font-size: var(--step--1); color: var(--muted); }
   .facts span::before { content: "· "; color: var(--line); }
   .facts span:first-child::before { content: ""; }
+  /* 누적 숫자는 사실 줄 바로 아래 한 단 낮춰 붙인다. 자랑이 아니라 근거라서
+     크게 쓰지 않는다. 숫자만 살짝 진하게 해 눈이 먼저 닿게 한다. */
+  .counters { margin-top: .5rem; }
+  .counters b { font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .counters[hidden] { display: none; }
 
   /* --------------------------------------------------- 히어로 미리보기 패널 */
   .panel {
@@ -671,7 +676,12 @@
           <span>v0.2.8</span>
           <span>Eine einzige exe</span>
           <span>100.000 Dateien ≈ 49 s</span>
-          <span>1,286 Tests</span>
+          <span>1,395 Tests</span>
+        </div>
+        
+        <div class="facts counters" id="counters" hidden>
+          <span>Besuche gesamt <b id="count-visits" class="notranslate" translate="no">0</b></span>
+          <span>Download <b id="count-downloads" class="notranslate" translate="no">0</b></span>
         </div>
       </div>
 
@@ -1206,7 +1216,7 @@
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Eine falsche Beschriftung im Verwaltungsfenster und den Rechte-Hinweis berichtigt</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Downloads kommen jetzt unmittelbar von uns</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Farben der App an diese Seite angeglichen, Ordnerfassung hervorgeholt</span></li>
-          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Webschriften entfernt — diese Seite zu öffnen erreicht niemanden</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> Webschriften entfernt — keine Schrift greift nach draußen</span></li>
       </ul>
     </div>
   </section>
@@ -1228,8 +1238,8 @@
           <p>Nur <b>eines</b> ist von Haus aus eingeschaltet: die Suche nach einer neueren Fassung. Einmal am Tag fragt sie nach und nimmt dabei nichts mit außer der Versionsnummer — keine Dateinamen, keine Pfade, keine Anzahlen. Beim ersten Start sagen wir Ihnen, dass sie an ist, und im Hinweis selbst lässt sie sich abschalten. Mitteilungen und Downloadzahlen werden nur geholt, wenn Sie es einschalten. Das Verwaltungsfenster nennt jede benutzte Adresse.</p>
         </details>
         <details>
-          <summary>Zählen Sie die Downloads?</summary>
-          <p>Wenn Sie auf die Schaltfläche drücken, hält unser Server nur das Datum, ein zweibuchstabiges Länderkürzel und die geholte Fassung fest. Keine IP-Adresse, kein Browsername, keine Herkunftsseite. Jede Zeile ist eine Summe über viele Menschen; niemand lässt sich daraus zurückverfolgen. Das gilt für das Herunterladen auf dieser Seite; das Einzige, was das Programm selbst nach außen fragt, ist, ob eine neuere Fassung da ist.</p>
+          <summary>Zählen Sie Besuche und Downloads?</summary>
+          <p>Ja. Die Zahlen <b>Besuche gesamt</b> und <b>Herunterladen</b> oben sind genau das — wir zeigen sie, statt sie zu verstecken. Unser Server behält nur das Datum, ein Ländercode aus zwei Buchstaben und welche Form geholt wurde. Keine IP, kein Browsername, keine Herkunft. Jede Zeile ist die Summe vieler Menschen und lässt sich nicht auf eine zurückführen. Das Einzige, was das Programm von sich aus nach draußen fragt, ist die Versionsprüfung.</p>
         </details>
         <details>
           <summary>Ist es kostenlos?</summary>
@@ -1275,7 +1285,9 @@
     <span>통신판매업 신고번호 제2026-경북봉화-0037호</span><br>
     <span>경상북도 봉화군 상운면 예봉로 1166-68</span><span class="sep">·</span>
     <span>070-7620-7256</span><span class="sep">·</span>
-    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span>
+    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span><br>
+    <span>서비스 제공 <a href="https://projectteamforyou.com" rel="noopener">Projectteamforyou</a></span><span class="sep">·</span>
+    <span>&copy; Copyright 2026, Projectteamforyou</span>
   </div>
 </footer>
 
@@ -1365,6 +1377,45 @@
   })();
 </script>
 <script>
+  (function () {
+    // 누적 접속 · 내려받기. 숫자는 우리 워커에서 온다 (Cloudflare 웹 분석기는
+    // 대시보드 전용이라 공개 API 가 없다 — 보여 줄 숫자는 우리가 센다).
+    var base = "https://dl.omnisort.win";
+    var box = document.getElementById("counters");
+    if (!base || !box) { return; }
+
+    // 한 번 연 것을 한 번 센다. 언어를 바꿔 가며 눌러도 한 사람은 한 번이다.
+    try {
+      if (!sessionStorage.getItem("os-v")) {
+        sessionStorage.setItem("os-v", "1");
+        fetch(base + "/v", { mode: "no-cors", cache: "no-store" }).catch(function () {});
+      }
+    } catch (e) {
+      // 사생활 보호 창에서는 sessionStorage 가 throw 한다. 세는 것을 건너뛸 뿐
+      // 페이지는 그대로 돈다.
+    }
+
+    function put(id, value) {
+      var slot = document.getElementById(id);
+      if (!slot) { return; }
+      try { slot.textContent = Number(value).toLocaleString(); }
+      catch (e) { slot.textContent = String(value); }
+    }
+
+    fetch(base + "/stats.json", { cache: "no-store" })
+      .then(function (answer) { return answer.ok ? answer.json() : null; })
+      .then(function (data) {
+        if (!data) { return; }
+        put("count-visits", data.visits || 0);
+        put("count-downloads", data.total || 0);
+        // 숫자가 들어온 뒤에야 보여 준다. 못 받아 오면 '—' 대신 칸이 없다 —
+        // 0 을 띄우면 아무도 안 받은 것처럼 보인다 (사실이 아니다).
+        box.hidden = false;
+      })
+      .catch(function () {});
+  })();
+</script>
+<script>
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
     window.addEventListener("load", function () {
       navigator.serviceWorker.register("../sw.js").then(function () {
@@ -1428,10 +1479,10 @@
     },
     {
       "@type": "Question",
-      "name": "Zählen Sie die Downloads?",
+      "name": "Zählen Sie Besuche und Downloads?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Wenn Sie auf die Schaltfläche drücken, hält unser Server nur das Datum, ein zweibuchstabiges Länderkürzel und die geholte Fassung fest. Keine IP-Adresse, kein Browsername, keine Herkunftsseite. Jede Zeile ist eine Summe über viele Menschen; niemand lässt sich daraus zurückverfolgen. Das gilt für das Herunterladen auf dieser Seite; das Einzige, was das Programm selbst nach außen fragt, ist, ob eine neuere Fassung da ist."
+        "text": "Ja. Die Zahlen Besuche gesamt und Herunterladen oben sind genau das — wir zeigen sie, statt sie zu verstecken. Unser Server behält nur das Datum, ein Ländercode aus zwei Buchstaben und welche Form geholt wurde. Keine IP, kein Browsername, keine Herkunft. Jede Zeile ist die Summe vieler Menschen und lässt sich nicht auf eine zurückführen. Das Einzige, was das Programm von sich aus nach draußen fragt, ist die Versionsprüfung."
       }
     },
     {

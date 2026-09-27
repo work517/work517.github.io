@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-0TfcYo4LdynqYk/GSO30RbausqK9RiW5mcaA1A9gjsg=' 'sha256-vJVoBYYLabyPk/y17HNkz3AUbi1PxCIbGIBTuf65o/8='; worker-src 'self'; style-src 'sha256-z2iPV8Iz8k0UngKSvoLXpKs0paQmNElLeNP7aTaKZlg='; font-src 'none'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-0TfcYo4LdynqYk/GSO30RbausqK9RiW5mcaA1A9gjsg=' 'sha256-UAu3DRQSiyO24cog5n/j/5FAEjDOorE4wdPfzO3sFX0='; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 動かす前に行き先を見せる Windows ファイル整理">
 <meta name="description" content="動かす前に、どのファイルがどこへ行くのかを先に見せる Windows のファイル整理ツール。">
@@ -290,6 +290,11 @@
   .facts { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-family: var(--mono); font-size: var(--step--1); color: var(--muted); }
   .facts span::before { content: "· "; color: var(--line); }
   .facts span:first-child::before { content: ""; }
+  /* 누적 숫자는 사실 줄 바로 아래 한 단 낮춰 붙인다. 자랑이 아니라 근거라서
+     크게 쓰지 않는다. 숫자만 살짝 진하게 해 눈이 먼저 닿게 한다. */
+  .counters { margin-top: .5rem; }
+  .counters b { font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .counters[hidden] { display: none; }
 
   /* --------------------------------------------------- 히어로 미리보기 패널 */
   .panel {
@@ -671,7 +676,12 @@
           <span>v0.2.8</span>
           <span>実行ファイル一つ</span>
           <span>10万ファイル ≈ 49秒</span>
-          <span>テスト 1,286 件</span>
+          <span>テスト 1,395 件</span>
+        </div>
+        
+        <div class="facts counters" id="counters" hidden>
+          <span>累計アクセス <b id="count-visits" class="notranslate" translate="no">0</b></span>
+          <span>ダウンロード <b id="count-downloads" class="notranslate" translate="no">0</b></span>
         </div>
       </div>
 
@@ -1206,7 +1216,7 @@
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 管理画面の誤った説明と、管理者権限の警告を直しました</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> ダウンロードを当方から直接お渡しします</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> アプリの色を紹介ページに合わせ、フォルダー版を前に出しました</span></li>
-          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> ウェブフォントを外しました — ページを開いても外には出ません</span></li>
+          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.4</b> ウェブフォントを外しました — フォントのために外へ出ることはありません</span></li>
       </ul>
     </div>
   </section>
@@ -1228,8 +1238,8 @@
           <p>既定でオンなのは<b>新しい版の確認</b>ひとつだけです。1日に1回、版番号だけを添えて尋ねます — ファイル名もパスも件数も出ません。オンであることは初回起動時にお知らせし、お知らせの行からすぐにオフにできます。お知らせとダウンロード数はオンにしたときだけ取得します。何が出ていくかは管理画面にアドレスまで書いてあります。</p>
         </details>
         <details>
-          <summary>ダウンロード数を数えていますか？</summary>
-          <p>ダウンロードのボタンを押すと、当方のサーバーは日付・2文字の国コード・受け取った形だけを記録します。IP アドレスもブラウザー名も参照元も残しません。1行が大勢の合計なので、そこから個人をたどることはできません。これはこのページから受け取るときの話で、プログラム自身が外に尋ねるのは新しい版が出たかどうか、その一つだけです。</p>
+          <summary>アクセス数とダウンロード数を数えていますか？</summary>
+          <p>数えています。上に出ている<b>累計アクセス</b>と<b>ダウンロード</b>がその数字です — 隠さずそのままお見せします。サーバーに残すのは日付・国コード2文字・受け取った形だけ。IPも、ブラウザ名も、どこから来たかも記録しません。1行が大勢の合計なので、さかのぼって個人にたどり着くことはできません。プログラム自身が外に尋ねるのは新版の確認ひとつだけです。</p>
         </details>
         <details>
           <summary>無料ですか？</summary>
@@ -1275,7 +1285,9 @@
     <span>통신판매업 신고번호 제2026-경북봉화-0037호</span><br>
     <span>경상북도 봉화군 상운면 예봉로 1166-68</span><span class="sep">·</span>
     <span>070-7620-7256</span><span class="sep">·</span>
-    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span>
+    <span><a href="mailto:projectteamforyou@gmail.com">projectteamforyou@gmail.com</a></span><br>
+    <span>서비스 제공 <a href="https://projectteamforyou.com" rel="noopener">Projectteamforyou</a></span><span class="sep">·</span>
+    <span>&copy; Copyright 2026, Projectteamforyou</span>
   </div>
 </footer>
 
@@ -1365,6 +1377,45 @@
   })();
 </script>
 <script>
+  (function () {
+    // 누적 접속 · 내려받기. 숫자는 우리 워커에서 온다 (Cloudflare 웹 분석기는
+    // 대시보드 전용이라 공개 API 가 없다 — 보여 줄 숫자는 우리가 센다).
+    var base = "https://dl.omnisort.win";
+    var box = document.getElementById("counters");
+    if (!base || !box) { return; }
+
+    // 한 번 연 것을 한 번 센다. 언어를 바꿔 가며 눌러도 한 사람은 한 번이다.
+    try {
+      if (!sessionStorage.getItem("os-v")) {
+        sessionStorage.setItem("os-v", "1");
+        fetch(base + "/v", { mode: "no-cors", cache: "no-store" }).catch(function () {});
+      }
+    } catch (e) {
+      // 사생활 보호 창에서는 sessionStorage 가 throw 한다. 세는 것을 건너뛸 뿐
+      // 페이지는 그대로 돈다.
+    }
+
+    function put(id, value) {
+      var slot = document.getElementById(id);
+      if (!slot) { return; }
+      try { slot.textContent = Number(value).toLocaleString(); }
+      catch (e) { slot.textContent = String(value); }
+    }
+
+    fetch(base + "/stats.json", { cache: "no-store" })
+      .then(function (answer) { return answer.ok ? answer.json() : null; })
+      .then(function (data) {
+        if (!data) { return; }
+        put("count-visits", data.visits || 0);
+        put("count-downloads", data.total || 0);
+        // 숫자가 들어온 뒤에야 보여 준다. 못 받아 오면 '—' 대신 칸이 없다 —
+        // 0 을 띄우면 아무도 안 받은 것처럼 보인다 (사실이 아니다).
+        box.hidden = false;
+      })
+      .catch(function () {});
+  })();
+</script>
+<script>
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
     window.addEventListener("load", function () {
       navigator.serviceWorker.register("../sw.js").then(function () {
@@ -1428,10 +1479,10 @@
     },
     {
       "@type": "Question",
-      "name": "ダウンロード数を数えていますか？",
+      "name": "アクセス数とダウンロード数を数えていますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "ダウンロードのボタンを押すと、当方のサーバーは日付・2文字の国コード・受け取った形だけを記録します。IP アドレスもブラウザー名も参照元も残しません。1行が大勢の合計なので、そこから個人をたどることはできません。これはこのページから受け取るときの話で、プログラム自身が外に尋ねるのは新しい版が出たかどうか、その一つだけです。"
+        "text": "数えています。上に出ている累計アクセスとダウンロードがその数字です — 隠さずそのままお見せします。サーバーに残すのは日付・国コード2文字・受け取った形だけ。IPも、ブラウザ名も、どこから来たかも記録しません。1行が大勢の合計なので、さかのぼって個人にたどり着くことはできません。プログラム自身が外に尋ねるのは新版の確認ひとつだけです。"
       }
     },
     {
