@@ -2,7 +2,7 @@
 
 OmniSort 실행 파일(`OmniSort.exe`, `omnisort-cli.exe`)에는 아래 오픈소스 구성요소가 들어 있습니다.
 라이선스 전문은 이 파일 뒤(사이트의 `third-party-notices.txt`)와 저장소의 `licenses` 폴더에 있습니다.
-공개 사이트: https://work517.github.io/third-party-notices.txt
+공개 사이트: https://omnisort.win/third-party-notices.txt
 
 OmniSort 자체는 MIT 라이선스입니다 (Copyright (c) 2026 OmniSort contributors).
 
@@ -51,7 +51,7 @@ zlib, bzip2, xz 등의 고지는 `CPython-license-and-acknowledgements.txt` 에 
   한 파일짜리 exe 는 라이브러리가 안에 묶여 있으므로, 릴리스마다 **폴더형 배포본**
   `OmniSort-<판>-folder.zip` 을 함께 올립니다. Qt DLL(`_internal\PySide6\Qt6*.dll`)과 PySide6 가
   exe 옆에 따로 있어 원하는 판으로 바꿔 끼울 수 있습니다.
-  릴리스: https://github.com/work517/work517.github.io/releases
+  받는 곳: https://omnisort.win/#download (폴더형 직접 내려받기: https://dl.omnisort.win/folder)
 
 
 ==============================================================================
