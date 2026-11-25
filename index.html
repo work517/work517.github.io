@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-+sQ97ZeW0DSVPVoouPq9YiaaeHj/uU8YmB2amsYi2yI=' 'sha256-ijUsyVWLna8FDJGhjT/6CT4I1J7nTEv3vvwYmHdBRks=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-RDCOxYpHdtXnMiMdTYLY3m1mZ7xKu0OLdFGLvcM21r8=' 'sha256-LFLADzHp3GJxive5K3pCrb36hfUvUBCpaVWUCVI3+vE=' 'sha256-p8bhTFr3+NgOJMHbkvZGKoOwa6BxUTxMQ/KmEKP51eA=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-yrLB138ePhHoHBGMqIIv3m18a7nTIGLz7/K8MYJ36uY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — 옮기기 전에 보여주는 Windows 파일 정리">
 <meta name="description" content="파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.">
@@ -613,9 +613,19 @@
     background-repeat: no-repeat; background-position: right .55rem center;
   }
   .langpick select:hover { border-color: var(--muted); }
+
+.promo{--p-bg:#FBE9C8;--p-ink:#3B2300;--p-line:#EBD5A8;--p-tag:#9E5E0A;--p-tag-ink:#FFFFFF;
+  background:var(--p-bg);border-bottom:1px solid var(--p-line);font-size:13px;line-height:1.4}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .promo{--p-bg:#2C2317;--p-ink:#F1E3C8;--p-line:#4A3A22;--p-tag:#E9A33D;--p-tag-ink:#2B1A00}}
+:root[data-theme="dark"] .promo{--p-bg:#2C2317;--p-ink:#F1E3C8;--p-line:#4A3A22;--p-tag:#E9A33D;--p-tag-ink:#2B1A00}
+.promo a{display:block;text-align:center;padding:.4rem .9rem;color:var(--p-ink);text-decoration:none}
+.promo a:hover .promo-text,.promo a:focus-visible .promo-text{text-decoration:underline}
+.promo-tag{display:inline-block;margin-right:.5rem;background:var(--p-tag);color:var(--p-tag-ink);border-radius:5px;padding:0 .4rem;font-size:11px;font-weight:700;letter-spacing:.02em;vertical-align:1px}
+.promo-go{margin-left:.4rem;font-weight:700}
 </style>
 </head>
 <body>
+<aside class="promo" lang="ko"><a href="https://projectteamforyou.com" target="_blank" rel="noopener"><span class="promo-tag">광고</span><span class="promo-text">프로젝트팀포유의 다양한 프로그램·앱·게임을 만나보시고 지지해 주세요</span><span class="promo-go" aria-hidden="true">→</span></a></aside>
 
 
 <span id="top" aria-hidden="true"></span>
@@ -673,10 +683,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.9</span>
+          <span>v0.2.10</span>
           <span>단일 실행 파일</span>
           <span>10만 파일 ≈ 49초</span>
-          <span>테스트 1,462개</span>
+          <span>테스트 1,725개</span>
         </div>
         
         <div class="facts counters" id="counters" hidden>
@@ -1168,12 +1178,12 @@
             <li>[+ 추가] 로 Downloads 폴더를 넣고 [분석] 을 누릅니다</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">OmniSort.exe 내려받기</a>
-          <p class="checksum" id="release-facts">v0.2.9 · 30.1 MB · SHA-256 <code>96ba622ce28ed5aa4bb1484a0112c71e68a072caf1ea913351865beda9d1d6ad</code></p>
+          <p class="checksum" id="release-facts">v0.2.10 · 30.5 MB · SHA-256 <code>30ecf8dd7ce9f3578cb4e1b0022cc865fe347398a361ba7c2565751db5905938</code></p>
           <div class="dl-alt">
             <strong>폴더형도 있습니다</strong>
             <p>같은 프로그램인데 Qt 라이브러리가 <code>_internal</code> 폴더에 따로 들어 있습니다. 원하는 판으로 바꿔 끼울 수 있습니다 (LGPL-3.0). 한 파일짜리가 백신에 걸릴 때도 이쪽을 받아 보세요.</p>
             <a href="https://dl.omnisort.win/folder">폴더형 zip 받기</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.9-folder.zip · 40.4 MB · SHA-256 <code>b1ed3405bbe6bc91a2fe34e95a07a2f7618f0789ccd37ba2f415cf32c70c07a8</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.10-folder.zip · 40.8 MB · SHA-256 <code>b056918c303a7ff99b44eafed7748ebafff8cf8e23101ce9882a06a8e4bbaad3</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1212,11 +1222,11 @@
         <p>날짜는 한국 시각(KST)입니다. 자세한 내용은 프로그램 안에서도 볼 수 있습니다.</p>
       </div>
       <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-11-25">2026-11-25</time> KST</span><span class="up-what"><b>v0.2.10</b> 맨 위에 소개 띠(‘광고’ 표시)가 생겼고, 되돌려도 기록 봉인이 맞습니다</span></li>
           <li><span class="up-when"><time datetime="2026-10-05">2026-10-05</time> KST</span><span class="up-what"><b>v0.2.9</b> 날짜 폴더 모양을 고릅니다 — 2026/09 · 2026-09 · 2026</span></li>
           <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> 새 판 확인 · 규칙 추천 · 폴더 지켜보기</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> 관리자 화면의 틀린 설명과 관리자 권한 경고를 고쳤습니다</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> 내려받기를 우리 자리에서 직접 줍니다</span></li>
-          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> 앱 색을 소개 페이지와 맞추고, 폴더형 배포본을 꺼냈습니다</span></li>
       </ul>
     </div>
   </section>
@@ -1244,7 +1254,7 @@
         </details>
         <details>
           <summary>무료인가요?</summary>
-          <p>네. 무료로 쓸 수 있고, 계정이나 결제가 필요 없습니다. 기본으로는 광고도 없습니다. 관리자 화면에서 공지 받기를 켰을 때 광고성 소식이 오면 ‘광고’ 라고 적어 보여 줍니다.</p>
+          <p>네. 무료로 쓸 수 있고, 계정이나 결제가 필요 없습니다. 이 페이지와 프로그램·앱 맨 위에는 프로젝트팀포유의 다른 프로그램·앱·게임을 소개하는 얇은 띠가 있고 ‘광고’ 라고 적혀 있습니다. 누를 때만 브라우저가 열립니다. 그 밖의 광고는 기본으로 없고, 관리자 화면에서 공지 받기를 켰을 때 광고성 소식이 오면 ‘광고’ 라고 적어 보여 줍니다.</p>
         </details>
         <details>
           <summary>공간 찾기가 파일을 지우나요?</summary>
@@ -1273,9 +1283,10 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.9 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.10 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><!--email_off--><a href="mailto:projectteamforyou@gmail.com">문의·버그 신고</a><!--/email_off--></span>
+    <span class="legal-links"><a href="privacy/">개인정보 처리방침</a> · <a href="terms/">이용약관</a></span>
     
   </div>
   
@@ -1440,7 +1451,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.9",
+  "softwareVersion": "0.2.10",
   "description": "파일을 옮기기 전에 어디로 가는지 먼저 보여주는 Windows 파일 정리 도구.",
   "url": "https://omnisort.win/",
   "inLanguage": "ko",
@@ -1492,7 +1503,7 @@
       "name": "무료인가요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "네. 무료로 쓸 수 있고, 계정이나 결제가 필요 없습니다. 기본으로는 광고도 없습니다. 관리자 화면에서 공지 받기를 켰을 때 광고성 소식이 오면 ‘광고’ 라고 적어 보여 줍니다."
+        "text": "네. 무료로 쓸 수 있고, 계정이나 결제가 필요 없습니다. 이 페이지와 프로그램·앱 맨 위에는 프로젝트팀포유의 다른 프로그램·앱·게임을 소개하는 얇은 띠가 있고 ‘광고’ 라고 적혀 있습니다. 누를 때만 브라우저가 열립니다. 그 밖의 광고는 기본으로 없고, 관리자 화면에서 공지 받기를 켰을 때 광고성 소식이 오면 ‘광고’ 라고 적어 보여 줍니다."
       }
     },
     {

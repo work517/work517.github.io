@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-tTgmQEul14R+9LwlpiO+nJaKO0HKuQC+p5GKaQH7CV0=' 'sha256-srIkesY9miq1tDufoXMXYdmVE3GQTfjU/v7GJEiaq20=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-ASgsMmpRXIj+Ra2nhY+NKrHUxNTZHuN+OotJtTjEjyY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ju81XyHxOaX3+jjMCkAw+ESg6R8ny679u+RbNuEp/cw=' 'sha256-pTcZRLy7E/v4L2BbD4lQpuHz3FDHck1JLqUKk1JvdSQ=' 'sha256-WhRaeJnRgMD4PhlD4LU1+k6fX3jSvJ2p/C0lHKtw5lI=' 'sha256-03UAEjhmMVSaDHCDycA8Khuv9nBVT0td3RaDKUW+Chc=' 'sha256-yo/4aCJaNqdmcgRQ8PJJFf4ZeVbJ/kH/j5v6CheHZ44=' 'sha256-UYj4KM9EA/CxYoPFBqbKo8+ZAvY5MrA6ilRUYnxGifI=' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'sha256-yrLB138ePhHoHBGMqIIv3m18a7nTIGLz7/K8MYJ36uY='; font-src 'none'; img-src 'self' data:; connect-src 'self' https://dl.omnisort.win https://cloudflareinsights.com https://static.cloudflareinsights.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="title" content="OmniSort — Zeigt, wohin jede Datei kommt, bevor sie umzieht">
 <meta name="description" content="Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.">
@@ -613,9 +613,19 @@
     background-repeat: no-repeat; background-position: right .55rem center;
   }
   .langpick select:hover { border-color: var(--muted); }
+
+.promo{--p-bg:#FBE9C8;--p-ink:#3B2300;--p-line:#EBD5A8;--p-tag:#9E5E0A;--p-tag-ink:#FFFFFF;
+  background:var(--p-bg);border-bottom:1px solid var(--p-line);font-size:13px;line-height:1.4}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .promo{--p-bg:#2C2317;--p-ink:#F1E3C8;--p-line:#4A3A22;--p-tag:#E9A33D;--p-tag-ink:#2B1A00}}
+:root[data-theme="dark"] .promo{--p-bg:#2C2317;--p-ink:#F1E3C8;--p-line:#4A3A22;--p-tag:#E9A33D;--p-tag-ink:#2B1A00}
+.promo a{display:block;text-align:center;padding:.4rem .9rem;color:var(--p-ink);text-decoration:none}
+.promo a:hover .promo-text,.promo a:focus-visible .promo-text{text-decoration:underline}
+.promo-tag{display:inline-block;margin-right:.5rem;background:var(--p-tag);color:var(--p-tag-ink);border-radius:5px;padding:0 .4rem;font-size:11px;font-weight:700;letter-spacing:.02em;vertical-align:1px}
+.promo-go{margin-left:.4rem;font-weight:700}
 </style>
 </head>
 <body>
+<aside class="promo" lang="de"><a href="https://projectteamforyou.com" target="_blank" rel="noopener"><span class="promo-tag">Anzeige</span><span class="promo-text">Entdecken Sie die Programme, Apps und Spiele von Projectteamforyou und unterstützen Sie uns</span><span class="promo-go" aria-hidden="true">→</span></a></aside>
 
 
 <span id="top" aria-hidden="true"></span>
@@ -673,10 +683,10 @@
         </div>
         
         <div class="facts">
-          <span>v0.2.9</span>
+          <span>v0.2.10</span>
           <span>Eine einzige exe</span>
           <span>100.000 Dateien ≈ 49 s</span>
-          <span>1,462 Tests</span>
+          <span>1,725 Tests</span>
         </div>
         
         <div class="facts counters" id="counters" hidden>
@@ -1168,12 +1178,12 @@
             <li>Mit [+ Hinzufügen] den Ordner Downloads eintragen und [Analysieren] klicken</li>
           </ol>
           <a class="btn btn-primary" href="https://dl.omnisort.win/single">OmniSort.exe herunterladen</a>
-          <p class="checksum" id="release-facts">v0.2.9 · 30.1 MB · SHA-256 <code>96ba622ce28ed5aa4bb1484a0112c71e68a072caf1ea913351865beda9d1d6ad</code></p>
+          <p class="checksum" id="release-facts">v0.2.10 · 30.5 MB · SHA-256 <code>30ecf8dd7ce9f3578cb4e1b0022cc865fe347398a361ba7c2565751db5905938</code></p>
           <div class="dl-alt">
             <strong>Es gibt auch eine Ordnerfassung</strong>
             <p>Dasselbe Programm, aber die Qt-Bibliotheken liegen getrennt in einem <code>_internal</code>-Ordner. Sie können sie gegen eine Fassung Ihrer Wahl tauschen (LGPL-3.0). Probieren Sie auch diese, wenn der Virenscanner die Einzeldatei blockiert.</p>
             <a href="https://dl.omnisort.win/folder">ZIP der Ordnerfassung laden</a>
-            <p class="checksum" id="folder-facts">OmniSort-0.2.9-folder.zip · 40.4 MB · SHA-256 <code>b1ed3405bbe6bc91a2fe34e95a07a2f7618f0789ccd37ba2f415cf32c70c07a8</code></p>
+            <p class="checksum" id="folder-facts">OmniSort-0.2.10-folder.zip · 40.8 MB · SHA-256 <code>b056918c303a7ff99b44eafed7748ebafff8cf8e23101ce9882a06a8e4bbaad3</code></p>
           </div>
         </div>
         <div class="dl-card">
@@ -1212,11 +1222,11 @@
         <p>Die Daten sind koreanische Zeit (KST). Alle Einzelheiten stehen auch im Programm.</p>
       </div>
       <ul class="updates">
+          <li><span class="up-when"><time datetime="2026-11-25">2026-11-25</time> KST</span><span class="up-what"><b>v0.2.10</b> Schmale Vorstellungsleiste (als „Anzeige“ gekennzeichnet) oben; das Siegel des Protokolls bleibt auch nach dem Rückgängigmachen gültig</span></li>
           <li><span class="up-when"><time datetime="2026-10-05">2026-10-05</time> KST</span><span class="up-what"><b>v0.2.9</b> Form der Datumsordner wählbar — 2026/09 · 2026-09 · 2026</span></li>
           <li><span class="up-when"><time datetime="2026-09-16">2026-09-16</time> KST</span><span class="up-what"><b>v0.2.8</b> Versionssuche · Regelvorschläge · Ordnerwache</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.7</b> Eine falsche Beschriftung im Verwaltungsfenster und den Rechte-Hinweis berichtigt</span></li>
           <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.6</b> Downloads kommen jetzt unmittelbar von uns</span></li>
-          <li><span class="up-when"><time datetime="2026-09-15">2026-09-15</time> KST</span><span class="up-what"><b>v0.2.5</b> Farben der App an diese Seite angeglichen, Ordnerfassung hervorgeholt</span></li>
       </ul>
     </div>
   </section>
@@ -1244,7 +1254,7 @@
         </details>
         <details>
           <summary>Ist es kostenlos?</summary>
-          <p>Ja. Es ist kostenlos, ohne Konto und ohne Bezahlung. Standardmäßig zeigt es auch keine Werbung. Wenn Sie im Verwaltungsbereich die Hinweise einschalten und ein werblicher Hinweis kommt, wird er als „Anzeige“ gekennzeichnet.</p>
+          <p>Ja. Es ist kostenlos, ohne Konto und ohne Bezahlung. Ganz oben auf dieser Seite, im Programm und in der App befindet sich ein dünner Streifen, der andere Programme, Apps und Spiele von Projectteamforyou vorstellt; er ist mit „Anzeige“ gekennzeichnet, und ein Browser öffnet sich nur, wenn Sie darauf klicken. Sonstige Werbung gibt es standardmäßig nicht; wenn Sie im Verwaltungsbereich die Hinweise einschalten und ein werblicher Hinweis kommt, wird auch er als „Anzeige“ gekennzeichnet.</p>
         </details>
         <details>
           <summary>Löscht „Speicherplatz finden“ Dateien?</summary>
@@ -1273,9 +1283,10 @@
 
 <footer>
   <div class="wrap foot-grid">
-    <span><strong>OmniSort</strong> v0.2.9 · MIT</span>
+    <span><strong>OmniSort</strong> v0.2.10 · MIT</span>
     <span>Windows 10 / 11 · Python · PySide6</span>
     <span><!--email_off--><a href="mailto:projectteamforyou@gmail.com">Fragen &amp; Fehler melden</a><!--/email_off--></span>
+    <span class="legal-links"><a href="privacy/">Datenschutzerklärung</a> · <a href="terms/">Nutzungsbedingungen</a></span>
     
   </div>
   
@@ -1440,7 +1451,7 @@
   "name": "OmniSort",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.2.9",
+  "softwareVersion": "0.2.10",
   "description": "Ein Aufräumwerkzeug für Windows, das zuerst zeigt, wohin jede Datei käme.",
   "url": "https://omnisort.win/de/",
   "inLanguage": "de",
@@ -1492,7 +1503,7 @@
       "name": "Ist es kostenlos?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja. Es ist kostenlos, ohne Konto und ohne Bezahlung. Standardmäßig zeigt es auch keine Werbung. Wenn Sie im Verwaltungsbereich die Hinweise einschalten und ein werblicher Hinweis kommt, wird er als „Anzeige“ gekennzeichnet."
+        "text": "Ja. Es ist kostenlos, ohne Konto und ohne Bezahlung. Ganz oben auf dieser Seite, im Programm und in der App befindet sich ein dünner Streifen, der andere Programme, Apps und Spiele von Projectteamforyou vorstellt; er ist mit „Anzeige“ gekennzeichnet, und ein Browser öffnet sich nur, wenn Sie darauf klicken. Sonstige Werbung gibt es standardmäßig nicht; wenn Sie im Verwaltungsbereich die Hinweise einschalten und ein werblicher Hinweis kommt, wird auch er als „Anzeige“ gekennzeichnet."
       }
     },
     {
